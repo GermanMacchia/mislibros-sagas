@@ -1,9 +1,8 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import { useAlert } from 'react-alert';
 import axios from 'axios';
-import Home from '../Home/Home';
 import { Fab } from '@material-ui/core';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 
@@ -11,7 +10,7 @@ function LoginForm (props) {
 
 	const history = useHistory();
 	const alert = useAlert()
-	const url = `mis-libros-bck.herokuapp.com/`;
+	const url = `https://mis-libros-bck.herokuapp.com/`;
 
 	const [form, setForm] = useState({
 								user:'',
