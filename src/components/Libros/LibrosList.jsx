@@ -16,7 +16,7 @@ import FormatList from '@material-ui/icons/FormatListNumbered';
 function LibrosList (props) {
 
 	const alert = useAlert();
-	const url = `//localhost:8000/`;
+	const url = `https://mis-libros-bck.herokuapp.com/`;
 	const header = {'Authorization': props.state.AuthReducer[0].token};
 
 	const [librosHtml, setLibrosHtml] = useState();

@@ -11,7 +11,7 @@ function LoginForm (props) {
 
 	const history = useHistory();
 	const alert = useAlert()
-	const url = `//localhost:8000/`;
+	const url = `https://mis-libros-bck.herokuapp.com/`;
 
 	const [form, setForm] = useState({
 								user:'',
