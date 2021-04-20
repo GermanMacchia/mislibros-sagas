@@ -7,7 +7,7 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 export default function Registro () {
 	
 	const alert = useAlert()
-	const url = `https://mis-libros-bck.herokuapp.com/`;
+	const url = `mis-libros-bck.herokuapp.com/`;
 
 	const [user, setUser] = useState({
 		usuario: " ",
