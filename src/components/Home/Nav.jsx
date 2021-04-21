@@ -13,43 +13,44 @@ export default function Nav () {
 
 
 	return(
-		<>
-			<div className="buttonsNav">
-				<Link className="butNav" to ={"/home"}>
-					<Button 
-						
-						variant="contained"
-						color="primary"
-						startIcon={<LocalLibraryIcon />}>
-						Biblioteca
-					</Button>
-				</Link>
-				<Link className="butNav" to ={"/categoria"}>
-					<Button
-						
-						variant="contained"
-						color="primary"
-						startIcon={<CategoryIcon />}>
-						Categoria
-					</Button>
-				</Link>
-				<Link className="butNavPer" to ={"/personas"}>
-					<Button
-						
-						variant="contained"
-						color="primary"
-						startIcon={<PersonPinIcon />}>
-						Personas
-					</Button>
-				</Link>
-				<Link className="butNavSalir" to={"/"} >
-					<Button						
-						variant="contained"
-						color="default"
-						startIcon={<ExitToAppIcon />}>
-						Salir
-					</Button>
-				</Link>
+		<>	
+			<div id="nav">
+				<div className="buttonsNav">			
+					<Link className="butNavSalir" to={"/"} >
+						<Button						
+							variant="contained"
+							color="default"
+							startIcon={<ExitToAppIcon />}>
+							Salir
+						</Button>
+					</Link>
+					<Link className="butNav" to ={"/home"}>
+						<Button 
+							variant="contained"
+							color="primary"
+							startIcon={<LocalLibraryIcon />}>
+							Biblioteca
+						</Button>
+					</Link>
+				</div>
+				<div className= "buttonsNav">
+					<Link className="butNav" to ={"/categoria"}>
+						<Button						
+							variant="contained"
+							color="primary"
+							startIcon={<CategoryIcon />}>
+							Categoria
+						</Button>
+					</Link>
+					<Link className="butNavPer" to ={"/personas"}>
+						<Button						
+							variant="contained"
+							color="primary"
+							startIcon={<PersonPinIcon />}>
+							Personas
+						</Button>
+					</Link>
+				</div>
 			</div>
 		</>
 	);

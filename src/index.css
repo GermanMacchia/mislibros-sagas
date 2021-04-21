@@ -38,14 +38,6 @@ h2 {
     color: #9EF1EE;
 }
 
-ul {
-    list-style-type: none;
-}
-
-nav ul a:hover {
-    color: #F22572;
-}
-
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
@@ -56,11 +48,16 @@ select {
     height: 30px;
     margin-top: 2px;
 }
-
+#nav{
+    display: flex;
+    flex-direction: row-reverse; 
+    border-top: solid #ffffff 5px;
+}
 .buttonsNav {
     display: flex;
     flex-direction: row-reverse;
-    border-top: solid #ffffff 5px;
+   
+
 }
 
 .butNav{
@@ -71,11 +68,13 @@ select {
     display: flex;
     width: 150px; 
     margin: 20px 5px 20px 0px;
+    text-decoration: none;
 }
 .butNavSalir{
     display: flex;
     width: 150px;     
     margin: 20px -31px 20px 0px;
+    text-decoration: none;
 }
 
 
@@ -233,7 +232,6 @@ table p {
         margin-left: 50px;
     }
     .homeform h2 {
-        color: #EC7015;
         text-align: center;
     }
     .contentForm {
@@ -276,6 +274,22 @@ table p {
 
     }
 }
+@media (max-width: 622px){
+    #nav{
+        display:contents;
+        border-top: solid #ffffff 5px;
+    }
+    #log{
+        flex-direction: column;
+        align-items: center;
+        
+    }
+    .Logform{
+        width: 97%;
+    }
+}
+
+
 
 .modal {
     position: fixed;
@@ -330,3 +344,4 @@ table p {
 .opacidad0 {
     opacity: 0;
 }
+
