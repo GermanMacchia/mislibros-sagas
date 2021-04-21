@@ -14,58 +14,43 @@ export default function Nav () {
 
 	return(
 		<>
-			<nav id="nav">
-				<ul >
-				<div className="buttonsNav">
-					<li>
-						<Link to ={"/home"}>
-							<Button
-								className="butNav"
-						        variant="contained"
-						        color="primary"
-						        startIcon={<LocalLibraryIcon />}>
-						        Biblioteca
-						    </Button>
-						</Link>
-				    </li>
-					<li>
-						<Link to ={"/categoria"}>
-							<Button
-								className="butNav"
-						        variant="contained"
-						        color="primary"
-						        startIcon={<CategoryIcon />}>
-						        Categoria
-						    </Button>
-						</Link>
-					</li>
-					</div>
-					<div className="buttonsNav">
-					<li>
-						<Link to ={"/personas"}>
-							<Button
-								className="butNav"
-						        variant="contained"
-						        color="primary"
-						        startIcon={<PersonPinIcon />}>
-						        Personas
-						    </Button>
-						</Link>
-					</li>
-					<li >
-						<a id="salir" href= "//localhost:3000/">
-							<Button
-								className="butNav"
-						        variant="contained"
-						        color="default"
-						        startIcon={<ExitToAppIcon />}>
-						        Salir
-						    </Button>
-						</a>
-					</li>
-				</div>
-				</ul>
-			</nav> 
+			<div className="buttonsNav">
+				<Link className="butNav" to ={"/home"}>
+					<Button 
+						
+						variant="contained"
+						color="primary"
+						startIcon={<LocalLibraryIcon />}>
+						Biblioteca
+					</Button>
+				</Link>
+				<Link className="butNav" to ={"/categoria"}>
+					<Button
+						
+						variant="contained"
+						color="primary"
+						startIcon={<CategoryIcon />}>
+						Categoria
+					</Button>
+				</Link>
+				<Link className="butNavPer" to ={"/personas"}>
+					<Button
+						
+						variant="contained"
+						color="primary"
+						startIcon={<PersonPinIcon />}>
+						Personas
+					</Button>
+				</Link>
+				<Link className="butNavSalir" to={"/"} >
+					<Button						
+						variant="contained"
+						color="default"
+						startIcon={<ExitToAppIcon />}>
+						Salir
+					</Button>
+				</Link>
+			</div>
 		</>
 	);
 
