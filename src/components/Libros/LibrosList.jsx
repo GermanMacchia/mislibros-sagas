@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import EditarLibro from './EditarLibro'
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
 
 import Tooltip from '@material-ui/core/Tooltip';
@@ -12,165 +12,133 @@ import PersonIcon from '@material-ui/icons/Person';
 import VerticalAlignBottomIcon from '@material-ui/icons/VerticalAlignBottom';
 import ClassIcon from '@material-ui/icons/Class';
 import FormatList from '@material-ui/icons/FormatListNumbered';
+import  { getLibrosAction, deleteLibroAction } from '../../reducers/librosDuck';
 
-function LibrosList (props) {
+function LibrosList ({ getLibrosAction, deleteLibroAction }) {
 
-	const alert = useAlert();
-	const url = `https://mis-libros-bck.herokuapp.com/`;
-	const header = {'Authorization': props.state.AuthReducer[0].token};
+	// const alert = useAlert();
 
+	const state = useSelector(state => state.libros)
 	const [librosHtml, setLibrosHtml] = useState();
 	const [libros, setLibros] = useState();
-	const [editar, setEditar] = useState();
-	const [libro, setLibro] = useState();
-	const [reload, setReload] = useState(0)
 
 
-	const handleDelete = (e) => {
-		e.preventDefault();
-
-			async function deleteLibro () {
-				const opcion = window.confirm('¿Seguro que quieres eliminar?')
-				if(opcion == true){
-					await axios({
-					    method: 'delete',
-					    url: url + `libro/` + e.target.value,
-					    headers: header,
-					    })
-					.then((res) => {
-						alert.success('Se ha borrado correctamente')
-						setReload(reload + 1 )
-					})
-					.catch((error) => {
-					  	console.error(error)
-					  	alert.error(`No se puede borrar ¡El libro esta prestado!`)
-					});
-				}
+	const handleDelete = (e) =>{
+		const opcion = window.confirm('¿Seguro que quieres eliminar?');
+			if(opcion == true){
+				deleteLibroAction(e.target.value)
 			}
-
-		deleteLibro ();
 	}
 
-
-	const handleEditar = (e) => {
-		e.preventDefault();
+	// const handleEditar = (e) => {
+	// 	e.preventDefault();
 		
-			async function editarLibro (e) {
-				setEditar(<EditarLibro id={e.target.value} />);
-			}
+	// 		async function editarLibro (e) {
+	// 			setEditar(<EditarLibro id={e.target.value} />);
+	// 		}
 
-		editarLibro(e);
-		const modal = document.querySelector(".modal");
-		modal.style = "opacity: 1;";
-	}
+	// 	editarLibro(e);
+	// 	const modal = document.querySelector(".modal");
+	// 	modal.style = "opacity: 1;";
+	// }
 
-	const handlePrestar = (e) =>{
-		e.preventDefault();
+	// const handlePrestar = (e) =>{
+	// 	e.preventDefault();
 
-		const persona = prompt('INGRESA EL ID DE LA PERSONA:');
+	// 	const persona = prompt('INGRESA EL ID DE LA PERSONA:');
 
-		async function prestarLibro () {
-			await axios({
-			    method: 'put',
-			    url: url + `libro/prestar/` + e.target.value,
-			    headers: header,
-			    data: {
-			    	'id': e.target.value,
-			    	'persona_id': persona
-		    		}
-		    	})
-				.then((res) => {
-					alert.success(`El libro se a prestado a la persona ${persona}`)
-					setReload(reload + 1 )
+	// 	async function prestarLibro () {
+	// 		await axios({
+	// 		    method: 'put',
+	// 		    url: url + `libro/prestar/` + e.target.value,
+	// 		    headers: header,
+	// 		    data: {
+	// 		    	'id': e.target.value,
+	// 		    	'persona_id': persona
+	// 	    		}
+	// 	    	})
+	// 			.then((res) => {
+	// 				alert.success(`El libro se a prestado a la persona ${persona}`)
+	// 				setReload(reload + 1 )
 
-				})
-				.catch((error) => {
-				  	console.error(error)
-				  	alert.error("La persona no existe o El libro ya esta prestado")
-				})
-		}
+	// 			})
+	// 			.catch((error) => {
+	// 			  	console.error(error)
+	// 			  	alert.error("La persona no existe o El libro ya esta prestado")
+	// 			})
+	// 	}
 
-		async function verificarPersona () {
-			await axios.get(url + `persona/` + persona, {headers: header}
-				)
-			.then( (res) => {
-				console.log('Persona existente')
-				prestarLibro ();
-				})
-				.catch( (error) => {
-				    alert.error('Ese ID de persona no existe');
-				});
-			}
+	// 	async function verificarPersona () {
+	// 		await axios.get(url + `persona/` + persona, {headers: header}
+	// 			)
+	// 		.then( (res) => {
+	// 			console.log('Persona existente')
+	// 			prestarLibro ();
+	// 			})
+	// 			.catch( (error) => {
+	// 			    alert.error('Ese ID de persona no existe');
+	// 			});
+	// 		}
 
-		verificarPersona ();			
+	// 	verificarPersona ();			
 		
-	}
-	
+	// }
 
-	const handleDevolver = (e) => {
-		e.preventDefault();
 
-		async function devolverLibro () {
-				await axios({
-				    method: 'put',
-				    url: url + `libro/devolver/` + e.target.value,
-				    headers: header
-				    })
-				.then((res) => {
-					alert.success("El libro a vuelto a tu bibiblioteca")
-					setReload(reload + 1 )
-				})
-				.catch((error) => {
-				  	console.error(error)
-				  	alert.show("El libro no esta prestado")
-				}
-		)}
+	// const handleDevolver = (e) => {
+	// 	e.preventDefault();
 
-		devolverLibro();
-	}
+	// 	async function devolverLibro () {
+	// 			await axios({
+	// 			    method: 'put',
+	// 			    url: url + `libro/devolver/` + e.target.value,
+	// 			    headers: header
+	// 			    })
+	// 			.then((res) => {
+	// 				alert.success("El libro a vuelto a tu bibiblioteca")
+	// 				setReload(reload + 1 )
+	// 			})
+	// 			.catch((error) => {
+	// 			  	console.error(error)
+	// 			  	alert.show("El libro no esta prestado")
+	// 			}
+	// 	)}
 
+	// 	devolverLibro();
+	// }
+
+	// Los useEffect renderizan primero todos (por eso alguno tiene condiciones de acceso)
+	// pero luego vuelven a renderizar en orden:
+	// - state.loaded
+	// - libros
 
 	useEffect(() => {
-
-		async function getLibros () { 
-			await axios.get(url + `libro`, {headers: header}
-				)
-				.then((res) => {
-				  setLibros(res.data.respuesta)
-				})
-				.catch((error) => {
-				  console.error(error)
-				});
-			}
-
-		getLibros ();
-		
-	}, [props.state.ChangeReducer, reload, editar])
-
+		getLibrosAction()
+	}, [state.globalChange]);
 
 	useEffect(() => {
+		setLibros(state.payload)
+	}, [state.loaded])
 
-		if(libros != undefined){
-
-	        const librosAux = libros.map((libro, index) => (
-	            <tr key={index}>
-	            	<td id="indexlibro"><p><strong>{index + 1}</strong></p></td> 
-	                <td id="nombrelibro"><p>{libro.nombre}</p></td>
-	                <td id="categorialibro"><p>{libro.categoria_id}</p></td>    
-	                <td id="descripcionlibro"><p>{libro.descripcion}</p></td>
-	            	<td id="personalibro"><p>{libro.persona_id}</p></td>
-	            	<td id= "prestarbtt"><button className="funcionBtt" onClick={handlePrestar} value= {libro.id}>P</button></td>
-	            	<td id= "devolverbtt"><button className="funcionBtt" onClick={handleDevolver} value= {libro.id}>↕</button></td>
-	            	<td id= "borrarbtt"><button className="funcionBtt" onClick={handleDelete} value= {libro.id}>X</button></td>
-					<td id= "editarbtt"><button  className="funcionBtt" onClick={handleEditar} value= {libro.id}>E</button></td>
-	            </tr>
-	        ))
+	useEffect(() => {
+		if(libros != undefined) {
+			const librosAux = libros.map((libro, index) => (
+				<tr key={index}>
+					<td id="indexlibro"><p><strong>{index + 1}</strong></p></td>
+					<td id="nombrelibro"><p>{libro.nombre}</p></td>
+					<td id="categorialibro"><p>{libro.categoria_id}</p></td>
+					<td id="descripcionlibro"><p>{libro.descripcion}</p></td>
+					<td id="personalibro"><p>{libro.persona_id}</p></td>
+					<td id="prestarbtt"><button className="funcionBtt" value={libro.id}>P</button></td>
+					<td id="devolverbtt"><button className="funcionBtt"  value={libro.id}>↕</button></td>
+					<td id="borrarbtt"><button className="funcionBtt" onClick={handleDelete} value={libro.id}>X</button></td>
+					<td id="editarbtt"><button className="funcionBtt"  value={libro.id}>E</button></td>
+				</tr>
+			))
 
 			setLibrosHtml(librosAux);
-		}
-
+		}	
 	}, [libros])
-
 
 	return(
 		<div className='contentList'>
@@ -218,20 +186,21 @@ function LibrosList (props) {
 	                </tr>
                 </thead>
 	            <tbody>
-	                {librosHtml}
+	                {(state.loaded == false)?
+					<h3 style={{color:"white"}} >Cargando...</h3>
+				:
+				librosHtml}
 	            </tbody>
 	        </table>
 			<div className="modal">
-				{editar}
+				{}
 			</div>
 			
 		</div>
 	);
 }
 
-const mapStateToProps = (state) =>{
-	return {state}
-}
 
-export default connect(mapStateToProps, null)(LibrosList);
+
+export default connect( null, { getLibrosAction, deleteLibroAction } )(LibrosList);
 

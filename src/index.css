@@ -60,6 +60,28 @@ select {
 
 }
 
+#logButt{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0px 0px 0px 280px;
+}
+
+#googleIcon{
+    width: 55px;
+    height: 55px;
+    margin: 60px 0px 55px 35px;
+    border-radius: 50%;
+}
+
+#googleIcon:hover{
+    filter: brightness(0.9);
+    cursor: pointer;
+}
+#imgGoog{
+    width: 40px;
+    height: auto;
+}
 .butNav{
     width: 150px;     
     margin: 20px 10px 20px 0px;
