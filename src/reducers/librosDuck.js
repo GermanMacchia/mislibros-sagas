@@ -25,7 +25,7 @@ const initialData = {
     posting: false,
     updating: false,
     deleting: false,
-    globalChange: 0
+    reducerChanges: [] 
 }
 //REDUCER
 export default function reducer(state = initialData, action){
@@ -34,7 +34,8 @@ export default function reducer(state = initialData, action){
         case GET_LIBROS:
             return {
                 ...state,
-                fetching:true
+                fetching:true,
+                loaded: false
             }
         case GET_LIBROS_ERROR:
             return {
@@ -64,9 +65,8 @@ export default function reducer(state = initialData, action){
         case DELETE_LIBROS_SUCCESS:
             return {
                 ...state,
-                loaded:false,
                 deleting: false,
-                globalChange: state.globalChange + 1
+                reducerChanges: [...state.reducerChanges, action.payload]
             }
         //UPDATE LIBROS
         case UPDATE_LIBROS:
@@ -91,20 +91,19 @@ export default function reducer(state = initialData, action){
         case POST_LIBROS:
             return {
                 ...state,
-                posting:true,
-                payload: action.payload
+                posting:true
             }
         case POST_LIBROS_ERROR:
             return {
                 ...state,
                 posting: false,
-                payload: action.payload
+                error: action.error
             }
         case POST_LIBROS_SUCCESS:
             return {
                 ...state,
                 posting: false,
-                ...action.payload,
+                reducerChanges: [...state.reducerChanges, action.payload]
             }
         //DEFAULT
         default:
@@ -130,7 +129,7 @@ export const getLibrosAction = () => {
                 payload: res.data.mensaje
             })
         }
-        //CORREGIR ESTO EN BACKEND
+        //CORREGIR ESTO EN BACKEND --------------------------------------------------------------
         dispatch({
             type:GET_LIBROS_SUCCESS,
             payload: res.data.respuesta
@@ -138,29 +137,66 @@ export const getLibrosAction = () => {
     }
 }
 
-export const deleteLibroAction = (value) => {
+export const deleteLibroAction = (props) => {
 //DELETE LIBRO
     return async (dispatch, getState) => {
         const auth =  {'Authorization': getState().user.user};
         dispatch({
             type: DELETE_LIBROS
         })
+        try{
+            const res = await axios.delete(url + 'libro/' + props, { headers: auth })
 
-        const res = await axios.delete(url + 'libro/' + value, { headers: auth })
-
-        if(res.status == 200 ){
-            dispatch({
-                type: DELETE_LIBROS_SUCCESS
-            })
-        }else{
+            if(res.status === 200 ){
+                dispatch({
+                    type: DELETE_LIBROS_SUCCESS,
+                    payload: `${DELETE_LIBROS} : ${props}`
+                })
+            }
+        }catch(e){
             dispatch({
                 type: DELETE_LIBROS_ERROR,
+                error: e.error
             })
         }
     }
-
 }
 
+export const postLibroAction = (props) => {
+//POST LIBRO
+    return async (dispatch, getState) => {
+
+        const auth =  {'Authorization': getState().user.user};
+
+        dispatch({
+            type: POST_LIBROS
+        })
+
+        try { 
+            const res = await axios({
+                            method: 'post',
+                            url: url + 'libro',
+                            data: props,
+                            headers: auth
+                        })
+
+            const libro = JSON.stringify(props);
+
+            if(res.status === 200 ){
+                dispatch({
+                    type: POST_LIBROS_SUCCESS,
+                    payload: `${POST_LIBROS} : ${libro}}`
+                })
+            }
+
+        }catch(e){
+            dispatch({
+                type: DELETE_LIBROS_ERROR,
+                error: e.error
+            })
+        }
+    }
+}
 // export const deleteLibroAction = () => {
 // //DELETE LIBRO
 //     return async (dispatch, getState) => {

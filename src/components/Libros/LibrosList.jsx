@@ -13,6 +13,7 @@ import VerticalAlignBottomIcon from '@material-ui/icons/VerticalAlignBottom';
 import ClassIcon from '@material-ui/icons/Class';
 import FormatList from '@material-ui/icons/FormatListNumbered';
 import  { getLibrosAction, deleteLibroAction } from '../../reducers/librosDuck';
+import { set } from 'react-hook-form';
 
 function LibrosList ({ getLibrosAction, deleteLibroAction }) {
 
@@ -21,7 +22,7 @@ function LibrosList ({ getLibrosAction, deleteLibroAction }) {
 	const state = useSelector(state => state.libros)
 	const [librosHtml, setLibrosHtml] = useState();
 	const [libros, setLibros] = useState();
-
+	const [reload, setReload] = useState(0);
 
 	const handleDelete = (e) =>{
 		const opcion = window.confirm('¿Seguro que quieres eliminar?');
@@ -114,7 +115,7 @@ function LibrosList ({ getLibrosAction, deleteLibroAction }) {
 
 	useEffect(() => {
 		getLibrosAction()
-	}, [state.globalChange]);
+	}, [state.reducerChanges]);
 
 	useEffect(() => {
 		setLibros(state.payload)
@@ -188,8 +189,8 @@ function LibrosList ({ getLibrosAction, deleteLibroAction }) {
 	            <tbody>
 	                {(state.loaded == false)?
 					<h3 style={{color:"white"}} >Cargando...</h3>
-				:
-				librosHtml}
+					:
+					librosHtml}
 	            </tbody>
 	        </table>
 			<div className="modal">

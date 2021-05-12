@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
 import { Fab } from '@material-ui/core';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import { postLibroAction } from '../../reducers/librosDuck';
+import { getPersonaAction } from '../../reducers/personaDuck';
+import { getCategoriasAction } from '../../reducers/categoriaDuck';
 
-
-export default function LibrosForm () {
+function LibrosForm ({ postLibroAction, getPersonaAction, getCategoriasAction }) {
 
 	const alert = useAlert();
-
+	const state = useSelector(state => state)
+	const [opcionP, setOpcionP] = useState();
+	const [opcionC, setOpcionC] = useState();
 	const [categoria, setCategoria] = useState([]);
 	const [persona, setPersona] = useState([])
-	const [newPost, setNewPost] = useState(0);
 	const [libro, setLibro] = useState({
 		    nombre: " ",
 		    descripcion: " ",
@@ -20,85 +22,57 @@ export default function LibrosForm () {
 		    persona_id: null
 	});
 	
-
 	useEffect(() => {
-
-		// async function getCategorias() {
-	    //     await axios.get(url + `categoria`, {headers: header})
-	    //         .then((res) => {
-	    //             setCategoria(res.data.respuesta);
-	    //         })
-	    //         .catch((error) => {
-	    //             console.error(error);
-	    //         });
-	    //     };
-	    
-	    // async function getPersonas() {
-	    //     await axios.get(url + `persona`, {headers: header})
-	    //         .then((res) => {
-	    //             setPersona(res.data.respuesta);
-	    //         })
-	    //         .catch((error) => {
-	    //             console.error(error);
-	    //         })
-	    //     };
-
-
-	    // getCategorias();
-	    // getPersonas();
-
+		//LLAMADAS API
+	    getCategoriasAction();
+	    getPersonaAction();
 	}, []);
 
+	useEffect(() => {
+		//SET LUEGO DE LA LLAMADA
+		if(state.categoria.loaded && state.persona.loaded){
+			setCategoria(state.categoria.payload)
+			setPersona(state.persona.payload)
+		}
+	}, [state.categoria.loaded, state.persona.loaded]);
 
-	// const handleNuevoLibro = (e) => {
-	// 	setLibro({
-	// 		...libro,
-	// 		[e.target.name]: e.target.value
+	useEffect(() => {
+		//CONFIGURACION DE OPCIONES
+		if(state.categoria.loaded && state.persona.loaded){
+			//OPCION CATEGORIA
+			const opcionAuxC = categoria.map((categorias, index) =>{
+			return <option key= {index} value = {categorias.id} >{categorias.nombre}</option>		
+			});
+			setOpcionC(opcionAuxC)
+			//OPCION PERSONA
+			const opcionAuxP = persona.map((personas, index) =>{
+			return <option key= {index} value = {personas.id} >{personas.nombre}</option>		
+			});
+			setOpcionP(opcionAuxP)
+		}
+	}, [categoria]);
+
+	const handleNuevoLibro = (e) => {
+		//SET LIBRO DESDE EL FORMS
+		setLibro({
+			...libro,
+			[e.target.name]: e.target.value
 			
-	// 	});
-	// };
+		});
+	};
+	//SUBMIT
+	const handleSubmit = (e) => {
+			e.preventDefault();	
+			postLibroAction (libro);
+			document.getElementById("Lregistro").reset();
+			document.getElementById("Tregistro").reset();
+	};
 
-				
-	// const handleSubmit = (e) => {
-	// 		e.preventDefault();	
 
-	// 		async function postLibros () { 
-	// 				await axios({
-	// 				    method: 'post',
-	// 				    url: url + 'libro',
-	// 				    data: libro,
-	// 				    headers: header
-	// 				})
-	// 				.then((res) => {
-	// 					alert.success(`Libro agregado`)
-	// 					setNewPost(newPost + 1);
-	// 					props.onSave(newPost);
-	// 					document.getElementById("Lregistro").reset();
-	// 					document.getElementById("Tregistro").reset();
-	// 				})
-	// 				.catch((error) => {
-	// 				  console.error(error)
-	// 				  alert.error("Debes completar todos los campos");
-	// 				});
-	// 			};
-
-	// 		postLibros ();
-	// 		document.getElementById("Lregistro").reset();
-	// 		document.getElementById("Tregistro").reset();
-	// };
-	/*
-	const opcion = categoria.map((categorias, index) =>{
-		return <option key= {index} value = {categorias.id} >{categorias.nombre}</option>		
-	});
-
-	const opcionPersona = persona.map((personas, index) =>{
-		return <option key= {index} value = {personas.id} >{personas.nombre}</option>		
-	});
-*/
 	return  (
 			<div className= "homeform">
 				<h2>Ingresar un libro</h2>
-				{/*
+
 				<div className="floatLeft">
 					<form id="Lregistro">
 						<label>Nombre </label><br/>
@@ -107,13 +81,13 @@ export default function LibrosForm () {
 						<label>Categoria </label><br/>
 						<select name="categoria_id" id="categoria" onChange={handleNuevoLibro} >
 						<option value="">Seleccionar:</option>
-							{opcion}	
+							{opcionC}	
 						</select>
 
 						<label>Persona</label><br/>
 						<select name="persona_id" id="persona" onChange={handleNuevoLibro} >
 						<option value="">Seleccionar:</option>
-							{opcionPersona}	
+							{opcionP}	
 						</select><br/>
 					</form>
 				</div>
@@ -126,18 +100,9 @@ export default function LibrosForm () {
 						</Fab>						
 					</form>
 				</div>
-				*/}
 			</div>
 		);
 
 }
 
-// const mapStateToProps = (state) =>{
-// 	return {state}
-// };
-
-
-
-
-
-
+export default connect( null, { postLibroAction, getPersonaAction, getCategoriasAction } )(LibrosForm);
