@@ -18,7 +18,7 @@ import { set } from 'react-hook-form';
 function LibrosList ({ getLibrosAction, deleteLibroAction }) {
 
 	// const alert = useAlert();
-
+	const alert = useAlert();
 	const state = useSelector(state => state.libros)
 	const [librosHtml, setLibrosHtml] = useState();
 	const [libros, setLibros] = useState();
@@ -27,10 +27,15 @@ function LibrosList ({ getLibrosAction, deleteLibroAction }) {
 	const handleDelete = (e) =>{
 		const opcion = window.confirm('¿Seguro que quieres eliminar?');
 			if(opcion == true){
-				deleteLibroAction(e.target.value)
+					deleteLibroAction(e.target.value)
 			}
-	}
 
+	}
+	useEffect(() => {
+		if(state.error){
+			alert.error("No se puede eliminar un libro prestado");
+		}
+	}, [state.error]);
 	// const handleEditar = (e) => {
 	// 	e.preventDefault();
 		
@@ -200,8 +205,6 @@ function LibrosList ({ getLibrosAction, deleteLibroAction }) {
 		</div>
 	);
 }
-
-
 
 export default connect( null, { getLibrosAction, deleteLibroAction } )(LibrosList);
 

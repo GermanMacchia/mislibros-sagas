@@ -25,6 +25,7 @@ const initialData = {
     posting: false,
     updating: false,
     deleting: false,
+    error: [],
     reducerChanges: [] 
 }
 //REDUCER
@@ -60,7 +61,7 @@ export default function reducer(state = initialData, action){
             return {
                 ...state,
                 deleting: false,
-                error: action.payload
+                error: [...state.error, action.payload]
             }
         case DELETE_LIBROS_SUCCESS:
             return {
@@ -138,6 +139,7 @@ export const getLibrosAction = () => {
 }
 
 export const deleteLibroAction = (props) => {
+
 //DELETE LIBRO
     return async (dispatch, getState) => {
         const auth =  {'Authorization': getState().user.user};
@@ -156,7 +158,7 @@ export const deleteLibroAction = (props) => {
         }catch(e){
             dispatch({
                 type: DELETE_LIBROS_ERROR,
-                error: e.error
+                payload: 'Libro prestado'
             })
         }
     }
