@@ -1,9 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
-import EditarLibro from './EditarLibro'
 import { connect, useSelector } from 'react-redux';
+
+import CircularProgress from '@material-ui/core/CircularProgress';
+
+import EditarLibro from './EditarLibro'
+
 import { useAlert } from 'react-alert';
 
+import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
@@ -12,30 +16,31 @@ import PersonIcon from '@material-ui/icons/Person';
 import VerticalAlignBottomIcon from '@material-ui/icons/VerticalAlignBottom';
 import ClassIcon from '@material-ui/icons/Class';
 import FormatList from '@material-ui/icons/FormatListNumbered';
-import  { getLibrosAction, deleteLibroAction } from '../../reducers/librosDuck';
+import  { getLibrosAction, deleteLibroAction, devolverLibroAction, prestarLibroAction } from '../../reducers/librosDuck';
+
 import { set } from 'react-hook-form';
 
-function LibrosList ({ getLibrosAction, deleteLibroAction }) {
+function LibrosList ({ getLibrosAction, deleteLibroAction, devolverLibroAction, prestarLibroAction }) {
 
-	// const alert = useAlert();
 	const alert = useAlert();
 	const state = useSelector(state => state.libros)
 	const [librosHtml, setLibrosHtml] = useState();
 	const [libros, setLibros] = useState();
-	const [reload, setReload] = useState(0);
 
 	const handleDelete = (e) =>{
 		const opcion = window.confirm('¿Seguro que quieres eliminar?');
 			if(opcion == true){
-					deleteLibroAction(e.target.value)
+					
+					deleteLibroAction(e)
 			}
-
 	}
+
 	useEffect(() => {
-		if(state.error){
+		if(state.error && state.error != 0){
 			alert.error("No se puede eliminar un libro prestado");
 		}
 	}, [state.error]);
+
 	// const handleEditar = (e) => {
 	// 	e.preventDefault();
 		
@@ -48,12 +53,11 @@ function LibrosList ({ getLibrosAction, deleteLibroAction }) {
 	// 	modal.style = "opacity: 1;";
 	// }
 
-	// const handlePrestar = (e) =>{
-	// 	e.preventDefault();
+	// const handlePrestar = (id) =>{
 
 	// 	const persona = prompt('INGRESA EL ID DE LA PERSONA:');
-
-	// 	async function prestarLibro () {
+	// 	prestarLibroAction(id, persona) 
+	// }
 	// 		await axios({
 	// 		    method: 'put',
 	// 		    url: url + `libro/prestar/` + e.target.value,
@@ -91,27 +95,9 @@ function LibrosList ({ getLibrosAction, deleteLibroAction }) {
 	// }
 
 
-	// const handleDevolver = (e) => {
-	// 	e.preventDefault();
-
-	// 	async function devolverLibro () {
-	// 			await axios({
-	// 			    method: 'put',
-	// 			    url: url + `libro/devolver/` + e.target.value,
-	// 			    headers: header
-	// 			    })
-	// 			.then((res) => {
-	// 				alert.success("El libro a vuelto a tu bibiblioteca")
-	// 				setReload(reload + 1 )
-	// 			})
-	// 			.catch((error) => {
-	// 			  	console.error(error)
-	// 			  	alert.show("El libro no esta prestado")
-	// 			}
-	// 	)}
-
-	// 	devolverLibro();
-	// }
+	const handleDevolver = (id) => {
+		devolverLibroAction(id);
+	}
 
 	// Los useEffect renderizan primero todos (por eso alguno tiene condiciones de acceso)
 	// pero luego vuelven a renderizar en orden:
@@ -124,7 +110,7 @@ function LibrosList ({ getLibrosAction, deleteLibroAction }) {
 
 	useEffect(() => {
 		setLibros(state.payload)
-	}, [state.loaded])
+	}, [state.loaded]);
 
 	useEffect(() => {
 		if(libros != undefined) {
@@ -135,13 +121,36 @@ function LibrosList ({ getLibrosAction, deleteLibroAction }) {
 					<td id="categorialibro"><p>{libro.categoria_id}</p></td>
 					<td id="descripcionlibro"><p>{libro.descripcion}</p></td>
 					<td id="personalibro"><p>{libro.persona_id}</p></td>
-					<td id="prestarbtt"><button className="funcionBtt" value={libro.id}>P</button></td>
-					<td id="devolverbtt"><button className="funcionBtt"  value={libro.id}>↕</button></td>
-					<td id="borrarbtt"><button className="funcionBtt" onClick={handleDelete} value={libro.id}>X</button></td>
-					<td id="editarbtt"><button className="funcionBtt"  value={libro.id}>E</button></td>
+					<td id="prestarbtt">
+						<IconButton color="primary">
+							<Tooltip title="Prestar">
+								<MenuBookIcon className="icon" onClick={() => {handlePrestar(libro.id)}} value={libro.id} />
+							</Tooltip>
+						</IconButton>
+					</td>
+					<td id="devolverbtt">
+						<IconButton color="primary">
+							<Tooltip title= "Devolver">
+								<VerticalAlignBottomIcon className="icon" onClick={() => {handleDevolver(libro.id)}} />
+							</Tooltip>
+						</IconButton>
+					</td>
+					<td id="borrarbtt">
+						<IconButton color="primary">
+							<Tooltip title= "Borrar">
+								<DeleteIcon className="icon" onClick={() => {handleDelete(libro.id)}} />
+							</Tooltip>
+						</IconButton>
+					</td>
+					<td id="editarbtt">
+						<IconButton color="primary">
+							<Tooltip title= "Editar">
+								<EditIcon className="icon" onClick={() => {}} value={libro.id} />
+							</Tooltip>
+						</IconButton>
+					</td>
 				</tr>
-			))
-
+			));
 			setLibrosHtml(librosAux);
 		}	
 	}, [libros])
@@ -149,55 +158,45 @@ function LibrosList ({ getLibrosAction, deleteLibroAction }) {
 	return(
 		<div className='contentList'>
 			<h2>Tu Bibiblioteca</h2>
-			<table>
-				<thead>
-					<tr>
-	                	<th>
-	                		<Tooltip title= "Numero">
-	                    		<FormatList />
-	                    	</Tooltip>
-	                    </th>
-	                    <th>Nombre</th>
-	                    <th>
-	                		<Tooltip title= "Categoria ID">
-	                    		<ClassIcon />
-	                    	</Tooltip>	                    	
-	                    </th>
-	                    <th id='descripcion_titulo'>Descripción</th>
-	                    <th>
-	                    	<Tooltip title= "Persona ID">
-	                    		<PersonIcon />
-	                    	</Tooltip>
-	                    </th>
-	                    <th className="funcion">
-	                    	<Tooltip title= "Prestar">
-	                    		<MenuBookIcon />
-	                    	</Tooltip>
-	                    </th>
-	                    <th className="funcion">
-	                    	<Tooltip title= "Devolver">
-	                    		<VerticalAlignBottomIcon />
-	                    	</Tooltip>
-	                    </th>
-	                    <th className="funcion">
-	                    	<Tooltip title= "Borrar">
-	                    		<DeleteIcon />
-	                    	</Tooltip>
-	                    </th>
-						<th className="funcion">
-							<Tooltip title= "Editar">
-	                    		<EditIcon />
-	                    	</Tooltip>
-	                    </th>            
-	                </tr>
-                </thead>
-	            <tbody>
-	                {(state.loaded == false)?
-					<h3 style={{color:"white"}} >Cargando...</h3>
-					:
-					librosHtml}
-	            </tbody>
-	        </table>
+			{
+				(state.loaded == false)
+				?
+					<>
+						<br/>
+						<CircularProgress id="circle" color="primary" size="70px" thickness= "7" />	
+					</>
+				:
+				<table>
+					<thead>
+						<tr>
+							<th>
+								<Tooltip title= "Numero">
+									<FormatList />
+								</Tooltip>
+							</th>
+							<th>Nombre</th>
+							<th>
+								<Tooltip title= "Categoria ID">
+									<ClassIcon />
+								</Tooltip>	                    	
+							</th>
+							<th id='descripcion_titulo'>Descripción</th>
+							<th>
+								<Tooltip title= "Persona ID">
+									<PersonIcon />
+								</Tooltip>
+							</th>
+							<th></th>
+							<th></th>
+							<th></th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						{librosHtml}
+					</tbody>
+				</table>
+			}
 			<div className="modal">
 				{}
 			</div>
@@ -206,5 +205,5 @@ function LibrosList ({ getLibrosAction, deleteLibroAction }) {
 	);
 }
 
-export default connect( null, { getLibrosAction, deleteLibroAction } )(LibrosList);
+export default connect( null, { getLibrosAction, deleteLibroAction, devolverLibroAction, prestarLibroAction } )(LibrosList);
 

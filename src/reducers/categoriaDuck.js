@@ -22,7 +22,8 @@ export default function reducer(state = initialData, action){
         case GET_CATEGORIAS:
             return {
                 ...state,
-                fetching:true
+                fetching:true,
+                loaded: false
             }
         case GET_CATEGORIAS_SUCCESS:
             return {
@@ -53,18 +54,17 @@ export const getCategoriasAction = () => {
         dispatch({
             type: GET_CATEGORIAS
         })
-        const res = await axios.get(url + `categoria`, {headers: auth})
-        console.log(res)
-        if(res.status === 200){
-        dispatch({
-            type: GET_CATEGORIAS_SUCCESS,
-            payload: res.data.respuesta
-        })
-        }else{
-        dispatch({
-            type: GET_CATEGORIAS_ERROR,
-            error: res.error
-        })
+        try{
+            const res = await axios.get(url + `categoria`, {headers: auth})
+            dispatch({
+                type: GET_CATEGORIAS_SUCCESS,
+                payload: res.data.respuesta
+            })
+        }catch(e){
+            dispatch({
+                type: GET_CATEGORIAS_ERROR,
+                error: e.error
+            })
         }
     }
 }

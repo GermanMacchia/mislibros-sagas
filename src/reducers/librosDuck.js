@@ -31,6 +31,7 @@ const initialData = {
 //REDUCER
 export default function reducer(state = initialData, action){
     switch(action.type){
+
         //GETLIBROS
         case GET_LIBROS:
             return {
@@ -42,7 +43,7 @@ export default function reducer(state = initialData, action){
             return {
                 ...state,
                 fetching: false,
-                error: action.payload
+                error: action.error
             }
         case GET_LIBROS_SUCCESS:
             return {
@@ -51,6 +52,7 @@ export default function reducer(state = initialData, action){
                 loaded: true,
                 payload: action.payload
             }
+
         //DELETE LIBROS
         case DELETE_LIBROS:
             return {
@@ -69,25 +71,26 @@ export default function reducer(state = initialData, action){
                 deleting: false,
                 reducerChanges: [...state.reducerChanges, action.payload]
             }
+
         //UPDATE LIBROS
         case UPDATE_LIBROS:
             return {
                 ...state,
                 updating:true,
-                payload: action.payload
             }
         case UPDATE_LIBROS_ERROR:
             return {
                 ...state,
                 updating: false,
-                payload: action.payload
+                error: action.error
             }
         case UPDATE_LIBROS_SUCCESS:
             return {
                 ...state,
                 updating: false,
-                ...action.payload,
+                reducerChanges: [...state.reducerChanges, action.payload]
             }
+
         //POST LIBROS
         case POST_LIBROS:
             return {
@@ -106,6 +109,7 @@ export default function reducer(state = initialData, action){
                 posting: false,
                 reducerChanges: [...state.reducerChanges, action.payload]
             }
+
         //DEFAULT
         default:
             return {
@@ -118,23 +122,23 @@ export default function reducer(state = initialData, action){
 export const getLibrosAction = () => { 
 //GET LIBROS
     return async (dispatch, getState) => {
+
         const auth =  {'Authorization': getState().user.user}
         dispatch({
             type: GET_LIBROS
         })
-        const res = await axios.get(url + 'libro', { headers: auth })
-        
-        if(res.data.mensaje === "Token no proveída"){
+        try{
+            const res = await axios.get(url + 'libro', { headers: auth })
+            dispatch({
+                type:GET_LIBROS_SUCCESS,
+                payload: res.data.respuesta
+            })        
+        }catch(e){
             dispatch({
                 type: GET_LIBROS_ERROR,
-                payload: res.data.mensaje
+                payload: e.error
             })
         }
-        //CORREGIR ESTO EN BACKEND --------------------------------------------------------------
-        dispatch({
-            type:GET_LIBROS_SUCCESS,
-            payload: res.data.respuesta
-        })
     }
 }
 
@@ -175,22 +179,18 @@ export const postLibroAction = (props) => {
         })
 
         try { 
-            const res = await axios({
-                            method: 'post',
-                            url: url + 'libro',
-                            data: props,
-                            headers: auth
+            await axios({
+                        method: 'post',
+                        url: url + 'libro',
+                        data: props,
+                        headers: auth
                         })
-
-            const libro = JSON.stringify(props);
-
-            if(res.status === 200 ){
+            .then(
                 dispatch({
                     type: POST_LIBROS_SUCCESS,
-                    payload: `${POST_LIBROS} : ${libro}}`
+                    payload: `${POST_LIBROS} : ${props}}`
                 })
-            }
-
+            )
         }catch(e){
             dispatch({
                 type: DELETE_LIBROS_ERROR,
@@ -199,14 +199,73 @@ export const postLibroAction = (props) => {
         }
     }
 }
-// export const deleteLibroAction = () => {
-// //DELETE LIBRO
-//     return async (dispatch, getState) => {
-//          const auth =  {'Authorization': getState().user.user}
-        // dispatch({
-        //     type: GET_LIBROS
-        // })
-        // const res = await axios.get(url + 'libro', { headers: auth })
-//     }
 
-// }
+export const devolverLibroAction = (props) => {
+//DEVOLVER LIBRO
+    return async (dispatch, getState) => {
+
+        const auth =  {'Authorization': getState().user.user};
+
+        dispatch({
+            type: UPDATE_LIBROS
+        })
+
+        try{
+            await axios({
+                        method: 'put',
+                        url: url + `libro/devolver/` + props,
+                        headers:auth
+                        })
+                    .then(
+                        dispatch({
+                            type: UPDATE_LIBROS_SUCCESS,
+                            payload: `${UPDATE_LIBROS} : libro devuelto`
+                        })
+                    )
+        }catch(e){
+            dispatch({
+                type: UPDATE_LIBROS_ERROR,
+                error: e.error
+            })
+        }
+    }
+}
+
+export const prestarLibroAction = (id, persona) => {
+//DEVOLVER LIBRO
+    return async (dispatch, getState) => {
+
+        const auth =  {'Authorization': getState().user.user};
+
+        dispatch({
+            type: UPDATE_LIBROS
+        })
+
+        try{
+            const res = await axios.get(url + `persona/` + persona, {headers: auth})
+            if(res.status == 200){
+                await axios({
+                    method: 'put',
+                    url: url + `libro/prestar/` + id,
+                    headers: auth,
+                    data: {
+                        'id': id,
+                        'persona_id': persona
+                        }
+                    })
+                    .then(          
+                        dispatch({
+                            type: UPDATE_LIBROS_SUCCESS,
+                            payload: `${UPDATE_LIBROS} : libro prestado`
+                        })
+                    )
+            }
+        }catch(e){
+            dispatch({
+                type: UPDATE_LIBROS_ERROR,
+                error: e.error
+            })
+        }
+    }
+}
+

@@ -15,6 +15,14 @@ body {
     clear: both;
 }
 
+#circle {
+    margin-left: 40px;
+}
+
+.icon{
+    color: white;
+}
+
 #header img {
     width: 350px;
     height: auto;
@@ -26,7 +34,7 @@ body {
 }
 
 #header h1 {
-    font-family: lobster;
+    font-family: lobster !important;
     font-size: 50px;
     float: left;
     margin-top: 40px;

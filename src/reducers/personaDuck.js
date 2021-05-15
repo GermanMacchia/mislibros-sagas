@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { prestarLibroAction } from './librosDuck';
 //URL
 const url = `https://mis-libros-bck.herokuapp.com/`;
 //CONSTANTES
@@ -54,7 +55,6 @@ export const getPersonaAction = () => {
             type: GET_PERSONA
         })
         const res = await axios.get(url + `persona`, {headers: auth})
-        console.log(res)
         if(res.status === 200){
         dispatch({
             type: GET_PERSONA_SUCCESS,
@@ -68,3 +68,39 @@ export const getPersonaAction = () => {
         }
     }
 }
+
+export const getPrestarAction = (id, persona) => {
+//VERIFICAR CATEGORIA
+    return async (dispatch, getState) => {
+        const auth =  {'Authorization': getState().user.user}
+        dispatch({
+            type: GET_PERSONA
+        })
+        try{
+            const res = await axios.get(url + `persona/` + persona, {headers: auth})
+            if(res.status == 200){
+                prestarLibroAction(id, persona)
+            }
+        }catch(e){
+            dispatch({
+                type: GET_PERSONA_ERROR,
+                error: e.error
+            })
+        }
+    }
+}
+
+
+
+
+	// 	async function verificarPersona () {
+	// 		await axios.get(url + `persona/` + persona, {headers: header}
+	// 			)
+	// 		.then( (res) => {
+	// 			console.log('Persona existente')
+	// 			prestarLibro ();
+	// 			})
+	// 			.catch( (error) => {
+	// 			    alert.error('Ese ID de persona no existe');
+	// 			});
+	// 		}

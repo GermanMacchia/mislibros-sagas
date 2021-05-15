@@ -11,6 +11,7 @@
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.6.3",
     "axios": "^0.21.1",
+    "bootstrap": "^4.6.0",
     "firebase": "^8.4.3",
     "mdi-material-ui": "^6.22.0",
     "react": "^17.0.1",
