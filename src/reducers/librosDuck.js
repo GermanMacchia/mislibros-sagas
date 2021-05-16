@@ -43,7 +43,7 @@ export default function reducer(state = initialData, action){
             return {
                 ...state,
                 fetching: false,
-                error: action.error
+                error: [...state.error, action.error]
             }
         case GET_LIBROS_SUCCESS:
             return {
@@ -82,7 +82,7 @@ export default function reducer(state = initialData, action){
             return {
                 ...state,
                 updating: false,
-                error: action.error
+                error: [...state.error, action.error]
             }
         case UPDATE_LIBROS_SUCCESS:
             return {
@@ -101,7 +101,7 @@ export default function reducer(state = initialData, action){
             return {
                 ...state,
                 posting: false,
-                error: action.error
+                error: [...state.error, action.error]
             }
         case POST_LIBROS_SUCCESS:
             return {

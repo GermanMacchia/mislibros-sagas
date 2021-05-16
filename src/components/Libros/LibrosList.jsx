@@ -124,7 +124,7 @@ function LibrosList ({ getLibrosAction, deleteLibroAction, devolverLibroAction, 
 					<td id="prestarbtt">
 						<IconButton color="primary">
 							<Tooltip title="Prestar">
-								<MenuBookIcon className="icon" onClick={() => {handlePrestar(libro.id)}} value={libro.id} />
+								<MenuBookIcon className="icon" onClick={() => {}} value={libro.id} />
 							</Tooltip>
 						</IconButton>
 					</td>

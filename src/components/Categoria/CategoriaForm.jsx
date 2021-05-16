@@ -5,56 +5,55 @@ import { useAlert } from 'react-alert';
 import { Fab } from '@material-ui/core';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
-function CategoriaForm (props) {
+function CategoriaForm () {
 
 	const alert = useAlert();
-	const url = `https://mis-libros-bck.herokuapp.com/`;
-	const header = {'Authorization': props.state.Auth.token};
+
 
 	const [newPost, setNewPost] = useState(0);
 	const [categoria, setCategoria] = useState({
 		    nombre: " "
 			})
 
-	const handleNuevacategoria = (e) => {
-		setCategoria({
-			nombre: e.target.value
-		});
-	}
+	// const handleNuevacategoria = (e) => {
+	// 	setCategoria({
+	// 		nombre: e.target.value
+	// 	});
+	// }
 
-	const handleSubmit = (e) => {
-		e.preventDefault()
+	// const handleSubmit = (e) => {
+	// 	e.preventDefault()
 
-		async function postCategoria () { 
-				await axios({
-				    method: 'post',
-				    url: url + `categoria`,
-				    data: categoria,
-				    headers: header
-				    })
-				.then((res) => {
-					alert.success('Nueva categoria agregada')
-					setNewPost(newPost + 1);
-					props.onSave(newPost);
-				})
-				.catch((error) => {
-				  console.error(error)
-				  alert.error('Categoria existente')
-				});
-			}
+	// 	async function postCategoria () { 
+	// 			await axios({
+	// 			    method: 'post',
+	// 			    url: url + `categoria`,
+	// 			    data: categoria,
+	// 			    headers: header
+	// 			    })
+	// 			.then((res) => {
+	// 				alert.success('Nueva categoria agregada')
+	// 				setNewPost(newPost + 1);
+	// 				props.onSave(newPost);
+	// 			})
+	// 			.catch((error) => {
+	// 			  console.error(error)
+	// 			  alert.error('Categoria existente')
+	// 			});
+	// 		}
 			
-		postCategoria ();
-		document.getElementById("Cregistro").reset();
-	}
+	// 	postCategoria ();
+	// 	document.getElementById("Cregistro").reset();
+	// }
 
 	return(
 			<div className= "homeform">
 				<h2>Ingresar una categoria</h2>
 					<form id="Cregistro">
 						<label>Categoria</label><br/><br/>
-						<input type="text" onChange={handleNuevacategoria} placeholder="Nombre categoria"/><br/><br/>
+						<input type="text"  placeholder="Nombre categoria"/><br/><br/>
 						<Fab color="primary">
-							<AddCircleIcon fontSize="large" type= "submit" onClick={handleSubmit} />
+							<AddCircleIcon fontSize="large" type= "submit" />
 						</Fab>		
 					</form>
 			</div>
@@ -62,12 +61,6 @@ function CategoriaForm (props) {
 
 }
 
-const mapStateToProps = (state) =>{
-	return {state}
-}
-const mapActionsToProps = (dispatch) => {
-	return {onSave: (newPost) => dispatch({type:'CHANGE', data: newPost})}
-}
 
-export default connect(mapStateToProps, mapActionsToProps)(CategoriaForm);
+export default connect(null, null)(CategoriaForm);
 
