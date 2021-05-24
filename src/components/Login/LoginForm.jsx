@@ -1,16 +1,16 @@
 import React, {useState, useEffect} from 'react';
-import { connect, useSelector} from 'react-redux';
+import { connect, useSelector, useDispatch} from 'react-redux';
 import { useHistory } from "react-router-dom";
 import { Fab } from '@material-ui/core';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import googleI from '../../assets/googleIcon.svg';
-import { doLoginAction, doLoginDbAction } from '../../reducers/userDuck';
+import { LOGIN } from '../../sagas/userDuck'; 
 
-
-function LoginForm ({ doLoginAction, doLoginDbAction}) {
+function LoginForm () {
 
 	const history = useHistory();
 	const state = useSelector(state => state.user)
+	const dispatch = useDispatch()
 	const [form, setForm] = useState({user:'',pass:''});
 
 	const handleForm = (e) => {
@@ -28,7 +28,10 @@ function LoginForm ({ doLoginAction, doLoginDbAction}) {
 	}, [state.loggedIn])
 	
     const handleSubmit = () => {
-		doLoginDbAction(form);
+		dispatch({
+			type: LOGIN,
+			payload: form
+		});
 	}
 
 	return(
@@ -46,7 +49,7 @@ function LoginForm ({ doLoginAction, doLoginDbAction}) {
 				<Fab color="primary">
 					<PowerSettingsNewIcon fontSize="large" onClick={ handleSubmit } />
 				</Fab>
-				<button id="googleIcon" onClick={ doLoginAction }  >
+				<button id="googleIcon"  >
 					<img id= "imgGoog" src={ googleI } />
 				</button>	
 			</div>
@@ -54,4 +57,4 @@ function LoginForm ({ doLoginAction, doLoginDbAction}) {
 	);
 }
 
-export default connect( null, { doLoginAction, doLoginDbAction } )( LoginForm );
+export default connect( null, null)( LoginForm );
