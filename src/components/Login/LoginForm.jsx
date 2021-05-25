@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { Fab } from '@material-ui/core';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import googleI from '../../assets/googleIcon.svg';
-import { LOGIN } from '../../sagas/userDuck'; 
+import { LOGIN } from '../../sagas/types'; 
 
 function LoginForm () {
 

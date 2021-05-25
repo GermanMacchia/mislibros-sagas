@@ -1,3 +1,6 @@
+import { LOGIN, LOG_OUT, LOGIN_SUCCESS, LOGIN_ERROR, LOGIN_GOOGLE_SUCCESS} from './types';
+import { loginWithGoogle } from '../firebase';
+
 const initialData = {
     loggedIn: false,
     fetching: false,
@@ -7,25 +10,8 @@ const initialData = {
     }
 }
 
-//GETERS
-export const LOGIN = "LOGIN";
-export const LOGIN_GOOGLE = "LOGIN_GOOGLE"
-
-//SETERS
-const LOGIN_SUCCESS = 'LOGIN_SUCCESS'; 
-const LOGIN_GOOGLE_SUCCESS = 'LOGIN_GOOGLE_SUCCESS';
-export const LOG_OUT = 'LOG_OUT';
-
-export const setLoginSuccess = (data) => ({
-    type: LOGIN_SUCCESS,
-    payload: data
-})
-
-//ERRORS
-export const LOGIN_ERROR = 'LOGIN_ERROR';
-
 //REDUCER
-export default (state = initialData, action) => {
+export default function userReducer(state = initialData, action){
     switch(action.type){
         case LOG_OUT:
             return{
@@ -60,3 +46,48 @@ export default (state = initialData, action) => {
     }
 }
 
+// export const doLoginDbAction = (form) => {
+
+//     return async dispatch => {
+//     dispatch({
+//         type: LOGIN
+//     })
+
+//     const loggin = await axios.post(url + `login`, form)
+// 		if(loggin.data.token != null || undefined){
+//             const token = loggin.data.token;
+//             dispatch({
+//                 type: LOGIN_SUCCESS,
+//                 payload: token
+//             })
+//         }else{
+//             dispatch({
+//                 type: LOGIN_ERROR,
+//                 error: loggin.data.error
+//             })
+//         }
+// 	}
+// }
+
+export const doLoginAction = () => dispatch => {
+    return loginWithGoogle()
+        .then( user => {
+            dispatch({
+                type: LOGIN_GOOGLE_SUCCESS,
+                payload: {
+                    uid: user.uid,
+                    displayName: user.displayName,
+                    email: user.email,
+                    photoURL: user.photoURL
+                }
+            })
+            
+        })
+        .catch( e => {
+            console.log(e)
+            dispatch({
+                type: LOGIN_ERROR,
+                payload: e.message
+            })
+        })
+}
