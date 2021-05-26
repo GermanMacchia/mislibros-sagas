@@ -3,12 +3,12 @@ import { handleGetLogin } from './handlers/loginHand';
 import { LOGIN } from './types';
 
 export default function* rootSaga() {
-    //Watch}
    yield all([
        watchUser(),
    ])
 }
 
+//Watchers
 function* watchUser(){
     yield takeLatest(LOGIN, handleGetLogin) 
 }

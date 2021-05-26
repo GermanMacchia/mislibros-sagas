@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useAlert } from 'react-alert';
 import { Fab } from '@material-ui/core';
 import AssignmentIcon from '@material-ui/icons/Assignment';
+import { Button } from 'primereact/button';
 
 export default function Registro () {
 	
@@ -44,9 +45,9 @@ export default function Registro () {
 
 
 	return(
-			<div className= "Logform">
-				<h2>Registrate</h2>
-				<form id="registro">
+		<>
+			<div >
+				<form className="log">
 					<label>User </label>
 					<input type="text" name="usuario"  onChange= {handleChange} placeholder="Nombre de usuario" /><br/>
 					<label>Pass </label>
@@ -55,10 +56,9 @@ export default function Registro () {
 					<input type="email" name="email" onChange= {handleChange} placeholder="Ingrese un email" /><br/>
 					<label>Celu </label>
 					<input type="text" name="celu" onChange= {handleChange} placeholder="Nro. de contacto"/><br/><br/>
-					<Fab color="primary">
-						<AssignmentIcon fontSize="large" type= "submit" onClick={handleSubmit} />
-					</Fab>
 				</form>
 			</div>
+			<Button style={{ marginBottom: "10px", width: "20em", height: "auto"}} onClick={ handleSubmit } icon="pi pi-check" className="p-button-success" />
+    	</>
 		);
 }

@@ -14,8 +14,6 @@ export default function Router (props){
 
 		<BrowserRouter> 
 
-			<Header />
-				
 				<Switch>
 					<Route exact path="/" component={SignIn} />
 					<Route exact path="/home" component={Home} />

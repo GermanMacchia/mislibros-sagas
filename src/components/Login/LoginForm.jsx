@@ -1,10 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import { connect, useSelector, useDispatch} from 'react-redux';
 import { useHistory } from "react-router-dom";
-import { Fab } from '@material-ui/core';
-import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
-import googleI from '../../assets/googleIcon.svg';
 import { LOGIN } from '../../sagas/types'; 
+import { Button } from 'primereact/button';
 
 function LoginForm () {
 
@@ -35,8 +33,7 @@ function LoginForm () {
 	}
 
 	return(
-		<div className= "Logform">
-			<h2>Ingresa a tu biblioteca</h2>
+		<div className="log">
 			{/*Formulario*/}
 			<form action="Login">
 				<label>User </label>
@@ -45,14 +42,15 @@ function LoginForm () {
 					<input type="password" name='pass'placeholder="Contraseña" onChange={ handleForm }/><br/><br/>
 			</form>
 			{/*Botones*/}
-			<div id="logButt">
-				<Fab color="primary">
-					<PowerSettingsNewIcon fontSize="large" onClick={ handleSubmit } />
-				</Fab>
-				<button id="googleIcon"  >
-					<img id= "imgGoog" src={ googleI } />
-				</button>	
-			</div>
+			{state.fetching
+				? <Button style={{ marginBottom: "10px", width: "23em", height: "auto"}} loading loadingOptions={{ position: 'right' }} className="p-button-secondary p-ml-2" />
+				: <Button style={{ marginBottom: "10px", width: "23em", height: "auto"}} onClick={ handleSubmit } label="Login" icon="pi pi-sign-in" className="p-button-secondary p-ml-2" />
+			}
+			<br/>
+			<Button style={{ width: "23em"}} className="google p-p-0">
+				<i className="pi pi-google p-px-2" /> 
+				<span style={{ marginLeft: "100px"}} className="p-px-3">Login with Google</span>
+			</Button>
 		</div>
 	);
 }

@@ -4,6 +4,10 @@ import App from './App';
 import { Provider } from 'react-redux';
 import generateStore from './configureStore';
 import './styles/index.css';
+import './styles/login.css';
+import 'primereact/resources/themes/arya-purple/theme.css';
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
 
 const store = generateStore(); 
 
