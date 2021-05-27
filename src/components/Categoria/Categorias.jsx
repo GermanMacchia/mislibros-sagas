@@ -1,33 +1,51 @@
-import React, {useEffect, useState} from 'react';
-import axios from 'axios';
-import { connect } from 'react-redux';
-
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import Spinner from '../utils/Spinner'
 import Nav from '../Home/Nav';
 import CategoriaForm from './CategoriaForm'
 import CategoriaList from './CategoriaList'
+import { Accordion, AccordionTab } from 'primereact/accordion';
+import { GET_CATEGORIAS } from '../../sagas/types';
 
+export default function Categorias () {
 
-function Categorias (props) {
+	const state = useSelector(state => state.libros)
+	const dispatch = useDispatch()
 
-	const [libros, setLibros] = useState({});
-
+	useEffect(() => {
+		dispatch( { type: GET_CATEGORIAS } )
+	}, [state.reducerChanges]);
 
 	return(
 		<>
 			<Nav />
-			<div className='display'>
-				<div className='contentForm'>
-					<CategoriaForm />
-				</div>
+			<div className= "center">
+			{
+				(state.loaded === false)
+				?
+					<>
+						<br/>
+						<Spinner />
+					</>
+				:
+				<div>
 					<CategoriaList />
+					<Accordion style={{ width: "80em", marginTop: "10px"}} activeIndex={1}>
+						<AccordionTab header={
+								<>
+									<i style={{ marginRight: "10px"}} className="pi pi-upload"/>
+									Ingresar un libro
+								</>
+							}>
+						<CategoriaForm />
+						</AccordionTab>
+					</Accordion>
+				</div>
+			}
 			</div>
 		</>
 		)
 }
 
-const mapStateToProps = (state) =>{
-	return {token: state}
-}
 
-export default connect(mapStateToProps, null)(Categorias);
 

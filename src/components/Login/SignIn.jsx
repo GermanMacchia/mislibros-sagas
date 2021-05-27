@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import Registro from '../Registro/Registro';
+import React from 'react';
+import Registro from './Registro';
 import LoginForm from './LoginForm';
 import { Card } from 'primereact/card';
 import shelve from '../../assets/shelve.jpg';
@@ -10,9 +10,10 @@ export default function SignIn () {
 	const header = (
         <h1>Mis Libros App</h1>
     );
+
 	return(
 		<>
-			<div id="card">
+			<div className="center">
 				<Card title="Ingresa a tu biblioteca" header={header}>
 					<img src= {shelve} alt="shelve" />
 					<LoginForm />

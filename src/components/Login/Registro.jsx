@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
 import axios from 'axios';
+import { REGISTER } from '../../sagas/types';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useAlert } from 'react-alert';
-import { Fab } from '@material-ui/core';
-import AssignmentIcon from '@material-ui/icons/Assignment';
 import { Button } from 'primereact/button';
 
 export default function Registro () {
 	
+	const dispatch = useDispatch();
 	const alert = useAlert()
 	const url = `https://mis-libros-bck.herokuapp.com/`;
 
@@ -27,7 +28,9 @@ export default function Registro () {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-
+		dispatch({
+			type: REGISTER
+		})
 		async function registro () {
 			await axios.post(url + `registro`, user)
 			    .then((res) => {
@@ -38,18 +41,16 @@ export default function Registro () {
                     alert.error('Nombre de usuario ya registrado')
                 });
         }
-        
         registro();
-        document.getElementById("registro").reset()
+		document.getElementById('myform').reset();
 	}
-
 
 	return(
 		<>
 			<div >
-				<form className="log">
+				<form className="log" id="myform">
 					<label>User </label>
-					<input type="text" name="usuario"  onChange= {handleChange} placeholder="Nombre de usuario" /><br/>
+					<input type="text" name="usuario" onChange= {handleChange} placeholder="Nombre de usuario" /><br/>
 					<label>Pass </label>
 					<input type="password" name="clave" onChange= {handleChange} placeholder="Ingrese una contraseña" /><br/>
 					<label>Mail </label>
@@ -58,6 +59,7 @@ export default function Registro () {
 					<input type="text" name="celu" onChange= {handleChange} placeholder="Nro. de contacto"/><br/><br/>
 				</form>
 			</div>
+			{/* { ? : } */}
 			<Button style={{ marginBottom: "10px", width: "20em", height: "auto"}} onClick={ handleSubmit } icon="pi pi-check" className="p-button-success" />
     	</>
 		);

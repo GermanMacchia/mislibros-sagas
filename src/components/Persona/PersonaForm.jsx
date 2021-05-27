@@ -1,22 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useAlert } from 'react-alert';
+import React from 'react';
+
 import { connect } from 'react-redux';
 import { Fab } from '@material-ui/core';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 function PersonaForm (props) {
 
-	const alert = useAlert()
+	// const alert = useAlert()
 
 
-	const [newPost, setNewPost] = useState(0);
-	const [persona, setPersona] = useState({
-		    nombre: " ",
-		    apellido: " ",
-		    email: " ",
-		    alias: " "
-			})
+	// const [newPost, setNewPost] = useState(0);
+	// const [persona, setPersona] = useState({
+	// 	    nombre: " ",
+	// 	    apellido: " ",
+	// 	    email: " ",
+	// 	    alias: " "
+	// 		})
 
 	// const handleNuevaPersona = (e) => {
 	// 	setPersona({

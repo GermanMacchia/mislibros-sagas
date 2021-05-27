@@ -47,15 +47,11 @@ select {
 #nav{
     display: flex;
     flex-direction: row-reverse; 
-    border-top: solid #ffffff 5px;
 }
 .buttonsNav {
     display: flex;
     flex-direction: row-reverse;
-   
-
 }
-
 
 
 .butNav{
@@ -87,8 +83,8 @@ select {
 }
 
 .homeform textarea {
-    width: 160px;
-    height: 147px;
+    width: 900px;
+    height: 85px;
 }
 
 .homeform label {

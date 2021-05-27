@@ -1,5 +1,12 @@
-import { LOGIN, LOG_OUT, LOGIN_SUCCESS, LOGIN_ERROR, LOGIN_GOOGLE_SUCCESS} from './types';
-import { loginWithGoogle } from '../firebase';
+import { 
+    LOGIN, 
+    LOG_OUT, 
+    LOGIN_SUCCESS, 
+    LOGIN_ERROR, 
+    LOGIN_GOOGLE_SUCCESS, 
+    REGISTER 
+} from './types'
+import { loginWithGoogle } from '../firebase'
 
 const initialData = {
     loggedIn: false,
@@ -11,8 +18,13 @@ const initialData = {
 }
 
 //REDUCER
-export default function userReducer(state = initialData, action){
+export default function reducer(state = initialData, action){
     switch(action.type){
+        case REGISTER:
+            return{
+                ...state,
+                registering: true,
+            }
         case LOG_OUT:
             return{
                 ...initialData

@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import { connect, useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch} from 'react-redux';
 import { useHistory } from "react-router-dom";
 import { LOGIN } from '../../sagas/types'; 
 import { Button } from 'primereact/button';
 
-function LoginForm () {
+export default function LoginForm () {
 
 	const history = useHistory();
 	const state = useSelector(state => state.user)
@@ -54,5 +54,3 @@ function LoginForm () {
 		</div>
 	);
 }
-
-export default connect( null, null)( LoginForm );

@@ -243,7 +243,7 @@ export const prestarLibroAction = (id, persona) => {
 
         try{
             const res = await axios.get(url + `persona/` + persona, {headers: auth})
-            if(res.status == 200){
+            if(res.status === 200){
                 await axios({
                     method: 'put',
                     url: url + `libro/prestar/` + id,

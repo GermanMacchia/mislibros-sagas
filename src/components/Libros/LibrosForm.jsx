@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { connect, useSelector } from 'react-redux';
-import { useAlert } from 'react-alert';
-import { Fab } from '@material-ui/core';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
+import { connect, useDispatch, useSelector } from 'react-redux';
+import { Button } from 'primereact/button';
 import { postLibroAction } from '../../reducers/librosDuck';
-import { getPersonaAction } from '../../reducers/personaDuck';
-import { getCategoriasAction } from '../../reducers/categoriaDuck';
+import { GET_CATEGORIAS, GET_PERSONA } from '../../sagas/types'
 
-function LibrosForm ({ postLibroAction, getPersonaAction, getCategoriasAction }) {
+function LibrosForm ({ postLibroAction }) {
+	const dispatch = useDispatch();
 
-	const alert = useAlert();
 	const state = useSelector(state => state)
 	const [opcionP, setOpcionP] = useState();
 	const [opcionC, setOpcionC] = useState();
@@ -23,9 +20,8 @@ function LibrosForm ({ postLibroAction, getPersonaAction, getCategoriasAction })
 	});
 	
 	useEffect(() => {
-		//LLAMADAS API
-	    getCategoriasAction();
-	    getPersonaAction();
+		dispatch({type: GET_CATEGORIAS})
+		dispatch({type: GET_PERSONA})		
 	}, []);
 
 	useEffect(() => {
@@ -71,8 +67,6 @@ function LibrosForm ({ postLibroAction, getPersonaAction, getCategoriasAction })
 
 	return  (
 			<div className= "homeform">
-				<h2>Ingresar un libro</h2>
-
 				<div className="floatLeft">
 					<form id="Lregistro">
 						<label>Nombre </label><br/>
@@ -95,9 +89,7 @@ function LibrosForm ({ postLibroAction, getPersonaAction, getCategoriasAction })
 					<form id= "Tregistro">
 						<label className="descripcion" >Descripcion </label><br/>
 						<textarea type="textarea" name="descripcion" onChange={handleNuevoLibro} placeholder="Descripcion" /><br/><br/>
-						<Fab color="primary">
-							<AddCircleIcon fontSize="large" type= "submit" onClick={handleSubmit} />
-						</Fab>						
+						<Button style={{ marginBottom: "10px", width: "20em", height: "auto"}} onClick={ handleSubmit } icon="pi pi-check" className="p-button-success" />						
 					</form>
 				</div>
 			</div>
@@ -105,4 +97,4 @@ function LibrosForm ({ postLibroAction, getPersonaAction, getCategoriasAction })
 
 }
 
-export default connect( null, { postLibroAction, getPersonaAction, getCategoriasAction } )(LibrosForm);
+export default connect( null, { postLibroAction } )(LibrosForm);

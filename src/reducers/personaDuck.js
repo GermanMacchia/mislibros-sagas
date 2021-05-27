@@ -78,7 +78,7 @@ export const getPrestarAction = (id, persona) => {
         })
         try{
             const res = await axios.get(url + `persona/` + persona, {headers: auth})
-            if(res.status == 200){
+            if(res.status === 200){
                 prestarLibroAction(id, persona)
             }
         }catch(e){
