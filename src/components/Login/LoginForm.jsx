@@ -3,6 +3,8 @@ import { useSelector, useDispatch} from 'react-redux';
 import { useHistory } from "react-router-dom";
 import { LOGIN } from '../../sagas/types'; 
 import { Button } from 'primereact/button';
+import { InputText } from 'primereact/inputtext';
+import { Password } from 'primereact/password';
 
 export default function LoginForm () {
 
@@ -36,18 +38,22 @@ export default function LoginForm () {
 		<div className="log">
 			{/*Formulario*/}
 			<form action="Login">
-				<label>User </label>
-					<input type="text" name='user' placeholder="Usuario" onChange={ handleForm } /><br/>
-				<label>Pass </label>
-					<input type="password" name='pass'placeholder="Contraseña" onChange={ handleForm }/><br/><br/>
+                <span className="p-float-label">
+                    <InputText  name='user' className="p-inputtext-mb p-d-block" onChange={handleForm} />
+                    <label htmlFor="usuario">Usuario</label>
+                </span><br/>
+				<span className="p-float-label">
+                    <Password name='pass' className="p-inputtext-mb p-d-block" onChange={handleForm} feedback={false} />
+                    <label htmlFor="usuario">Contraseña</label>
+                </span><br/>
 			</form>
 			{/*Botones*/}
 			{state.fetching
-				? <Button style={{ marginBottom: "10px", width: "23em", height: "auto"}} loading loadingOptions={{ position: 'right' }} className="p-button-secondary p-ml-2" />
-				: <Button style={{ marginBottom: "10px", width: "23em", height: "auto"}} onClick={ handleSubmit } label="Login" icon="pi pi-sign-in" className="p-button-secondary p-ml-2" />
+				? <Button id="loading" loading loadingOptions={{ position: 'right' }} className="p-button-secondary p-ml-2" />
+				: <Button onClick={ handleSubmit } label="Login" icon="pi pi-sign-in" className="p-button-secondary p-ml-2" />
 			}
 			<br/>
-			<Button style={{ width: "23em"}} className="google p-p-0">
+			<Button className="google p-p-0">
 				<i className="pi pi-google p-px-2" /> 
 				<span style={{ marginLeft: "100px"}} className="p-px-3">Login with Google</span>
 			</Button>

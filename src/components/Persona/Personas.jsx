@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Nav from '../Home/Nav'
-import Spinner from '../utils/Spinner'
+import Spinner from '../utilities/Spinner'
 import PersonaForm from './PersonaForm'
 import PersonaList from './PersonaList'
 import { Accordion, AccordionTab } from 'primereact/accordion'

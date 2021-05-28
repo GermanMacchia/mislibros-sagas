@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { connect, useSelector} from 'react-redux';
+import { connect, useSelector, useDispatch } from 'react-redux';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -10,9 +10,11 @@ import VerticalAlignBottomIcon from '@material-ui/icons/VerticalAlignBottom';
 import ClassIcon from '@material-ui/icons/Class';
 import FormatList from '@material-ui/icons/FormatListNumbered';
 import  {  deleteLibroAction, devolverLibroAction, prestarLibroAction } from '../../reducers/librosDuck';
+import { DELETE_LIBROS } from '../../sagas/types';
 
 function LibrosList ({ deleteLibroAction, devolverLibroAction }) {
 
+	const dispatch = useDispatch()
 	const state = useSelector(state => state.libros)
 	const [librosHtml, setLibrosHtml] = useState();
 	const [libros, setLibros] = useState();
@@ -20,8 +22,7 @@ function LibrosList ({ deleteLibroAction, devolverLibroAction }) {
 	const handleDelete = (e) =>{
 		const opcion = window.confirm('¿Seguro que quieres eliminar?');
 			if(opcion === true){
-					
-					deleteLibroAction(e)
+					dispatch({type: DELETE_LIBROS, props: e})
 			}
 	}
 

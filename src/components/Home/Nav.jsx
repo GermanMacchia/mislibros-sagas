@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from "react-router-dom";
 
 import Button from '@material-ui/core/Button';
@@ -6,11 +6,18 @@ import LocalLibraryIcon from '@material-ui/icons/LocalLibrary';
 import CategoryIcon from '@material-ui/icons/Category';
 import PersonPinIcon from '@material-ui/icons/PersonPin';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { green, purple } from '@material-ui/core/colors';
-
+import { useDispatch } from 'react-redux';
+import { GET_CATEGORIAS, GET_PERSONA, GET_LIBROS } from '../../sagas/types'
 
 export default function Nav () {
 
+	const dispatch = useDispatch()
+
+	useEffect(() => {
+		dispatch( { type: GET_LIBROS } )
+		dispatch({type: GET_CATEGORIAS})
+		dispatch({type: GET_PERSONA})		
+	}, []);
 
 	return(
 		<>	

@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'primereact/button';
-import { postLibroAction } from '../../reducers/librosDuck';
-import { GET_CATEGORIAS, GET_PERSONA } from '../../sagas/types'
+import { GET_CATEGORIAS, POST_LIBROS } from '../../sagas/types'
 
-function LibrosForm ({ postLibroAction }) {
+export default function LibrosForm ({ postLibroAction }) {
+	
 	const dispatch = useDispatch();
-
 	const state = useSelector(state => state)
 	const [opcionP, setOpcionP] = useState();
 	const [opcionC, setOpcionC] = useState();
@@ -18,11 +17,7 @@ function LibrosForm ({ postLibroAction }) {
 		    categoria_id: " ",
 		    persona_id: null
 	});
-	
-	useEffect(() => {
-		dispatch({type: GET_CATEGORIAS})
-		dispatch({type: GET_PERSONA})		
-	}, []);
+
 
 	useEffect(() => {
 		//SET LUEGO DE LA LLAMADA
@@ -53,17 +48,15 @@ function LibrosForm ({ postLibroAction }) {
 		setLibro({
 			...libro,
 			[e.target.name]: e.target.value
-			
 		});
 	};
 	//SUBMIT
 	const handleSubmit = (e) => {
 			e.preventDefault();	
-			postLibroAction (libro);
+			dispatch({type: POST_LIBROS, props: libro})
 			document.getElementById("Lregistro").reset();
 			document.getElementById("Tregistro").reset();
 	};
-
 
 	return  (
 			<div className= "homeform">
@@ -97,4 +90,3 @@ function LibrosForm ({ postLibroAction }) {
 
 }
 
-export default connect( null, { postLibroAction } )(LibrosForm);

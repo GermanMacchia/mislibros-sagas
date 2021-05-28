@@ -1,23 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch } from 'react-redux'
 import { classNames } from 'primereact/utils';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Toast } from 'primereact/toast';
 import { Button } from 'primereact/button';
-import { FileUpload } from 'primereact/fileupload';
-import { Rating } from 'primereact/rating';
+// import { FileUpload } from 'primereact/fileupload';
 import { Toolbar } from 'primereact/toolbar';
 import { InputTextarea } from 'primereact/inputtextarea';
-import { RadioButton } from 'primereact/radiobutton';
-import { InputNumber } from 'primereact/inputnumber';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
-
+import { Dropdown } from 'primereact/dropdown';
 import { useSelector } from 'react-redux';
+import { DELETE_LIBROS } from '../../sagas/types';
 
 
 export default function Lista(){
 
+//SE UBICA COMO INICIAL EN SETPRODUCTS QUE INGRESA DIALOG ABAJO
     let emptyProduct = {
         id: null,
         name: '',
@@ -29,34 +29,62 @@ export default function Lista(){
         rating: 0,
         inventoryStatus: 'INSTOCK'
     };
+    const dispatch = useDispatch();
     const state = useSelector(state => state.libros)
+    const [auxCategorias, setAuxCategorias] = useState()
+    const categorias = useSelector(state => state.categoria.payload)    
+    const personas = useSelector(state => state.persona.payload)   
 
-//LISTA DE PRODUCTOS
+//INGRESO LISTA DE PRODUCTOS INICIAL
     const [products, setProducts] = useState(null);
 
     const [productDialog, setProductDialog] = useState(false);
     const [deleteProductDialog, setDeleteProductDialog] = useState(false);
     const [deleteProductsDialog, setDeleteProductsDialog] = useState(false);
 
+//INGRESO SET DIALOG LINEA 283
     const [product, setProduct] = useState(emptyProduct);
-
+//SELECTORES POR CASILLA
     const [selectedProducts, setSelectedProducts] = useState(null);
+
     const [submitted, setSubmitted] = useState(false);
+
+//FILTRO DEL HEADER 
     const [globalFilter, setGlobalFilter] = useState(null);
     const toast = useRef(null);
     const dt = useRef(null);
 
-//INGRESO DE PRODUCTOS
+//INGRESO INICIAL DE PRODUCTOS A LISTA
     useEffect(() => {
-        setProducts(state.payload);
+        sacarCategoria()
+    }, [state.loaded, categorias]);
 
-        console.log(state.payload)
-    }, [state.loaded]);
+//FUNCION PARA FILTRAR ID CATEGORIAS Y ASIGNARLAS AL ARRAY DE TABlA CON NOMBRE
+function sacarCategoria(){
 
-    // const formatCurrency = (value) => {
-    //     return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-    // }
+    if(state.payload !== 0 && categorias !== undefined){
+                let cat = [...categorias]
+                let tabla = [...state.payload]
+                let array1 = [];
 
+                tabla.forEach( e => {
+                    
+                    let [ cate ] = cat.filter( c => c.id === e.categoria_id)
+                    let objeto = {
+                        nombre: e.nombre,
+                        categoria: cate.nombre,
+                        descripcion: e.descripcion
+                    }
+                    array1.push(objeto)
+                }) 
+
+                setProducts(array1) 
+            }        
+
+}
+
+
+//SWITCH PARA ABRIR EL DIALOGO LINEA 283
     const openNew = () => {
         setProduct(emptyProduct);
         setSubmitted(false);
@@ -110,12 +138,13 @@ export default function Lista(){
         setDeleteProductDialog(true);
     }
 
+    //BORRAR PRODUCTO LINA 251
     const deleteProduct = () => {
-        let _products = products.filter(val => val.id !== product.id);
-        setProduct(_products);
+
+        dispatch({type:DELETE_LIBROS, props: product.id})
         setDeleteProductDialog(false);
-        setProduct(emptyProduct); //
-        toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
+        setProduct(emptyProduct); 
+        toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Libro Borrado', life: 3000 });
     }
 
     const findIndexById = (id) => {
@@ -178,7 +207,7 @@ export default function Lista(){
 
         setProduct(_product);
     }
-//BOTONERA IZQUIERDA
+//BOTONERA IZQUIERDA SUPERIOR
     const leftToolbarTemplate = () => {
         return (
             <React.Fragment>
@@ -187,15 +216,6 @@ export default function Lista(){
             </React.Fragment>
         )
     }
-//BOTONERA DERECHA--------------------------------------------------
-    // const rightToolbarTemplate = () => {
-    //     return (
-    //         <React.Fragment>
-    //             <FileUpload mode="basic" accept="image/*" maxFileSize={1000000} label="Import" chooseLabel="Import" className="p-mr-2 p-d-inline-block" />
-    //             <Button label="Export" icon="pi pi-upload" className="p-button-help" onClick={exportCSV} />
-    //         </React.Fragment>
-    //     )
-    // }
 
     //IMAGEN
     const imageBodyTemplate = (rowData) => {
@@ -239,7 +259,7 @@ export default function Lista(){
             <Button label="Save" icon="pi pi-check" className="p-button-text" onClick={saveProduct} />
         </React.Fragment>
     );
-    //BORRAR PRODUCTO INDIVIDUAL?
+    //BORRAR PRODUCTO INDIVIDUAL LINEA 336
     const deleteProductDialogFooter = (
         <React.Fragment>
             <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleteProductDialog} />
@@ -266,7 +286,9 @@ export default function Lista(){
                 {/*ESTRUCTURA DE TABLA*/}
                 <DataTable                    
                     ref={dt} 
+                    //VALORES DE LAS TABLAS
                     value={products} 
+                    //SELECCION POR CASILLA
                     selection={selectedProducts} 
                     onSelectionChange={(e) => setSelectedProducts(e.value)}
                     dataKey="id" 
@@ -276,13 +298,14 @@ export default function Lista(){
                     globalFilter={globalFilter}
                     header={header}>
 
+                    {/*SELECCION POR CASILLA */}
                     <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
-                    {/* <Column field="code" header="Code" sortable></Column> */}
+                    {/* <<FIELD>> AGARRA EL VALOR DEL OBJETO INGRESADO EN <Datatable> Value */}
                     <Column field="nombre" header="Nombre" sortable></Column>
                     <Column field="subtitulo" header="Subtitulo" sortable></Column>
                     <Column header="Imagen" body={imageBodyTemplate}></Column>
                     <Column field="descripcion" header="Descripcion" ></Column>
-                    <Column field="category" header="Categoria" sortable></Column>
+                    <Column field="categoria" header="Categoria" sortable></Column>
                     {/* <Column field="rating" header="Rating" body={ratingBodyTemplate} sortable></Column> */}
                     {/* <Column field="estado" header="Estado" body={statusBodyTemplate} sortable></Column> */}
                     <Column body={actionBodyTemplate}></Column>
@@ -291,48 +314,34 @@ export default function Lista(){
 
 
             {/* MODAL DE PRODUCTO NUEVO */}
-            <Dialog visible={productDialog} style={{ width: '450px' }} header="Product Details" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog}>
-                {product.image && <img src={`showcase/demo/images/product/${product.image}`} onError={(e) => e.target.src='https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'} alt={product.image} className="product-image" />}
+            <Dialog visible={productDialog} style={{ width: '450px' }} header="Ingrese el libro" footer={productDialogFooter} modal className="p-fluid" onHide={hideDialog}>
+                {/* {product.image && <img src={`showcase/demo/images/product/${product.image}`} onError={(e) => e.target.src='https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'} alt={product.image} className="product-image" />} */}
                 <div className="p-field">
-                    <label htmlFor="name">Name</label>
+                    <label htmlFor="name">Nombre</label>
                     <InputText id="name" value={product.name} onChange={(e) => onInputChange(e, 'name')} required autoFocus className={classNames({ 'p-invalid': submitted && !product.name })} />
+                    {submitted && !product.name && <small className="p-error">Se requiere ingresar un nombre</small>}
+                </div>
+                <div className="p-field">
+                    <label htmlFor="name">Subtitulo</label>
+                    <InputText id="name" value={product.subtitulo} onChange={(e) => onInputChange(e, 'name')} required autoFocus className={classNames({ 'p-invalid': submitted && !product.name })} />
                     {submitted && !product.name && <small className="p-error">Name is required.</small>}
                 </div>
                 <div className="p-field">
-                    <label htmlFor="description">Description</label>
+                    <label htmlFor="description">Descripción</label>
                     <InputTextarea id="description" value={product.description} onChange={(e) => onInputChange(e, 'description')} required rows={3} cols={20} />
                 </div>
 
                 <div className="p-field">
-                    <label className="p-mb-3">Category</label>
+                    <label className="p-mb-3">Categoria</label>
                     <div className="p-formgrid p-grid">
-                        <div className="p-field-radiobutton p-col-6">
-                            <RadioButton inputId="category1" name="category" value="Accessories" onChange={onCategoryChange} checked={product.category === 'Accessories'} />
-                            <label htmlFor="category1">Accessories</label>
-                        </div>
-                        <div className="p-field-radiobutton p-col-6">
-                            <RadioButton inputId="category2" name="category" value="Clothing" onChange={onCategoryChange} checked={product.category === 'Clothing'} />
-                            <label htmlFor="category2">Clothing</label>
-                        </div>
-                        <div className="p-field-radiobutton p-col-6">
-                            <RadioButton inputId="category3" name="category" value="Electronics" onChange={onCategoryChange} checked={product.category === 'Electronics'} />
-                            <label htmlFor="category3">Electronics</label>
-                        </div>
-                        <div className="p-field-radiobutton p-col-6">
-                            <RadioButton inputId="category4" name="category" value="Fitness" onChange={onCategoryChange} checked={product.category === 'Fitness'} />
-                            <label htmlFor="category4">Fitness</label>
-                        </div>
+                    <Dropdown value={product.category} options={auxCategorias}  optionLabel="Categoria" editable />
                     </div>
                 </div>
 
-                <div className="p-formgrid p-grid">
-                    <div className="p-field p-col">
-                        <label htmlFor="price">Price</label>
-                        <InputNumber id="price" value={product.price} onValueChange={(e) => onInputNumberChange(e, 'price')} mode="currency" currency="USD" locale="en-US" />
-                    </div>
-                    <div className="p-field p-col">
-                        <label htmlFor="quantity">Quantity</label>
-                        <InputNumber id="quantity" value={product.quantity} onValueChange={(e) => onInputNumberChange(e, 'quantity')} integeronly />
+                <div className="p-field">
+                    <label className="p-mb-3">Prestado</label>
+                    <div className="p-formgrid p-grid">
+                    <Dropdown value={product.category} options={auxCategorias}  optionLabel="Categoria" editable />
                     </div>
                 </div>
             </Dialog>
@@ -341,10 +350,10 @@ export default function Lista(){
             <Dialog visible={deleteProductDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteProductDialogFooter} onHide={hideDeleteProductDialog}>
                 <div className="confirmation-content">
                     <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem'}} />
-                    {product && <span> ¿Seguro que quieres borrar <b>{product.name}</b>?</span>}
+                    {product && <span> ¿Seguro que quieres borrar <b>{product.nombre}</b>?</span>}
                 </div>
             </Dialog>
-
+            {/* MODAL DE BORRAR CON SELECTORES */}
             <Dialog visible={deleteProductsDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteProductsDialogFooter} onHide={hideDeleteProductsDialog}>
                 <div className="confirmation-content">
                     <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem'}} />

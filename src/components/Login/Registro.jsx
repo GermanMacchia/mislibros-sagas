@@ -4,6 +4,9 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useAlert } from 'react-alert';
 import { Button } from 'primereact/button';
+import { InputText } from 'primereact/inputtext';
+import { Password } from 'primereact/password'
+import { InputNumber } from 'primereact/inputnumber';
 
 export default function Registro () {
 	
@@ -22,7 +25,6 @@ export default function Registro () {
 		setUser({
 			...user,
 			[e.target.name] : e.target.value
-
 		})
 	}
 
@@ -47,16 +49,24 @@ export default function Registro () {
 
 	return(
 		<>
-			<div >
-				<form className="log" id="myform">
-					<label>User </label>
-					<input type="text" name="usuario" onChange= {handleChange} placeholder="Nombre de usuario" /><br/>
-					<label>Pass </label>
-					<input type="password" name="clave" onChange= {handleChange} placeholder="Ingrese una contraseña" /><br/>
-					<label>Mail </label>
-					<input type="email" name="email" onChange= {handleChange} placeholder="Ingrese un email" /><br/>
-					<label>Celu </label>
-					<input type="text" name="celu" onChange= {handleChange} placeholder="Nro. de contacto"/><br/><br/>
+			<div className="registro">
+				<form className="log">
+					<span className="p-float-label">
+						<InputText name='usuario' className="p-inputtext-mb p-d-block" onChange={handleChange} />
+						<label htmlFor="usuario">Usuario</label>
+                	</span>
+					<span className="p-float-label">
+						<Password name='clave' className="p-inputtext-mb p-d-block" onChange={handleChange} toggleMask />
+						<label htmlFor="usuario">Contraseña</label>
+					</span>
+					<span className="p-float-label">
+						<InputText name='email' className="p-inputtext-mb p-d-block" onChange={handleChange} />
+						<label htmlFor="usuario">Email</label>
+                	</span>
+					<span className="p-float-label">
+						<InputText name='celu' className="p-inputtext-mb p-d-block" onChange={handleChange} />
+						<label htmlFor="telefono">Telefono</label>
+                	</span>
 				</form>
 			</div>
 			{/* { ? : } */}

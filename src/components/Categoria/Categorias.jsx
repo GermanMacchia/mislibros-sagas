@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import Spinner from '../utils/Spinner'
+import Spinner from '../utilities/Spinner'
 import Nav from '../Home/Nav';
 import CategoriaForm from './CategoriaForm'
 import CategoriaList from './CategoriaList'

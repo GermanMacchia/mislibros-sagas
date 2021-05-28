@@ -1,7 +1,7 @@
 import { createStore, combineReducers, compose, applyMiddleware} from 'redux';
 import thunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
-import librosReducer from './reducers/librosDuck';
+import librosReducer from './sagas/librosDuck';
 import personaReducer from './reducers/personaDuck';
 import categoriaReducer from './reducers/categoriaDuck';
 import userReducer from './sagas/userDuck'

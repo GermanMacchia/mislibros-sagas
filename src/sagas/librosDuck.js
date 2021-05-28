@@ -17,9 +17,9 @@ import {
 const initialData = {
     fetching: false,
     loaded: false,
-    posting: false,
-    updating: false,
-    deleting: false,
+    posting: null,
+    updating: null,
+    deleting: null,
     error: [],
     reducerChanges: [] 
 }
@@ -52,18 +52,21 @@ export default function reducer(state = initialData, action){
         case DELETE_LIBROS:
             return {
                 ...state,
-                deleting:true
+                deleting: {
+                    status: true,
+                    props: action.props
+                }
             }
         case DELETE_LIBROS_ERROR:
             return {
                 ...state,
-                deleting: false,
+                deleting: null,
                 error: [...state.error, action.payload]
             }
         case DELETE_LIBROS_SUCCESS:
             return {
                 ...state,
-                deleting: false,
+                deleting: null,
                 reducerChanges: [...state.reducerChanges, action.payload]
             }
 
@@ -90,18 +93,21 @@ export default function reducer(state = initialData, action){
         case POST_LIBROS:
             return {
                 ...state,
-                posting:true
+                posting: {
+                    status: true,
+                    props: action.props
+                }
             }
         case POST_LIBROS_ERROR:
             return {
                 ...state,
-                posting: false,
+                posting: null,
                 error: [...state.error, action.error]
             }
         case POST_LIBROS_SUCCESS:
             return {
                 ...state,
-                posting: false,
+                posting: null,
                 reducerChanges: [...state.reducerChanges, action.payload]
             }
 
