@@ -13,7 +13,7 @@ export default function SignIn () {
 
 	return(
 		<>
-			<div className="center">
+			<div className="center" >
 				<Card title="Ingresa a tu biblioteca" header={header}>
 					<img src= {shelve} alt="shelve" />
 					<LoginForm />

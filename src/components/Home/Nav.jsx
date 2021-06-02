@@ -1,17 +1,21 @@
-import React, { useEffect } from 'react';
-import { Link } from "react-router-dom";
-
-import Button from '@material-ui/core/Button';
-import LocalLibraryIcon from '@material-ui/icons/LocalLibrary';
-import CategoryIcon from '@material-ui/icons/Category';
-import PersonPinIcon from '@material-ui/icons/PersonPin';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import React, { useEffect, useState } from 'react';
+import shelve from '../../assets/shelve.jpg'
+// import { Link } from "react-router-dom";
+import { TabMenu } from 'primereact/tabmenu';
+// import Button from '@material-ui/core/Button';
+// import LocalLibraryIcon from '@material-ui/icons/LocalLibrary';
+// import CategoryIcon from '@material-ui/icons/Category';
+// import PersonPinIcon from '@material-ui/icons/PersonPin';
+// import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { useDispatch } from 'react-redux';
+import { useHistory } from "react-router-dom";
 import { GET_CATEGORIAS, GET_PERSONA, GET_LIBROS } from '../../sagas/types'
 
 export default function Nav () {
 
 	const dispatch = useDispatch()
+	const history = useHistory();
+
 
 	useEffect(() => {
 		dispatch( { type: GET_LIBROS } )
@@ -19,10 +23,21 @@ export default function Nav () {
 		dispatch({type: GET_PERSONA})		
 	}, []);
 
+    const items = [
+        {label: 'Biblioteca', icon: 'pi pi-fw pi-book', command:()=>{ history.push('/home')}},
+        {label: 'Categorias', icon: 'pi pi-fw pi-bookmark', command:()=>{ history.push('/categoria')}},
+        {label: 'Personas', icon: 'pi pi-fw pi-users', command:()=>{ history.push('/personas')}},
+        {label: 'Settings', icon: 'pi pi-fw pi-cog', command:()=>{ history.push('/settings')}}
+    ];
+
 	return(
 		<>	
 			<div id="nav">
-				<div className="buttonsNav">			
+				<img id= "imagen" src= {shelve} alt="shelve" />
+				<div id="menu" className="card">
+					<TabMenu model={items} />
+            	</div>
+				{/* <div className="buttonsNav">			
 					<Link className="butNavSalir" to={"/"} >
 						<Button						
 							variant="contained"
@@ -57,7 +72,7 @@ export default function Nav () {
 							Personas
 						</Button>
 					</Link>
-				</div>
+				</div> */}
 			</div>
 		</>
 	);

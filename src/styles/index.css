@@ -6,6 +6,16 @@ body {
     background: #201f1f;
 }
 
+.datatable-crud-demo .table-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.column {
+    word-wrap: break-word;
+    width: 3em;
+}
 
 
 .clear {
@@ -46,8 +56,18 @@ select {
 }
 #nav{
     display: flex;
-    flex-direction: row-reverse; 
+    flex-direction: row; 
 }
+#menu{
+    margin: 30px 0px 0px 605px;
+}
+
+#imagen{
+    width: 200px;
+    height: auto;
+    margin: 30px 0px 0px 30px;
+}
+
 .buttonsNav {
     display: flex;
     flex-direction: row-reverse;

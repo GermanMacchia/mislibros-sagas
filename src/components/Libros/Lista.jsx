@@ -66,18 +66,29 @@ function sacarCategoria(){
                 let cat = [...categorias]
                 let tabla = [...state.payload]
                 let array1 = [];
-
+                
                 tabla.forEach( e => {
                     
                     let [ cate ] = cat.filter( c => c.id === e.categoria_id)
+                    
+
+                    function retorno(){
+                        if( e.persona_id !== null){
+                            return "Prestado"
+                        }else{
+                            return "En biblioteca"
+                        }
+                    }
+                    
                     let objeto = {
                         nombre: e.nombre,
                         categoria: cate.nombre,
-                        descripcion: e.descripcion
+                        descripcion: e.descripcion,
+                        subtitulo: e.subtitulo,
+                        estado: retorno()
                     }
                     array1.push(objeto)
                 }) 
-
                 setProducts(array1) 
             }        
 
@@ -159,6 +170,7 @@ function sacarCategoria(){
         return index;
     }
 
+    
 //CREAR ID AL LLEGAR LOS PRODUCTOS
     // const createId = () => {
     //     let id = '';
@@ -170,9 +182,9 @@ function sacarCategoria(){
     // }
 
 //EXPORT A CRUD ?----
-    // const exportCSV = () => {
-    //     dt.current.exportCSV();
-    // }
+    const exportCSV = () => {
+        dt.current.exportCSV();
+    }
 
     const confirmDeleteSelected = () => {
         setDeleteProductsDialog(true);
@@ -186,27 +198,27 @@ function sacarCategoria(){
         toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000 });
     }
 
-    const onCategoryChange = (e) => {
-        let _product = {...product};
-        _product['category'] = e.value;
-        setProduct(_product);
-    }
+    // const onCategoryChange = (e) => {
+    //     let _product = {...product};
+    //     _product['category'] = e.value;
+    //     setProduct(_product);
+    // }
 
-    const onInputChange = (e, name) => {
-        const val = (e.target && e.target.value) || '';
-        let _product = {...product};
-        _product[`${name}`] = val;
+    // const onInputChange = (e, name) => {
+    //     const val = (e.target && e.target.value) || '';
+    //     let _product = {...product};
+    //     _product[`${name}`] = val;
 
-        setProduct(_product);
-    }
+    //     setProduct(_product);
+    // }
 
-    const onInputNumberChange = (e, name) => {
-        const val = e.value || 0;
-        let _product = {...product};
-        _product[`${name}`] = val;
+    // const onInputNumberChange = (e, name) => {
+    //     const val = e.value || 0;
+    //     let _product = {...product};
+    //     _product[`${name}`] = val;
 
-        setProduct(_product);
-    }
+    //     setProduct(_product);
+    // }
 //BOTONERA IZQUIERDA SUPERIOR
     const leftToolbarTemplate = () => {
         return (
@@ -259,6 +271,7 @@ function sacarCategoria(){
             <Button label="Save" icon="pi pi-check" className="p-button-text" onClick={saveProduct} />
         </React.Fragment>
     );
+
     //BORRAR PRODUCTO INDIVIDUAL LINEA 336
     const deleteProductDialogFooter = (
         <React.Fragment>
@@ -285,30 +298,32 @@ function sacarCategoria(){
 
                 {/*ESTRUCTURA DE TABLA*/}
                 <DataTable                    
-                    ref={dt} 
+                    // ref={dt} 
                     //VALORES DE LAS TABLAS
                     value={products} 
                     //SELECCION POR CASILLA
                     selection={selectedProducts} 
-                    onSelectionChange={(e) => setSelectedProducts(e.value)}
+                    onSelectionChange={ e => setSelectedProducts(e.value)}
                     dataKey="id" 
-                    paginator rows={10} rowsPerPageOptions={[5, 10, 25]}
+                    paginator rows={5} rowsPerPageOptions={[5, 10, 25]}
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                     currentPageReportTemplate="Mostrando {first} to {last} de {totalRecords} libros"
                     globalFilter={globalFilter}
                     header={header}>
 
                     {/*SELECCION POR CASILLA */}
-                    <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
+                    <Column selectionMode="multiple" headerStyle={{ width: '0.3rem' }}></Column>
                     {/* <<FIELD>> AGARRA EL VALOR DEL OBJETO INGRESADO EN <Datatable> Value */}
-                    <Column field="nombre" header="Nombre" sortable></Column>
-                    <Column field="subtitulo" header="Subtitulo" sortable></Column>
-                    <Column header="Imagen" body={imageBodyTemplate}></Column>
-                    <Column field="descripcion" header="Descripcion" ></Column>
-                    <Column field="categoria" header="Categoria" sortable></Column>
+                    <Column className="column" field="nombre" header="Nombre" sortable></Column>
+                    <Column className="column" field="subtitulo" header="Subtitulo" sortable></Column>
+                    {/* Esta anulado */}
+                    <Column style={{display: "none"}} header="Imagen" body={imageBodyTemplate}></Column>
+                    {/* tiene una ampliacion mayor */}
+                    <Column style={{wordWrap: "break-word", width: "100px"}} field="descripcion" header="Descripcion"></Column>
+                    <Column className="column" field="categoria" header="Categoria" sortable></Column>
                     {/* <Column field="rating" header="Rating" body={ratingBodyTemplate} sortable></Column> */}
-                    {/* <Column field="estado" header="Estado" body={statusBodyTemplate} sortable></Column> */}
-                    <Column body={actionBodyTemplate}></Column>
+                    <Column className="column" field="estado" header="Estado" sortable></Column>
+                    <Column className="column" body={actionBodyTemplate}></Column>
                 </DataTable>
             </div>
 
@@ -318,23 +333,23 @@ function sacarCategoria(){
                 {/* {product.image && <img src={`showcase/demo/images/product/${product.image}`} onError={(e) => e.target.src='https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'} alt={product.image} className="product-image" />} */}
                 <div className="p-field">
                     <label htmlFor="name">Nombre</label>
-                    <InputText id="name" value={product.name} onChange={(e) => onInputChange(e, 'name')} required autoFocus className={classNames({ 'p-invalid': submitted && !product.name })} />
+                    <InputText id="name" value={product.name}  required autoFocus className={classNames({ 'p-invalid': submitted && !product.name })} />
                     {submitted && !product.name && <small className="p-error">Se requiere ingresar un nombre</small>}
                 </div>
                 <div className="p-field">
                     <label htmlFor="name">Subtitulo</label>
-                    <InputText id="name" value={product.subtitulo} onChange={(e) => onInputChange(e, 'name')} required autoFocus className={classNames({ 'p-invalid': submitted && !product.name })} />
+                    <InputText id="name" value={product.subtitulo} required autoFocus className={classNames({ 'p-invalid': submitted && !product.name })} />
                     {submitted && !product.name && <small className="p-error">Name is required.</small>}
                 </div>
                 <div className="p-field">
                     <label htmlFor="description">Descripción</label>
-                    <InputTextarea id="description" value={product.description} onChange={(e) => onInputChange(e, 'description')} required rows={3} cols={20} />
+                    <InputTextarea id="description" value={product.description} required rows={3} cols={20} />
                 </div>
 
                 <div className="p-field">
                     <label className="p-mb-3">Categoria</label>
                     <div className="p-formgrid p-grid">
-                    <Dropdown value={product.category} options={auxCategorias}  optionLabel="Categoria" editable />
+                    <Dropdown value={product.categoria_id} options={auxCategorias}  optionLabel="Categoria" editable />
                     </div>
                 </div>
 
@@ -350,7 +365,7 @@ function sacarCategoria(){
             <Dialog visible={deleteProductDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteProductDialogFooter} onHide={hideDeleteProductDialog}>
                 <div className="confirmation-content">
                     <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem'}} />
-                    {product && <span> ¿Seguro que quieres borrar <b>{product.nombre}</b>?</span>}
+                    {product && <span>¿Seguro que quieres borrar <b>{product.nombre}</b>?</span>}
                 </div>
             </Dialog>
             {/* MODAL DE BORRAR CON SELECTORES */}

@@ -15,7 +15,8 @@ export default function LibrosForm ({ postLibroAction }) {
 		    nombre: " ",
 		    descripcion: " ",
 		    categoria_id: " ",
-		    persona_id: null
+		    persona_id: null,
+			subtitulo: " "
 	});
 
 
@@ -64,7 +65,10 @@ export default function LibrosForm ({ postLibroAction }) {
 					<form id="Lregistro">
 						<label>Nombre </label><br/>
 						<input type="text" name="nombre" onChange={handleNuevoLibro} placeholder="Nombre del libro" /><br/>
-
+						
+						<label>Subtitulo </label><br/>
+						<input type="text" name="subtitulo" onChange={handleNuevoLibro} placeholder="Subtitulo del libro" /><br/>
+						
 						<label>Categoria </label><br/>
 						<select name="categoria_id" id="categoria" onChange={handleNuevoLibro} >
 						<option value="">Seleccionar:</option>

@@ -8,7 +8,7 @@ import './styles/login.css'
 import 'primereact/resources/themes/arya-purple/theme.css'
 import 'primereact/resources/primereact.min.css'
 import 'primeicons/primeicons.css'
-import './styles/datatable.css'
+
 
 const store = generateStore()
 
