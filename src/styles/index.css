@@ -54,12 +54,9 @@ select {
     height: 30px;
     margin-top: 2px;
 }
-#nav{
-    display: flex;
-    flex-direction: row; 
-}
+
 #menu{
-    margin: 30px 0px 0px 605px;
+    float: right;
 }
 
 #imagen{

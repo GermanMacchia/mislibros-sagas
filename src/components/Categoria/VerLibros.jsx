@@ -16,10 +16,10 @@ function VerLibros (props) {
 		async function getLibros () { 
 			await axios.get( url + `libro/`, {headers: header})
 				.then((res) => {
-				  setLibros(res.data.respuesta)
+				setLibros(res.data.respuesta)
 				})
 				.catch((error) => {
-				  console.error(error)
+				console.error(error)
 				});
 			}
 			
@@ -37,9 +37,7 @@ function VerLibros (props) {
                     return  <span key={libro.id}>
                                 <strong style={{"color": "white"}}>-{libro.nombre}</strong><br/>
                             </span>
-                             
                 })} 
-					
 			</div>	
 		)
 

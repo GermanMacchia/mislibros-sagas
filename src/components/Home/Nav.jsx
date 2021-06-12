@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import shelve from '../../assets/shelve.jpg'
 // import { Link } from "react-router-dom";
 import { TabMenu } from 'primereact/tabmenu';
+import { Menubar } from 'primereact/menubar';
 // import Button from '@material-ui/core/Button';
 // import LocalLibraryIcon from '@material-ui/icons/LocalLibrary';
 // import CategoryIcon from '@material-ui/icons/Category';
 // import PersonPinIcon from '@material-ui/icons/PersonPin';
 // import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import { GET_CATEGORIAS, GET_PERSONA, GET_LIBROS } from '../../sagas/types'
 
@@ -15,7 +16,6 @@ export default function Nav () {
 
 	const dispatch = useDispatch()
 	const history = useHistory();
-
 
 	useEffect(() => {
 		dispatch( { type: GET_LIBROS } )
@@ -32,11 +32,12 @@ export default function Nav () {
 
 	return(
 		<>	
-			<div id="nav">
+			<div>
 				<img id= "imagen" src= {shelve} alt="shelve" />
-				<div id="menu" className="card">
-					<TabMenu model={items} />
-            	</div>
+				<div id="menu">
+					{/* <TabMenu model={items} activeIndex={activeIndex} /> */}
+					<Menubar model={items} />
+            			</div>
 				{/* <div className="buttonsNav">			
 					<Link className="butNavSalir" to={"/"} >
 						<Button						

@@ -23,6 +23,7 @@ export default function LoginForm () {
 	
 	useEffect(() => {
 		if(state.loggedIn === true){
+
 			history.push('/home');
 		}
 	}, [state.loggedIn])
