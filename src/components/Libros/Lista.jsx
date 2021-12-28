@@ -16,7 +16,7 @@ export default function Lista(){
 //SE UBICA COMO INICIAL EN SETPRODUCTS QUE INGRESA DIALOG ABAJO
     let libroVacio= {
         id: null,
-        subtitulo: '',
+        autor: '',
         nombre: '',
         descripcion: '',
         categoria_id: null,
@@ -82,7 +82,7 @@ function formatearArray(){
                     descripcion: e.descripcion,
                     persona_id: e.persona_id,
                     categoria_id: e.categoria_id,
-                    subtitulo: e.subtitulo,
+                    autor: e.autor,
                     rating: e.rating,
                     estado: retorno()
                 }
@@ -288,7 +288,7 @@ function formatearArray(){
                     {/* FIELD = AGARRA EL VALOR DEL OBJETO INGRESADO EN <Datatable> Value - REFERENCIA DEL JSON*/}
                     <Column selectionMode="multiple" headerStyle={{ width: '0.3rem' }}></Column>
                     <Column className="column" field="nombre" header="Nombre" sortable></Column>
-                    <Column className="column" field="subtitulo" header="Subtitulo" sortable></Column>
+                    <Column className="column" field="autor" header="Autor" sortable></Column>
                     <Column style={{wordWrap: "break-word", width: "5em"}} field="descripcion" header="Descripcion"></Column>
                     <Column className="column" field="categoria" header="Categoria" sortable></Column>
                     <Column style={{width: "3em"}}field="rating" header="Rating" body={ratingBodyTemplate} sortable></Column>

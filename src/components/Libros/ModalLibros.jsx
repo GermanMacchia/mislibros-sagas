@@ -106,8 +106,8 @@ export default function ModalLibros({hideDialog, libroModal}) {
 				<InputText name="nombre" placeholder="Nombre" onChange={ handleForm }  />
 			</div>
 			<div className="p-field">
-				<label htmlFor="subtitulo">Subtitulo</label>
-				<InputText name="subtitulo" onChange={ handleForm } placeholder="Subtitulo"/>
+				<label htmlFor="autor">Autor</label>
+				<InputText name="autor" onChange={ handleForm } placeholder="Autor"/>
 			</div>
 			<div className="p-field">
 				<label htmlFor="description">Descripción</label>

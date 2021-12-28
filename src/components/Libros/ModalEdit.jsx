@@ -87,7 +87,7 @@ export default function ModalEdit({hideEditDialog, libroEditModal, libroUpdate})
 		setForm({
 			id: libro.id,
 			nombre: libro.nombre,
-			subtitulo: libro.subtitulo,
+			autor: libro.autor,
 			categoria_id: libro.categoria_id,
 			descripcion: libro.descripcion,
 			persona_id: libro.persona_id,
@@ -119,8 +119,8 @@ export default function ModalEdit({hideEditDialog, libroEditModal, libroUpdate})
 				<InputText name="nombre" placeholder="Nombre" value={libro.nombre} onChange={ handleForm }  />
 			</div>
 			<div className="p-field">
-				<label htmlFor="subtitulo">Subtitulo</label>
-				<InputText name="subtitulo" onChange={ handleForm } value={libro.subtitulo} placeholder="Subtitulo"/>
+				<label htmlFor="autor">Autor</label>
+				<InputText name="autor" onChange={ handleForm } value={libro.autor} placeholder="Autor"/>
 			</div>
 			<div className="p-field">
 				<label htmlFor="description">Descripción</label>
