@@ -1,5 +1,5 @@
 import { call, put, select } from 'redux-saga/effects'
-import { reqGetLibros, reqDeleteLibros, reqPostLibros } from '../requests/librosReq'
+import { reqGetLibros, reqDeleteLibros, reqPostLibros, reqPutLibros } from '../requests/librosReq'
 import { 
     DELETE_LIBROS_ERROR, 
     DELETE_LIBROS_SUCCESS, 
@@ -7,7 +7,9 @@ import {
     GET_LIBROS_ERROR, 
     GET_LIBROS_SUCCESS,
     POST_LIBROS_ERROR,
-    POST_LIBROS_SUCCESS } from '../types'
+    POST_LIBROS_SUCCESS,
+    UPDATE_LIBROS_ERROR,
+    UPDATE_LIBROS_SUCCESS } from '../types'
 
 
 export function* handleGetLibros() {
@@ -38,6 +40,20 @@ export function* handleDeleteLibro() {
 
 }
 
+export function* handlePutLibro() {
+
+    try {
+        const { user } = yield select(state => state.user)
+        const { props } = yield select(state => state.libros.updating)
+        const respuesta  = yield call(reqPutLibros, user, props)
+        yield put({ type:UPDATE_LIBROS_SUCCESS, payload: respuesta} )
+        yield put({ type: GET_LIBROS })
+    } catch (error) {
+        yield put({ type: UPDATE_LIBROS_ERROR, error: error})
+    }
+
+}
+
 export function* handlePostLibro() {
 
     try {
@@ -47,7 +63,7 @@ export function* handlePostLibro() {
         yield put({ type:POST_LIBROS_SUCCESS, payload: respuesta} )
         yield put({ type: GET_LIBROS })
     } catch (error) {
-        yield put({ type: POST_LIBROS_ERROR, error: error })
+        yield put({ type: POST_LIBROS_ERROR, error: error.response.data.error})
     }
 
 }

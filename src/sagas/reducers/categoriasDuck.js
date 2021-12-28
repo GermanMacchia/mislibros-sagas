@@ -1,4 +1,7 @@
-import { GET_CATEGORIAS, GET_CATEGORIAS_ERROR, GET_CATEGORIAS_SUCCESS } from './types'
+import { 
+    GET_CATEGORIAS, 
+    GET_CATEGORIAS_ERROR, 
+    GET_CATEGORIAS_SUCCESS } from '../types'
 
 //INITIAL DATA
 const initialData = {

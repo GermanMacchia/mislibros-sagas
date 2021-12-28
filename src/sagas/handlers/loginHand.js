@@ -9,8 +9,7 @@ export function* handleGetLogin() {
         const  { data }  = yield call(reqLogin, user);
         yield put({ type: LOGIN_SUCCESS, payload: data.token} );
     } catch (error){
-        yield put({ type: LOGIN_ERROR, error: error})
-        console.log(error)
+        yield put({ type: LOGIN_ERROR, error: error.response.data.error})
     }
     
 }

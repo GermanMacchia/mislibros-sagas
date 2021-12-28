@@ -21,7 +21,7 @@ export default function CategoriaList () {
         setCategorias(state.payload)
     }, [state.loaded])
 
-    console.log(categorias)
+
 
     // useEffect(() => {
 

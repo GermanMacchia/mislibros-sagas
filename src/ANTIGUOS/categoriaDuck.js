@@ -1,11 +1,12 @@
+/*
+
 import axios from 'axios';
-//URL
-const url = `https://mis-libros-bck.herokuapp.com/`;
-//CONSTANTES
-//GET CATEGORIAS
-const GET_CATEGORIAS = "GET_CATEGORIAS"
-const GET_CATEGORIAS_ERROR = "GET_CATEGORIAS_ERROR";
-const GET_CATEGORIAS_SUCCESS = "GET_CATEGORIAS_SUCCESS";
+
+import { URL } from '../sagas/requests/URL'
+import {
+    GET_CATEGORIAS,
+    GET_CATEGORIAS_ERROR,
+    GET_CATEGORIAS_SUCCESS } from '../sagas/types'
 
 //INITIAL DATA
 const initialData = {
@@ -18,6 +19,7 @@ const initialData = {
 }
 //REDUCER
 export default function reducer(state = initialData, action){
+
     switch(action.type){
         case GET_CATEGORIAS:
             return {
@@ -43,6 +45,7 @@ export default function reducer(state = initialData, action){
                 ...state
             }
     }
+    
 }
 
 //ACTIONS
@@ -55,7 +58,7 @@ export const getCategoriasAction = () => {
             type: GET_CATEGORIAS
         })
         try{
-            const res = await axios.get(url + `categoria`, {headers: auth})
+            const res = await axios.get(URL + `categoria`, {headers: auth})
             dispatch({
                 type: GET_CATEGORIAS_SUCCESS,
                 payload: res.data.respuesta
@@ -67,4 +70,4 @@ export const getCategoriasAction = () => {
             })
         }
     }
-}
+} */

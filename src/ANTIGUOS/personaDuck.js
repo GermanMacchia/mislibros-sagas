@@ -1,12 +1,7 @@
-import axios from 'axios';
-import { prestarLibroAction } from './librosDuck';
-//URL
-const url = `https://mis-libros-bck.herokuapp.com/`;
-//CONSTANTES
-//GET PERSONA
-const GET_PERSONA = "GET_PERSONA"
-const GET_PERSONA_ERROR = "GET_PERSONA_ERROR";
-const GET_PERSONA_SUCCESS = "GET_PERSONA_SUCCESS";
+/*import axios from 'axios'
+import { prestarLibroAction } from './librosDuck'
+import { GET_PERSONA, GET_PERSONA_ERROR, GET_PERSONA_SUCCESS } from '../sagas/types'
+import { URL } from '../sagas/requests/URL'
 
 //INITIAL DATA
 const initialData = {
@@ -44,17 +39,15 @@ export default function reducer(state = initialData, action){
             }
     }
 }
-
 //ACTIONS
-
 export const getPersonaAction = () => {
-//GET CATEGORIA
+    //GET CATEGORIA
     return async (dispatch, getState) => {
         const auth =  {'Authorization': getState().user.user}
         dispatch({
             type: GET_PERSONA
         })
-        const res = await axios.get(url + `persona`, {headers: auth})
+        const res = await axios.get(URL + `persona`, {headers: auth})
         if(res.status === 200){
         dispatch({
             type: GET_PERSONA_SUCCESS,
@@ -70,14 +63,14 @@ export const getPersonaAction = () => {
 }
 
 export const getPrestarAction = (id, persona) => {
-//VERIFICAR CATEGORIA
+    //VERIFICAR CATEGORIA
     return async (dispatch, getState) => {
         const auth =  {'Authorization': getState().user.user}
         dispatch({
             type: GET_PERSONA
         })
         try{
-            const res = await axios.get(url + `persona/` + persona, {headers: auth})
+            const res = await axios.get(URL + `persona/` + persona, {headers: auth})
             if(res.status === 200){
                 prestarLibroAction(id, persona)
             }
@@ -104,3 +97,4 @@ export const getPrestarAction = (id, persona) => {
 	// 			    alert.error('Ese ID de persona no existe');
 	// 			});
 	// 		}
+*/

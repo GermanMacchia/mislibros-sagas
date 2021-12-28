@@ -1,4 +1,7 @@
-import { GET_PERSONA, GET_PERSONA_ERROR, GET_PERSONA_SUCCESS } from './types'
+import { 
+    GET_PERSONA, 
+    GET_PERSONA_ERROR, 
+    GET_PERSONA_SUCCESS } from '../types'
 
 //INITIAL DATA
 const initialData = {

@@ -4,9 +4,12 @@ import {
     LOGIN_SUCCESS, 
     LOGIN_ERROR, 
     LOGIN_GOOGLE_SUCCESS, 
-    REGISTER 
-} from './types'
-import { loginWithGoogle } from '../firebase'
+    REGISTER,
+    REGISTER_SUCCESS,
+    REGISTER_ERROR,
+    TOAST
+} from '../types'
+import { loginWithGoogle } from '../../firebase'
 
 const initialData = {
     loggedIn: false,
@@ -14,7 +17,9 @@ const initialData = {
     user: [],
     id: {
         uid: []
-    }
+    },
+    error:[],
+    info:[]
 }
 
 //REDUCER
@@ -24,6 +29,16 @@ export default function reducer(state = initialData, action){
             return{
                 ...state,
                 registering: true,
+            }
+        case REGISTER_SUCCESS:
+            return{
+                ...state,
+                registering: false,
+            }
+        case REGISTER_ERROR:
+            return{
+                ...state,
+                registering: false,
             }
         case LOG_OUT:
             return{
@@ -39,7 +54,7 @@ export default function reducer(state = initialData, action){
             return {
                 ...state,
                 fetching: false,
-                payload: action.payload
+                error: [...state.error, action.error]
             }
         case LOGIN_GOOGLE_SUCCESS:
             return {
@@ -52,6 +67,11 @@ export default function reducer(state = initialData, action){
                 fetching: false,
                 user: action.payload,
                 loggedIn: true
+            }
+        case TOAST:
+            return {
+                ...state,
+                info: [...state.info, action.info] 
             }
         default:
             return state

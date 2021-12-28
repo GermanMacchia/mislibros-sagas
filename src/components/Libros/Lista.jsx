@@ -1,18 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
-import { classNames } from 'primereact/utils';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { Toast } from 'primereact/toast';
 import { Button } from 'primereact/button';
 import { Toolbar } from 'primereact/toolbar';
-import { InputTextarea } from 'primereact/inputtextarea';
 import { Dialog } from 'primereact/dialog';
-import { InputText } from 'primereact/inputtext';
-import { Dropdown } from 'primereact/dropdown';
-import { DELETE_LIBROS } from '../../sagas/types';
+import { InputText } from 'primereact/inputtext'
+import { DELETE_LIBROS, TOAST } from '../../sagas/types';
 import { Rating } from 'primereact/rating';
-
+import ModalLibros from './ModalLibros';
+import ModalEdit from './ModalEdit';
 
 export default function Lista(){
 
@@ -23,6 +20,7 @@ export default function Lista(){
         nombre: '',
         descripcion: '',
         categoria_id: null,
+        persona_id: null,
         rating: 0,
     };
 
@@ -30,12 +28,12 @@ export default function Lista(){
     const state = useSelector(state => state.libros)
     const categorias = useSelector(state => state.categoria.payload) 
     const personas = useSelector(state => state.persona.payload)
+
 //INGRESO LISTA DE PRODUCTOS INICIAL
     const [libros, setLibros] = useState([]);   
 //VISIBILIDAD DEL MODAL DE LIBROS NUEVOS / EDIT
-    const [productDialog, setProductDialog] = useState(false);
-//LISTA CATEGORIAS EN MODAL  
-    const [auxCategorias, setAuxCategorias] = useState();    
+    const [libroModal, setLibroModal] = useState(false);
+    const [libroEditModal, setLibroEditModal] = useState(false);
 //BORRAR PRODUCTO INDIVIDUAL
     const [deleteProductDialog, setDeleteProductDialog] = useState(false);
 //BORRAR SELECCION MULTIPLE
@@ -46,68 +44,68 @@ export default function Lista(){
     const [selectedProducts, setSelectedProducts] = useState(null);
 //INGRESOS DEL MODAL
     const [submitted, setSubmitted] = useState(false);
-//RATING MODAL
-    const [value, setValue] = useState()
-    const [prestado, setPrestado] = useState()
-    const [categoriaModal, setCategoriaModal] = useState()
+    const [submitEdit, setSubmitEdit] = useState(false);
+    const [modalEdit, setModalEdit] = useState(false);
 //FILTRO DEL HEADER 
     const [globalFilter, setGlobalFilter] = useState(null);
-
-    const toast = useRef(null);
     const dt = useRef(null);
 
 //INGRESO INICIAL DE PRODUCTOS A LISTA
     useEffect(() => {
-        sacarCategoria()
-        console.log(categorias)
-    }, [state.loaded, categorias]);
+        formatearArray()
 
-//FUNCION PARA FILTRAR ID CATEGORIAS Y ASIGNARLAS AL ARRAY DE TABlA CON NOMBRE
-function sacarCategoria(){
+    }, [personas, state, categorias]);
 
+//FUNCION PARA FILTRAR ID CATEGORIAS Y PRESTADO/EN BIBIOTECA / (de la API llegan con numeros de id relacional)
+function formatearArray(){
     if(state.payload && categorias){
-                let AuxCategorias = [...categorias]
-                let libros = [...state.payload]
-                let array = [];             
-                //Por cada libro voy a crear un objeto distinto al que hay en el servidor para mejorar la presentación de la tabla
-                libros.forEach( e => {
-                    //Saco el nombre de la categoria que coincida con el categoria_id de <<libros>> en cada caso
-                    let [ cate ] = AuxCategorias.filter( c => c.id === e.categoria_id)
-                    //si el persona_id de <<libros>> esta ocupado quiere decir que esta prestado
-                    function retorno(){
-                        if( e.persona_id !== null){
-                            return "Prestado"
-                        }else{
-                            return "En biblioteca"
-                        }
+            let auxCategorias = [...categorias]
+            let libros = [...state.payload]
+            let array = [];             
+            //Por cada libro voy a crear un objeto distinto al que hay en el servidor para mejorar la presentación de la tabla
+            libros.forEach( e => {
+                //Saco el nombre de la categoria que coincida con el categoria_id de <<libros>> en cada caso
+                let [ cate ] = auxCategorias.filter( c => c.id === e.categoria_id)
+                //si el persona_id de <<libros>> esta ocupado quiere decir que esta prestado
+                function retorno(){
+                    if( e.persona_id !== null){
+                        return "Prestado"
+                    }else{
+                        return "En biblioteca"
                     }
-                    //Finalmente creo el objeto a medida con lo que consumo del servidor
-                    let objeto = {
-                        id: e.id,
-                        nombre: e.nombre,
-                        categoria: cate.nombre,
-                        descripcion: e.descripcion,
-                        subtitulo: e.subtitulo,
-                        rating: e.rating,
-                        estado: retorno()
-                    }
-                    array.push(objeto)
-                    
-                }) 
-                setLibros(array) 
+                }
+                //Finalmente creo el objeto a medida con lo que consumo del servidor
+                let objeto = {
+                    id: e.id,
+                    nombre: e.nombre,
+                    categoria: cate.nombre,
+                    descripcion: e.descripcion,
+                    persona_id: e.persona_id,
+                    categoria_id: e.categoria_id,
+                    subtitulo: e.subtitulo,
+                    rating: e.rating,
+                    estado: retorno()
+                }
+                array.push(objeto)    
+            }) 
+            setLibros(array) 
     }        
 }
 
-//SWITCH PARA ABRIR EL DIALOGO LINEA 283
+//ABRIR EL MODAL DE INGRESO NUEVO
     const openNew = () => {
-        setLibro(libroVacio);
+        //setLibro(libroVacio);
         setSubmitted(false);
-        setProductDialog(true);
+        setLibroModal(true);
     }
-
+//CERRAR MODAL SIN GUARDAR
     const hideDialog = () => {
-        setSubmitted(false);
-        setProductDialog(false);
+        //setSubmitted(false);
+        setLibroModal(false);
+    }
+    
+    const hideDialogEdit = () => {
+        setLibroEditModal(false)
     }
 
     const hideDeleteProductDialog = () => {
@@ -115,90 +113,41 @@ function sacarCategoria(){
     }
 
 
-    const saveProduct = () => {
-        // setSubmitted(true);
-
-        // if (product.name.trim()) {
-        //     let _products = [...libros];
-        //     let _product = {...product};
-        //     if (product.id) {
-        //         const index = findIndexById(product.id);
-
-        //         _products[index] = _product;
-        //         toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
-        //     }
-        //     else {
-        //         // _product.id = createId();
-        //         _product.image = 'product-placeholder.svg';
-        //         _products.push(_product);
-        //         toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
-        //     }
-        //     setLibros(_products);
-        //     setProductDialog(false);
-        //     setProduct(libroVacio);
-        // }
+    const confirmEditProduct = (libro) => {
+       /* setCategoriaModal(libro.categoria_id)
+        setNombrePlaceHolder(libro.nombre)
+        if(libro.subtitulo){setSubtituloPlaceHolder(libro.subtitulo)}
+        if(libro.descripcion){setDescripcionPlaceHolder(libro.descripcion)}
+        if(libro.persona_id){setPrestado(libro.persona_id)}
+        if(libro.rating){setStars(libro.rating)}
+        setSubmitted(false);*/
+        setSubmitEdit(false)
+        setLibroEditModal(true);
+        setLibro(libro)
     }
-
-    const editProduct = (product) => {
-        setLibro({...product});
-        setProductDialog(true);
-    }
-    //MODAL CONFIRMACION
-    const confirmDeleteProduct = (product) => {
-        setLibro(product);
+    
+    //MODAL CONFIRMACION BORRAR INDIVIDUAL
+    const confirmDeleteProduct = (libroFila) => {
+        setLibro(libroFila);
         setDeleteProductDialog(true);
     }
-
-    //BORRAR PRODUCTO LINA 251
+    //BORRAR PRODUCTO INDIVIDUAL UNA VEZ CONFIRMADO
     const deleteProduct = () => {
-
         dispatch({type:DELETE_LIBROS, props: libro.id})
         setDeleteProductDialog(false);
         setLibro(libroVacio); 
-        toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Libro Borrado', life: 3000 });
     }
-
-    const findIndexById = (id) => {
-        let index = -1;
-        for (let i = 0; i < libros.length; i++) {
-            if (libros[i].id === id) {
-                index = i;
-                break;
-            }
-        }
-        return index;
-    }
-
-
+    //MODAL CONFIRMACION BORRAR MULTIPLES
     const confirmDeleteSelected = () => {
         setDeleteProductsDialog(true);
     }
+    // ESCONDER MODAL DE COMFIRMACIÓN
+    const hideDeleteProductsDialog = () => {
+        setDeleteProductsDialog(false);
+    }
 
 
-    // const onCategoryChange = (e) => {
-    //     let _product = {...product};
-    //     _product['category'] = e.value;
-    //     setProduct(_product);
-    // }
-
-    // const onInputChange = (e, name) => {
-    //     const val = (e.target && e.target.value) || '';
-    //     let _product = {...product};
-    //     _product[`${name}`] = val;
-
-    //     setProduct(_product);
-    // }
-
-    // const onInputNumberChange = (e, name) => {
-    //     const val = e.value || 0;
-    //     let _product = {...product};
-    //     _product[`${name}`] = val;
-
-    //     setProduct(_product);
-    // }
-
-
-//BOTONERA IZQUIERDA SUPERIOR------------------------------------------------------------
+//----------------------------------------BOTONERA IZQUIERDA SUPERIOR------------------------------------------------------------
     const leftToolbarTemplate = () => {
         return (
             <React.Fragment>
@@ -208,15 +157,8 @@ function sacarCategoria(){
         )
     }
 
-    //FOOTER DE MODAL +nuevo o editar(pencil)
-    const productDialogFooter = (
-        <React.Fragment>
-            <Button label="Cancel" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
-            <Button label="Save" icon="pi pi-check" className="p-button-text" onClick={saveProduct} />
-        </React.Fragment>
-    );
 
-    //HEADER y BUSCADOR ----------------------------------------
+//--------------------------------------------------HEADER y BUSCADOR ----------------------------------------
     const header = (
         <div className="table-header">
             <h5 className="p-m-0">TU BIBLIOTECA</h5>
@@ -228,8 +170,8 @@ function sacarCategoria(){
     );
     
 
-
 //----------------------------------------------- INDICACIONES A LA FILA HORIZONTAL--------------------------------
+
     //TEMPLATE DE ESTRELLAS RATING
     const ratingBodyTemplate = (rowData) => {
         return <Rating value={rowData.rating} readOnly cancel={false} />;
@@ -239,13 +181,13 @@ function sacarCategoria(){
     const actionBodyTemplate = (rowData) => {
         return (
             <React.Fragment>
-                <Button icon="pi pi-pencil" className="p-button-rounded p-button-success p-mr-2" onClick={() => editProduct(rowData)} />
+                <Button icon="pi pi-pencil" className="p-button-rounded p-button-success p-mr-2" onClick={() => confirmEditProduct(rowData)} />
                 <Button icon="pi pi-trash" className="p-button-rounded p-button-warning" onClick={() => confirmDeleteProduct(rowData)} />
             </React.Fragment>
         );
     }
 
-    //BORRAR PRODUCTO INDIVIDUAL LINEA 336
+    //FOOTER DE CONFIRMACION PARA BORRAR PRODUCTO INDIVIDUAL 
     const deleteProductDialogFooter = (
         <React.Fragment>
             <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleteProductDialog} />
@@ -253,22 +195,67 @@ function sacarCategoria(){
         </React.Fragment>
     );
 
-    //BORRAR PRODUCTOS SELECCIONADOS ---------------------------------------
-
-    // ESCONDER MODAL
-    const hideDeleteProductsDialog = () => {
-        setDeleteProductsDialog(false);
-    }
-
-    // BORRAR PRODUCTOS SELECCIONADOS
+    //BORRAR PRODUCTOS DE SELECCION MULTIPLE 
     const deleteSelectedProducts = () => {
-        let _products = libros.filter(val => !selectedProducts.includes(val));
-        setLibros(_products);
+
+        //Los libros a Borrar debe ser los que NO están prestados
+        var librosABorrar = []
+        librosABorrar = selectedProducts.filter( libro => libro.persona_id == null)
+
+        //función para que retorne array solo los nombres de otro array
+        const retornarLista = (aBorrar) =>{
+            var nombres = []
+            nombres = aBorrar.map(element => {
+                return element.nombre
+            });
+            return nombres
+        }
+
+        //Condiciones para TOAST de info
+        if( librosABorrar.length == 0){
+            //NINGUNO
+            dispatch({
+                type:TOAST, 
+                info: {
+                    severity: 'info', 
+                    summary: 'Atención', 
+                    detail: 'Los libros prestados no pueden eliminarse'
+                }
+            })
+
+        }else if(selectedProducts.length > librosABorrar.length){
+            //ALGUNOS
+            dispatch({
+                type:TOAST, 
+                info: { 
+                    severity: 'warn', 
+                    summary: 'Prestados no pueden eliminarse', 
+                    detail: retornarLista(librosABorrar).toString() + ' se han eliminado'
+                }
+            })    
+
+        } else{
+            //TODOS
+            dispatch({
+                type:TOAST, 
+                info: { 
+                    severity: 'success', 
+                    summary: 'Libros Eliminados', 
+                    detail: retornarLista(librosABorrar).toString() 
+                }
+            }) 
+        }
+        
+
+        librosABorrar.forEach( e =>{
+            dispatch({type:DELETE_LIBROS, props: e.id})
+        })
+
         setDeleteProductsDialog(false);
         setSelectedProducts(null);
-        toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000 });
     }
 
+    //FOOTER DE CONFIRMACION PARA BORRAR PRODUCTOS MULTIPLES  
     const deleteProductsDialogFooter = (
         <React.Fragment>
             <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleteProductsDialog} />
@@ -276,17 +263,13 @@ function sacarCategoria(){
         </React.Fragment>
     );
 
-    //RENDER---------------------------------------------------------------------
+
+    //RENDER----------------------------------------------------------------------------------------------------------
     return (
-        
         <div className="datatable-crud-demo">
-            <Toast ref={toast} />
-
             <div className="card">
-
                 {/*BOTONERA SUPERIOR*/}
                 <Toolbar className="p-mb-4" left={leftToolbarTemplate} ></Toolbar>
-
                 {/*ESTRUCTURA DE TABLA*/}
                 <DataTable                    
                     ref={dt} 
@@ -310,59 +293,29 @@ function sacarCategoria(){
                     <Column className="column" field="categoria" header="Categoria" sortable></Column>
                     <Column style={{width: "3em"}}field="rating" header="Rating" body={ratingBodyTemplate} sortable></Column>
                     <Column className="column" field="estado" header="Estado" sortable></Column>
-                    <Column className="column" body={actionBodyTemplate}></Column>
+                    {/* OPCIONES BOORRAR Y EDIT n°175 */}
+                    <Column className="column" body={actionBodyTemplate}></Column> 
                 </DataTable>
-            </div>
+            </div>    
 
-
-            {/* MODAL DE PRODUCTO NUEVO */}
-            <Dialog visible={productDialog} style={{ width: '450px' }} header="Ingrese el libro" footer={productDialogFooter} modal className="p-fluid" onHide={hideDialog}>
-                <div className="p-field">
-                    <label htmlFor="name">Nombre</label>
-                    <InputText id="name" autoFocus className={classNames({ 'p-invalid': submitted && !libro.nombre })} />
-                    {submitted && !libro.nombre && <small className="p-error">Se requiere ingresar un nombre</small>}
-                </div>
-                <div className="p-field">
-                    <label htmlFor="name">Subtitulo</label>
-                    <InputText id="name" autoFocus className={classNames({ 'p-invalid': submitted && !libro.name })} />
-                </div>
-                <div className="p-field">
-                    <label htmlFor="description">Descripción</label>
-                    <InputTextarea id="description" required rows={3} cols={20} />
-                </div>
-                <div className="p-field">
-                    <label className="p-mb-3">Categoria</label>
-                    <div className="p-formgrid p-grid">
-                    <Dropdown optionLabel="nombre" options={categorias} value={categoriaModal} onChange={(e) => setCategoriaModal(e.value)} />
-                    </div>
-                </div>
-                <div className="p-field">
-                    <label className="p-mb-3">Prestado</label>
-                    <div className="p-formgrid p-grid">
-                    <Dropdown optionLabel="alias" options={personas} value={prestado} onChange={(e) => setPrestado(e.value)} />
-                    </div>
-                </div>
-                <div className="p-field">
-                    <label className="p-mb-3">Rating</label>
-                    <div style={{marginTop:"10px"}} className="p-formgrid p-grid">
-                    <Rating cancel={false} value={value} onChange={(e) => setValue(e.value)} />
-                    </div>
-                </div>
-            </Dialog>
-
-        {/*MODALES*/}
+            {/*MODAL LIBRO NUEVO*/}  
+            {libroEditModal?                
+                <ModalEdit hideEditDialog={hideDialogEdit} submitEdit={submitEdit} libroEditModal={libroEditModal} libroUpdate={libro}/>
+                :
+                <ModalLibros hideDialog={hideDialog} submitted={submitted} libroModal={libroModal}/>
+            }               
             {/*MODAL PARA BORRAR ARTICULO INDIVIDUAL*/}
-            <Dialog visible={deleteProductDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteProductDialogFooter} onHide={hideDeleteProductDialog}>
+            <Dialog visible={deleteProductDialog} style={{ width: '450px' }} header="Confirmar" modal footer={deleteProductDialogFooter} onHide={hideDeleteProductDialog}>
                 <div className="confirmation-content">
-                    <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem'}} />
-                    {libro && <span>¿Seguro que quieres borrar <b>{libro.nombre}</b>?</span>}
+                    <i  className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem'}} />
+                    {libro && <span style={{marginLeft: "20px"}}>¿Seguro que quieres borrar <b>{libro.nombre}</b>?</span>}
                 </div>
             </Dialog>
             {/* MODAL DE BORRAR CON SELECTOR MULTIPLE */}
-            <Dialog visible={deleteProductsDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteProductsDialogFooter} onHide={hideDeleteProductsDialog}>
+            <Dialog visible={deleteProductsDialog} style={{ width: '450px' }} header="Confirmar" modal footer={deleteProductsDialogFooter} onHide={hideDeleteProductsDialog}>
                 <div className="confirmation-content">
                     <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem'}} />
-                    {libro && <span> ¿Seguro que queres borrar los libros seleccionados?</span>}
+                    {libro && <span style={{marginLeft: "20px"}}> ¿Seguro que queres borrar los libros seleccionados?</span>}
                 </div>
             </Dialog>
         </div>

@@ -1,27 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import shelve from '../../assets/shelve.jpg'
-// import { Link } from "react-router-dom";
 import { TabMenu } from 'primereact/tabmenu';
 import { Menubar } from 'primereact/menubar';
-// import Button from '@material-ui/core/Button';
-// import LocalLibraryIcon from '@material-ui/icons/LocalLibrary';
-// import CategoryIcon from '@material-ui/icons/Category';
-// import PersonPinIcon from '@material-ui/icons/PersonPin';
-// import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import { GET_CATEGORIAS, GET_PERSONA, GET_LIBROS } from '../../sagas/types'
+import { Toast } from 'primereact/toast';
 
 export default function Nav () {
 
 	const dispatch = useDispatch()
 	const history = useHistory();
-
+	const state = useSelector(state => state.user)
+	const toast = useRef(null);
 	useEffect(() => {
-		dispatch( { type: GET_LIBROS } )
+		dispatch({type: GET_LIBROS})
 		dispatch({type: GET_CATEGORIAS})
 		dispatch({type: GET_PERSONA})		
 	}, []);
+
+	useEffect(() => {
+		if(state.info != 0){
+			toast.current.show({ severity: state.info.at(-1).severity, summary: state.info.at(-1).summary, detail: state.info.at(-1).detail, life: 3000	 });
+		}
+	}, [state.info]);
 
     const items = [
         {label: 'Biblioteca', icon: 'pi pi-fw pi-book', command:()=>{ history.push('/home')}},
@@ -33,6 +35,7 @@ export default function Nav () {
 	return(
 		<>	
 			<div>
+				<Toast ref={toast} />
 				<img id= "imagen" src= {shelve} alt="shelve" />
 				<div id="menu">
 					{/* <TabMenu model={items} activeIndex={activeIndex} /> */}

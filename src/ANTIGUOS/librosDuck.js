@@ -1,23 +1,19 @@
-import axios from 'axios';
-//URL 
-const url = `https://mis-libros-bck.herokuapp.com/`;
-//CONSTANTES
-//GET LIBROS
-const GET_LIBROS = "GET_LIBROS"
-const GET_LIBROS_ERROR = "GET_LIBROS_ERROR";
-const GET_LIBROS_SUCCESS = "GET_LIBROS_SUCCESS";
-//DELETE LIBROS
-const DELETE_LIBROS = "DELETE_LIBROS";
-const DELETE_LIBROS_ERROR = "DELETE_LIBROS_ERROR";
-const DELETE_LIBROS_SUCCESS = "DELETE_LIBROS_SUCCESS"
-//UPDATE LIBROS
-const UPDATE_LIBROS = "UPDATE_LIBROS";
-const UPDATE_LIBROS_ERROR = "UPDATE_LIBROS_ERROR";
-const UPDATE_LIBROS_SUCCESS = "UPDATE_LIBROS_SUCCESS"
-//POST LIBROS
-const POST_LIBROS = "POST_LIBROS";
-const POST_LIBROS_ERROR = "POST_LIBROS_ERROR";
-const POST_LIBROS_SUCCESS = "POST_LIBROS_SUCCESS"
+/*import axios from 'axios'
+import { 
+    GET_LIBROS, 
+    GET_LIBROS_ERROR, 
+    GET_LIBROS_SUCCESS, 
+    DELETE_LIBROS, 
+    DELETE_LIBROS_SUCCESS, 
+    DELETE_LIBROS_ERROR,
+    UPDATE_LIBROS, 
+    UPDATE_LIBROS_ERROR, 
+    UPDATE_LIBROS_SUCCESS, 
+    POST_LIBROS, 
+    POST_LIBROS_ERROR, 
+    POST_LIBROS_SUCCESS } from '../sagas/types'
+import { URL } from '../sagas/requests/URL'
+
 //INITIAL DATA
 const initialData = {
     fetching: false,
@@ -30,8 +26,8 @@ const initialData = {
 }
 //REDUCER
 export default function reducer(state = initialData, action){
-    switch(action.type){
 
+    switch(action.type){
         //GETLIBROS
         case GET_LIBROS:
             return {
@@ -128,7 +124,7 @@ export const getLibrosAction = () => {
             type: GET_LIBROS
         })
         try{
-            const res = await axios.get(url + 'libro', { headers: auth })
+            const res = await axios.get(URL + 'libro', { headers: auth })
             dispatch({
                 type:GET_LIBROS_SUCCESS,
                 payload: res.data.respuesta
@@ -151,7 +147,7 @@ export const deleteLibroAction = (props) => {
             type: DELETE_LIBROS
         })
         try{
-            const res = await axios.delete(url + 'libro/' + props, { headers: auth })
+            const res = await axios.delete(URL + 'libro/' + props, { headers: auth })
 
             if(res.status === 200 ){
                 dispatch({
@@ -181,7 +177,7 @@ export const postLibroAction = (props) => {
         try { 
             await axios({
                         method: 'post',
-                        url: url + 'libro',
+                        url: URL + 'libro',
                         data: props,
                         headers: auth
                         })
@@ -213,7 +209,7 @@ export const devolverLibroAction = (props) => {
         try{
             await axios({
                         method: 'put',
-                        url: url + `libro/devolver/` + props,
+                        url: URL + `libro/devolver/` + props,
                         headers:auth
                         })
                     .then(
@@ -242,11 +238,11 @@ export const prestarLibroAction = (id, persona) => {
         })
 
         try{
-            const res = await axios.get(url + `persona/` + persona, {headers: auth})
-            if(res.status === 200){
+            const res = await axios.get(URL + `persona/` + persona, {headers: auth})
+if(res.status === 200){
                 await axios({
                     method: 'put',
-                    url: url + `libro/prestar/` + id,
+                    url: URL + `libro/prestar/` + id,
                     headers: auth,
                     data: {
                         'id': id,
@@ -267,5 +263,5 @@ export const prestarLibroAction = (id, persona) => {
             })
         }
     }
-}
+}*/
 

@@ -1,19 +1,18 @@
 import axios from 'axios';
-import { REGISTER } from '../../sagas/types';
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useAlert } from 'react-alert';
+import React, {useState,  useRef } from 'react';
+import { REGISTER, REGISTER_SUCCESS, REGISTER_ERROR } from '../../sagas/types';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password'
-import { InputNumber } from 'primereact/inputnumber';
+import { URL } from '../../sagas/requests/URL';
+import { Toast } from 'primereact/toast';
 
 export default function Registro () {
 	
 	const dispatch = useDispatch();
-	const alert = useAlert()
-	const url = `https://mis-libros-bck.herokuapp.com/`;
-
+	const state = useSelector(state => state.user)
+	const toast = useRef(null);
 	const [user, setUser] = useState({
 		usuario: " ",
 		clave: " ",
@@ -27,34 +26,38 @@ export default function Registro () {
 			[e.target.name] : e.target.value
 		})
 	}
+	//SE ENVIA REGISTRO POR ACA PARA NO COMPROMETER CLAVE
+	async function registrar () {
+		await axios.post(URL + `registro`, user)
+			.then((res) => {
+				toast.current.show({ severity: 'success', summary: "Exito", detail: res.data.message});
+				dispatch({ type: REGISTER_SUCCESS })
+				document.getElementById('myform').reset();
+			})
+               	 	.catch((e) => {
+				console.log(e.response.data.message)
+				dispatch({ type: REGISTER_ERROR })	
+				toast.current.show({ severity: 'error', summary: "Error de Registro", detail: "No enviaste los datos necesarios" });			
+			});
+        }
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		dispatch({
 			type: REGISTER
 		})
-		async function registro () {
-			await axios.post(url + `registro`, user)
-			    .then((res) => {
-                    alert.success('Se ha Registrado correctamente')
-                })
-                .catch((error) => {
-                    console.error(error)
-                    alert.error('Nombre de usuario ya registrado')
-                });
-        }
-        registro();
-		document.getElementById('myform').reset();
+        	registrar();
 	}
 
 	return(
 		<>
 			<div className="registro">
-				<form className="log">
+				<Toast ref={toast} />
+				<form className="log" id="myform">
 					<span className="p-float-label">
 						<InputText name='usuario' className="p-inputtext-mb p-d-block" onChange={handleChange} />
-						<label htmlFor="usuario">Usuario</label>
-                	</span>
+						<label htmlFor="usuario">Usuario</label>											
+                			</span>
 					<span className="p-float-label">
 						<Password name='clave' className="p-inputtext-mb p-d-block" onChange={handleChange} toggleMask />
 						<label htmlFor="usuario">Contraseña</label>
@@ -62,15 +65,18 @@ export default function Registro () {
 					<span className="p-float-label">
 						<InputText name='email' className="p-inputtext-mb p-d-block" onChange={handleChange} />
 						<label htmlFor="usuario">Email</label>
-                	</span>
+                			</span>
 					<span className="p-float-label">
 						<InputText name='celu' className="p-inputtext-mb p-d-block" onChange={handleChange} />
 						<label htmlFor="telefono">Telefono</label>
-                	</span>
+                			</span>
 				</form>
 			</div>
-			{/* { ? : } */}
-			<Button style={{ marginBottom: "10px", width: "20em", height: "auto"}} onClick={ handleSubmit } icon="pi pi-check" className="p-button-success" />
-    	</>
+			{state.registering? 
+				<Button style={{ marginBottom: "10px", width: "20em", height: "auto"}} id="loading" loading className="p-button-secondary p-ml-2" />
+					:
+				<Button style={{ marginBottom: "10px", width: "20em", height: "auto"}} onClick={ handleSubmit } icon="pi pi-check" className="p-button-success" />
+			}
+    		</>
 		);
 }

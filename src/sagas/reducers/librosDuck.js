@@ -10,8 +10,7 @@ import {
     UPDATE_LIBROS_SUCCESS,
     POST_LIBROS,
     POST_LIBROS_ERROR,
-    POST_LIBROS_SUCCESS
-} from './types'
+    POST_LIBROS_SUCCESS } from '../types'
 
 //INITIAL DATA
 const initialData = {
@@ -74,18 +73,21 @@ export default function reducer(state = initialData, action){
         case UPDATE_LIBROS:
             return {
                 ...state,
-                updating:true,
+                updating: {
+                    status: true,
+                    props: action.props
+                }             
             }
         case UPDATE_LIBROS_ERROR:
             return {
                 ...state,
-                updating: false,
+                updating: null,
                 error: [...state.error, action.error]
             }
         case UPDATE_LIBROS_SUCCESS:
             return {
                 ...state,
-                updating: false,
+                updating: null,
                 reducerChanges: [...state.reducerChanges, action.payload]
             }
 

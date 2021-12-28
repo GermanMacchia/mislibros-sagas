@@ -1,9 +1,6 @@
-import React, { useEffect } from 'react';
-import LibrosForm from './LibrosForm'
-import LibrosList from './LibrosList'
+import React from 'react'
 import Spinner from '../utilities/Spinner'
-import { Accordion, AccordionTab } from 'primereact/accordion';
-import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux'
 import Lista from './Lista';
 
 
@@ -22,17 +19,6 @@ export default function Biblioteca () {
 				</>
 			:
 			<div>
-				{/* <LibrosList />
-				<Accordion style={{ width: "80em", marginTop: "10px"}} activeIndex={1}>
-					<AccordionTab header={
-							<>
-								<i style={{ marginRight: "10px"}} className="pi pi-upload"/>
-								Ingresar un libro
-							</>
-						}>
-						<LibrosForm />
-					</AccordionTab>
-				</Accordion> */}
 				<Lista />
 			</div>
 		}
