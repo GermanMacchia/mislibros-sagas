@@ -19,7 +19,7 @@ const initialData = {
         uid: []
     },
     error:[],
-    info:[]
+    info: null
 }
 
 //REDUCER
@@ -71,7 +71,7 @@ export default function reducer(state = initialData, action){
         case TOAST:
             return {
                 ...state,
-                info: [...state.info, action.info] 
+                info: action.info
             }
         default:
             return state

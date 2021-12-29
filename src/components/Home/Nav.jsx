@@ -1,10 +1,9 @@
 import React, { useEffect, useRef } from 'react';
-import shelve from '../../assets/shelve.jpg'
-import { TabMenu } from 'primereact/tabmenu';
+import shelve from '../../assets/fondo.jpg'
 import { Menubar } from 'primereact/menubar';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from "react-router-dom";
-import { GET_CATEGORIAS, GET_PERSONA, GET_LIBROS } from '../../sagas/types'
+import { GET_CATEGORIAS, GET_PERSONA, GET_LIBROS, TOAST } from '../../sagas/types'
 import { Toast } from 'primereact/toast';
 
 export default function Nav () {
@@ -20,9 +19,13 @@ export default function Nav () {
 	}, []);
 
 	useEffect(() => {
-		if(state.info != 0){
-			toast.current.show({ severity: state.info.at(-1).severity, summary: state.info.at(-1).summary, detail: state.info.at(-1).detail, life: 3000	 });
+		if(state.info != null){
+			toast.current.show({ severity: state.info.severity, summary: state.info.summary, detail: state.info.detail, life: 3000	 });
 		}
+		dispatch({
+			type:TOAST, 
+			info: null
+		}) 
 	}, [state.info]);
 
     const items = [
@@ -35,12 +38,14 @@ export default function Nav () {
 	return(
 		<>	
 			<div>
-				<Toast ref={toast} />
-				<img id= "imagen" src= {shelve} alt="shelve" />
+				<Toast ref={toast} />				
 				<div id="menu">
 					{/* <TabMenu model={items} activeIndex={activeIndex} /> */}
 					<Menubar model={items} />
             			</div>
+
+				<div id="imagen"></div>
+
 				{/* <div className="buttonsNav">			
 					<Link className="butNavSalir" to={"/"} >
 						<Button						

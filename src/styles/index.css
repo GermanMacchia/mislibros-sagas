@@ -34,7 +34,6 @@ body {
     color: white;
 }
 
-
 #header h1 {
     font-family: lobster !important;
     font-size: 50px;
@@ -60,13 +59,17 @@ select {
 }
 
 #menu{
-    float: right;
+    border: none !important;
+    left: -1px;
+    width: 140px;
+}
+.p-menubar{
+    border: none !important;
 }
 
 #imagen{
-    width: 200px;
-    height: auto;
-    margin: 30px 0px 0px 30px;
+    height: 189px;
+    background-image: url('../assets/fondo.jpg');
 }
 
 .buttonsNav {
