@@ -1,66 +1,51 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { connect } from 'react-redux';
-import { useAlert } from 'react-alert';
-import { Fab } from '@material-ui/core';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
+import React, {useState, useEffect } from 'react';
+import { useSelector, useDispatch} from 'react-redux';
+import { Button } from 'primereact/button';
+import { InputText } from 'primereact/inputtext';
+import { InputTextarea } from 'primereact/inputtextarea';
 
-function CategoriaForm () {
+export default function LoginForm () {
 
-	const alert = useAlert();
+	const state = useSelector(state => state.user)
+	const dispatch = useDispatch()
+	const [form, setForm] = useState({categoria:'',imagen:''});
 
+	const handleForm = (e) => {
+		setForm({
+			...form,
+			[e.target.name]: e.target.value
+		});
+		
+	}
+	
+    	const handleSubmit = () => {
 
-	const [newPost, setNewPost] = useState(0);
-	const [categoria, setCategoria] = useState({
-		    nombre: " "
-			})
-
-	// const handleNuevacategoria = (e) => {
-	// 	setCategoria({
-	// 		nombre: e.target.value
-	// 	});
-	// }
-
-	// const handleSubmit = (e) => {
-	// 	e.preventDefault()
-
-	// 	async function postCategoria () { 
-	// 			await axios({
-	// 			    method: 'post',
-	// 			    url: url + `categoria`,
-	// 			    data: categoria,
-	// 			    headers: header
-	// 			    })
-	// 			.then((res) => {
-	// 				alert.success('Nueva categoria agregada')
-	// 				setNewPost(newPost + 1);
-	// 				props.onSave(newPost);
-	// 			})
-	// 			.catch((error) => {
-	// 			  console.error(error)
-	// 			  alert.error('Categoria existente')
-	// 			});
-	// 		}
-			
-	// 	postCategoria ();
-	// 	document.getElementById("Cregistro").reset();
-	// }
+	}
 
 	return(
-			<div className= "homeform">
-				<h2>Ingresar una categoria</h2>
-					<form id="Cregistro">
-						<label>Categoria</label><br/><br/>
-						<input type="text"  placeholder="Nombre categoria"/><br/><br/>
-						<Fab color="primary">
-							<AddCircleIcon fontSize="large" type= "submit" />
-						</Fab>		
-					</form>
-			</div>
-		)
+		<div id="catForm">
+			{/*Formulario*/}
+			<form action="Post Categoría">
+               			 <span className="p-float-label">
+					<InputText  name='categoria' className="p-inputtext-mb p-d-block txt" onChange={handleForm} />
+					<label class="lab" htmlFor="categoria">Nueva Categoría</label>
+               			 </span><br/>
+				<span className="p-float-label">
+					<InputText name='imagen' className="p-inputtext-mb p-d-block txt" onChange={handleForm} feedback={false} />
+					<label class="lab" htmlFor="usuario">Dirección de Imagen</label>
+				</span><br/>
+				<span className="p-float-label">
+					<InputTextarea name="descripcion" required rows={4} cols={18} class="txt" />
+					<label class="lab" htmlFor="description">Descripción</label>
+				</span><br/>
+			</form>
+			{/*Botones*/}
+			{state.fetching? 
+				<Button id="loading" loading loadingOptions={{ position: 'right' }} className="p-button-secondary p-ml-2" />
+					: 
+			 	<Button label="Crear" icon="pi pi-plus" className="p-button-success p-mr-2"  />
+			}
 
+		</div>
+	);
 }
-
-
-export default connect(null, null)(CategoriaForm);
-

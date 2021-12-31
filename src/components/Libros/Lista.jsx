@@ -180,7 +180,9 @@ function formatearArray(){
     //OPCIONES DE CADA FILA {EDICION y BORRAR}
     const actionBodyTemplate = (rowData) => {
         return (
+            
             <React.Fragment>
+                <Button icon="pi pi-info-circle" className="p-button-rounded p-button-warn p-mr-2" />
                 <Button icon="pi pi-pencil" className="p-button-rounded p-button-success p-mr-2" onClick={() => confirmEditProduct(rowData)} />
                 <Button icon="pi pi-trash" className="p-button-rounded p-button-warning" onClick={() => confirmDeleteProduct(rowData)} />
             </React.Fragment>

@@ -20,10 +20,20 @@ body {
     word-wrap: break-word;
     width: 3em;
 }
-
+label{
+    margin-top: -0.6 !important;
+}
+.txt {
+    margin-bottom: 0.5rem !important;
+}
 
 .clear {
     clear: both;
+}
+
+#catForm{
+    padding: 30px;
+
 }
 
 #circle {
@@ -32,6 +42,10 @@ body {
 
 .icon{
     color: white;
+}
+
+.copy{
+    color: #ffffff;
 }
 
 #header h1 {
@@ -56,6 +70,18 @@ select {
     width: 100%;
     height: 30px;
     margin-top: 2px;
+}
+
+.flex{
+    display:flex;
+    flex-direction: row;
+}
+
+.block{
+    display: grid;
+    grid-template-columns: repeat(3, 5fr);
+    grid-gap: 20px;
+    margin-top: 20px;
 }
 
 #menu{

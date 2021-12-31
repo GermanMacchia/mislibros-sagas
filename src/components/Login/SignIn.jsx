@@ -12,10 +12,11 @@ export default function SignIn () {
     );
 
 	return(
+		
 		<>
 			<div className="center" >
 				<Card title="Ingresa a tu biblioteca" header={header}>
-					<img src= {shelve} alt="shelve" />
+					<img id="intro" src= {shelve} alt="shelve" />
 					<LoginForm />
 					<Accordion style={{ width: "23em", marginTop: "10px"}} activeIndex={1}>
 						<AccordionTab header={
