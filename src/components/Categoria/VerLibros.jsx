@@ -34,9 +34,9 @@ function VerLibros (props) {
 				<h2>Libros de la categoria</h2>
                 
                 {libros.filter(libro => libro.categoria_id == props.id).map(libro => {
-                    return  <span key={libro.id}>
-                                <strong style={{"color": "white"}}>-{libro.nombre}</strong><br/>
-                            </span>
+                	return  <span key={libro.id}>
+                        	        <strong style={{"color": "white"}}>-{libro.nombre}</strong><br/>
+                        	</span>
                 })} 
 			</div>	
 		)

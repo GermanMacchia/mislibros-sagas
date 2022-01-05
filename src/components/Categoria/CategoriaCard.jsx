@@ -1,25 +1,25 @@
 import React from 'react';
 import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
-import imagen from '../../assets/shelve.jpg'
 
-export default function CategoriaCard({ nombre, imagen, descripcion}) {
+
+export default function CategoriaCard({ categoria, openDelete }) {
 
     const header = (
-        <img alt="Card" style={{width: '15rem' }} src={imagen}  alt='imagen' />
+        <img alt="Card" style={{width: '15rem' }} src={categoria.imagen}  alt='imagen' />
     );
+
     const footer = (
         <span>
-            <Button label="Save" icon="pi pi-check" />
-            <Button label="Cancel" icon="pi pi-times" className="p-button-secondary p-ml-2" />
+            <Button icon="pi pi-trash" className="p-button-rounded p-button-danger" onClick={() => { openDelete(categoria)} } />
         </span>
     );
 
     return (
         <div>
-            <Card title={nombre} style={{ width: '25em' }} footer={footer} header={header}>
-                <p className="p-m-0" style={{lineHeight: '1.5'}}>{descripcion}</p>
-            </Card>
-        </div>
+            <Card title={categoria.nombre} style={{ width: '25em' }} footer={footer} header={header}>
+                <p className="p-m-0" style={{lineHeight: '1.5'}}>{categoria.descripcion}</p>            
+            </Card> 
+        </div>  
     )
 }

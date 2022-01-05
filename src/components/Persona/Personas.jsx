@@ -2,9 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Nav from '../Home/Nav'
 import Spinner from '../utilities/Spinner'
-
-
-import { Accordion, AccordionTab } from 'primereact/accordion'
+import PersonaList from './PersonasList'
 import { GET_PERSONA } from '../../sagas/types'
 
 export default function Personas () {
@@ -23,24 +21,9 @@ export default function Personas () {
 				{
 					(state.loaded === false)
 					?
-						<>
-							<br/>
-							<Spinner />
-						</>
+					<Spinner />
 					:
-					<div>
-
-					<Accordion style={{ width: "80em", marginTop: "10px"}} activeIndex={1}>
-						<AccordionTab header={
-								<>
-									<i style={{ marginRight: "10px"}} className="pi pi-upload"/>
-									Ingresar una persona
-								</>
-							}>
-
-						</AccordionTab>
-					</Accordion>
-					</div>
+					<PersonaList />
 				}
 			</div>
 		</>

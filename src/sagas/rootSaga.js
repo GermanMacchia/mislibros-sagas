@@ -1,9 +1,19 @@
 import { takeLatest, all } from 'redux-saga/effects'
 import { handleGetLogin } from './handlers/loginHand'
 import { handleGetLibros, handleDeleteLibro, handlePostLibro, handlePutLibro } from './handlers/librosHand'
-import { handleGetCategorias } from './handlers/categoriasHand'
+import { handleGetCategorias, handlePostCategorias, handleDeleteCategorias } from './handlers/categoriasHand'
 import { handleGetPersonas } from './handlers/personasHand'
-import { DELETE_LIBROS, GET_CATEGORIAS, GET_LIBROS, GET_PERSONA, LOGIN, POST_LIBROS, UPDATE_LIBROS } from './types'
+import { 
+    DELETE_CATEGORIAS,
+    DELETE_LIBROS, 
+    GET_CATEGORIAS, 
+    GET_LIBROS, 
+    GET_PERSONA, 
+    LOGIN, 
+    POST_CATEGORIAS, 
+    POST_LIBROS, 
+    UPDATE_LIBROS
+} from './types'
 
 export default function* rootSaga() {
    yield all([
@@ -31,4 +41,6 @@ function* watchPersonas(){
 
 function* watchCategorias(){
     yield takeLatest(GET_CATEGORIAS, handleGetCategorias) 
+    yield takeLatest(POST_CATEGORIAS, handlePostCategorias)
+    yield takeLatest(DELETE_CATEGORIAS, handleDeleteCategorias)
 }

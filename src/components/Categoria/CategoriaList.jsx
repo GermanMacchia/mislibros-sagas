@@ -1,53 +1,69 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector} from 'react-redux';
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import Spinner from '../utilities/Spinner'
-import CategoriaCard from './CategoriaCard';
+import CategoriaCard from './CategoriaCard'
+import { Button } from 'primereact/button'
+import { Dialog } from 'primereact/dialog'
+import { useDispatch } from 'react-redux'
+import { DELETE_CATEGORIAS } from '../../sagas/types'
+
 
 export default function CategoriaList () {
 
+	const dispatch = useDispatch()
     const state = useSelector( state => state.categoria )
     const [categorias, setCategorias] = useState();
     const [loaded, setLoaded] = useState(false);
+    const [categoria, setCategoria] = useState();
+    const [deleteCategoriaDialog, setDeleteCategoriaDialog] = useState(false);
+
+    const hideDeleteCategoriaDialog = () => {
+        setDeleteCategoriaDialog(false);
+    }
+
+    const deleteCategoriaDialogFooter = (
+        <React.Fragment>
+            <Button label="No" icon="pi pi-times" className="p-button-text" onClick={() => hideDeleteCategoriaDialog()} />
+            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={() => deleteCategoria()}/>
+        </React.Fragment>
+    );
+    
+    const openDeleteModal = (categoria) => {
+        setDeleteCategoriaDialog(true)
+        setCategoria(categoria)
+    }
+
+    const deleteCategoria = () => {
+        dispatch({
+            type: DELETE_CATEGORIAS,
+            props: categoria.id
+        })
+        hideDeleteCategoriaDialog();
+    }
 
     useEffect(() => {
-        setCategorias(state.payload)
-        setLoaded(true)
+        if( state.loaded ){
+            setCategorias(state.payload)
+            setLoaded(true)
+        }
     }, [state.loaded])
 
-
-    const cartas = (nombre, id) => {
-        
-        return  <CategoriaCard nombre={nombre} descripcion={id} />
-
-    }
-
-    const itemTemplate = (item) => {
-        return (             
-            
-            <div className="product-item">
-
-                <div className="image-container">
-                    <img src={"http://4.bp.blogspot.com/-96B1ZlftYbQ/UhDNBNV9vAI/AAAAAAAANKM/DXP-KnOrwtM/s640/masks.jpg"} 
-                    onError={(e) => e.target.src='https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'} alt={item.nombre} />
-                </div>
-                <div className="product-list-detail">
-                    <h5 className="p-mb-2">{item.nombre}</h5>    
-                </div>
-                <div className="product-list-action">
-                    <span className="product-category">{item.id}</span>
-                </div> 
-            </div>
-        );
-    }
-
     return (
-        <div class= 'block'>
-            { 
-                loaded ? categorias.map((cat) => { return (<CategoriaCard key={cat.id} imagen={cat.imagen} nombre={cat.nombre} descripcion={cat.descripcion}/>) }) 
-                    :
-                <Spinner /> 
-            }
-        </div>
+        <>
+            <div class= 'block'>
+                { 
+                    loaded ? categorias.map((cat) => { return (<CategoriaCard key={cat.id} categoria={cat} openDelete={openDeleteModal} />) }) 
+                        :
+                    <Spinner /> 
+                }
+            </div>
+            <Dialog visible={deleteCategoriaDialog} style={{ width: '450px' }} header="Confirmar" modal footer={deleteCategoriaDialogFooter} onHide={hideDeleteCategoriaDialog}>
+                <div className="confirmation-content">
+                    <i  className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem'}} />
+                    {categoria && <span style={{marginLeft: "20px"}}>¿Seguro que quieres borrar <b>{categoria.nombre}</b>?</span>}
+                </div>
+            </Dialog>
+        </>
     );
 }
 

@@ -71,6 +71,10 @@ select {
     height: 30px;
     margin-top: 2px;
 }
+#spin{
+    margin-left: 23rem;
+    margin-top: 2rem;
+}
 
 .flex{
     display:flex;
@@ -309,7 +313,11 @@ table p {
         width: 97%;
     }
 }
-
+#dialogo {
+    margin: 0;
+    line-height: 1.5;
+    text-align: justify;
+}
 
 
 .modal {

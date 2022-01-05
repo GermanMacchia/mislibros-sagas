@@ -35,7 +35,6 @@ export default function Registro () {
 				document.getElementById('myform').reset();
 			})
                	 	.catch((e) => {
-				console.log(e.response.data.message)
 				dispatch({ type: REGISTER_ERROR })	
 				toast.current.show({ severity: 'error', summary: "Error de Registro", detail: "No enviaste los datos necesarios" });			
 			});
