@@ -16,8 +16,8 @@ export default function CategoriaCard({ categoria, openDelete }) {
     );
 
     return (
-        <div>
-            <Card title={categoria.nombre} style={{ width: '25em' }} footer={footer} header={header}>
+        <div id="tarjetas">
+            <Card title={categoria.nombre}  footer={footer} header={header}>
                 <p className="p-m-0" style={{lineHeight: '1.5'}}>{categoria.descripcion}</p>            
             </Card> 
         </div>  

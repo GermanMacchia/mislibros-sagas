@@ -6,7 +6,7 @@ import { Button } from 'primereact/button'
 import { Dialog } from 'primereact/dialog'
 import { useDispatch } from 'react-redux'
 import { DELETE_CATEGORIAS } from '../../sagas/types'
-
+import { Carousel } from 'primereact/carousel';
 
 export default function CategoriaList () {
 
@@ -48,15 +48,40 @@ export default function CategoriaList () {
         }
     }, [state.loaded])
 
+    const responsiveOptions = [
+        {
+            breakpoint: '200px',
+            numVisible: 3,
+            numScroll: 3
+        },
+        {
+            breakpoint: '10rem',
+            numVisible: 2,
+            numScroll: 2
+        },
+        {
+            breakpoint: '4rem',
+            numVisible: 1,
+            numScroll: 1
+        }
+    ];
+
+    const productTemplate = (cat) => {
+        return (<CategoriaCard key={cat.id} categoria={cat} openDelete={openDeleteModal} />)
+    }
+
+    {/*categorias.map((cat) => { return (<CategoriaCard key={cat.id} categoria={cat} openDelete={openDeleteModal} />)})*/}
     return (
         <>
-            <div class= 'block'>
-                { 
-                    loaded ? categorias.map((cat) => { return (<CategoriaCard key={cat.id} categoria={cat} openDelete={openDeleteModal} />) }) 
+            { 
+                loaded ? 
+                    <div id="carrusel">
+                        <Carousel value={categorias} numVisible={3} numScroll={3} responsiveOptions={responsiveOptions}
+                        itemTemplate={productTemplate}  />
+                    </div>  
                         :
                     <Spinner /> 
-                }
-            </div>
+            }
             <Dialog visible={deleteCategoriaDialog} style={{ width: '450px' }} header="Confirmar" modal footer={deleteCategoriaDialogFooter} onHide={hideDeleteCategoriaDialog}>
                 <div className="confirmation-content">
                     <i  className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem'}} />
