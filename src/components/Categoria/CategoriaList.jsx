@@ -20,13 +20,6 @@ export default function CategoriaList () {
     const hideDeleteCategoriaDialog = () => {
         setDeleteCategoriaDialog(false);
     }
-
-    const deleteCategoriaDialogFooter = (
-        <React.Fragment>
-            <Button label="No" icon="pi pi-times" className="p-button-text" onClick={() => hideDeleteCategoriaDialog()} />
-            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={() => deleteCategoria()}/>
-        </React.Fragment>
-    );
     
     const openDeleteModal = (categoria) => {
         setDeleteCategoriaDialog(true)
@@ -46,7 +39,14 @@ export default function CategoriaList () {
             setCategorias(state.payload)
             setLoaded(true)
         }
-    }, [state.loaded])
+    }, [state.loaded, state])
+
+    const deleteCategoriaDialogFooter = (
+        <React.Fragment>
+            <Button label="No" icon="pi pi-times" className="p-button-text" onClick={() => hideDeleteCategoriaDialog()} />
+            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={() => deleteCategoria()}/>
+        </React.Fragment>
+    );
 
     const responsiveOptions = [
         {
@@ -70,7 +70,6 @@ export default function CategoriaList () {
         return (<CategoriaCard key={cat.id} categoria={cat} openDelete={openDeleteModal} />)
     }
 
-    {/*categorias.map((cat) => { return (<CategoriaCard key={cat.id} categoria={cat} openDelete={openDeleteModal} />)})*/}
     return (
         <>
             { 

@@ -9,7 +9,8 @@ import {
     POST_LIBROS_ERROR,
     POST_LIBROS_SUCCESS,
     UPDATE_LIBROS_ERROR,
-    UPDATE_LIBROS_SUCCESS } from '../types'
+    UPDATE_LIBROS_SUCCESS,
+    TOAST } from '../types'
 
 
 export function* handleGetLibros() {
@@ -33,9 +34,25 @@ export function* handleDeleteLibro() {
         const  { data }  = yield call(reqDeleteLibros, user, props)
         yield put({ type:DELETE_LIBROS_SUCCESS, payload: data.respuesta} )
         yield put({ type: GET_LIBROS })
+        yield put({
+            type:TOAST, 
+            info: { 
+                severity: 'success', 
+                summary: 'Libro Eliminado', 
+                detail: data.respuesta
+            }          
+        })
 
     } catch (error) {
         yield put({ type: DELETE_LIBROS_ERROR, error: error })
+        yield put({
+            type:TOAST, 
+            info: { 
+                severity: 'error', 
+                summary: 'Error', 
+                detail: error.response.data.error
+            }          
+        })
     }
 
 }

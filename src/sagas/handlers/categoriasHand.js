@@ -8,10 +8,11 @@ import {
     DELETE_CATEGORIAS_SUCCESS,
     DELETE_CATEGORIAS_ERROR,
     TOAST,
-    GET_CATEGORIAS,
-    RELOAD
+    GET_CATEGORIAS
     } from '../types'
 
+
+    
 export function* handleGetCategorias() {
     
     try {
@@ -20,7 +21,6 @@ export function* handleGetCategorias() {
         yield put({ type: GET_CATEGORIAS_SUCCESS, payload: data.respuesta} )
     } catch (error){
         yield put({ type: GET_CATEGORIAS_ERROR, error: error})
-        console.log(error)
     }
 
 }
@@ -32,7 +32,6 @@ export function* handlePostCategorias() {
         const { props } = yield select(state => state.categoria)
         const  { data }  = yield call(reqPostCategorias, user, props)
         yield put({ type: POST_CATEGORIAS_SUCCESS, props: data } )
-        console.log(data)
         yield put({
                 type:TOAST, 
 				info: { 
@@ -42,8 +41,7 @@ export function* handlePostCategorias() {
 				}          
 			})
         yield put ({ type: GET_CATEGORIAS })
-        yield put ({ type: RELOAD })
-
+        
     } catch (error){
         yield put({ type: POST_CATEGORIAS_ERROR, error: error.response.data.error })
         yield put({
@@ -74,8 +72,6 @@ export function* handleDeleteCategorias() {
                     }          
             })
         yield put ({ type: GET_CATEGORIAS })
-        yield put ({ type: RELOAD })
-
     } catch (error){
         yield put({ type: DELETE_CATEGORIAS_ERROR, error: error.response.data.error})
         yield put({

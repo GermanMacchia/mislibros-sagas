@@ -7,38 +7,64 @@ import {
     REGISTER,
     REGISTER_SUCCESS,
     REGISTER_ERROR,
-    TOAST
+    TOAST,
+    REDIRECT,
+    REDIRECT_SUCCESS
 } from '../types'
 import { loginWithGoogle } from '../../firebase'
 
 const initialData = {
     loggedIn: false,
+    registering: false,
     fetching: false,
     user: [],
     id: {
         uid: []
     },
     error:[],
-    info: null
+    info: null,
+    redirect:{
+        redirecting: false,
+        page: null
+    }
 }
 
 //REDUCER
 export default function reducer(state = initialData, action){
     switch(action.type){
+        case REDIRECT:
+            return {
+                ...state,
+                redirect: {
+                    redirecting: true,
+                    page: action.page
+                }
+            }
+        case REDIRECT_SUCCESS:
+            return {
+                ...state,
+                redirect: {
+                    redirecting: false,
+                    page: null
+                }
+            }
         case REGISTER:
             return{
                 ...state,
                 registering: true,
+                user: action.payload
             }
         case REGISTER_SUCCESS:
             return{
                 ...state,
                 registering: false,
+                user: []
             }
         case REGISTER_ERROR:
             return{
                 ...state,
                 registering: false,
+                user: []
             }
         case LOG_OUT:
             return{

@@ -6,9 +6,7 @@ import {
     DELETE_CATEGORIAS,
     DELETE_CATEGORIAS_ERROR,
     POST_CATEGORIAS_SUCCESS,
-    DELETE_CATEGORIAS_SUCCESS,
-    LOADED,
-    RELOAD} from '../types'
+    DELETE_CATEGORIAS_SUCCESS} from '../types'
 
 //INITIAL DATA
 const initialData = {
@@ -17,7 +15,6 @@ const initialData = {
     posting: false,
     updating: false,
     deleting: false,
-    reload: false,
     props: [],
     error: [],
     reducerChanges: [] 
@@ -76,16 +73,6 @@ export default function reducer(state = initialData, action){
                 deleting: false,
                 props: [],
                 error: action.error
-            }
-        case LOADED:
-            return {
-                ...state,
-                reload: false
-            }
-        case RELOAD:
-            return {
-                ...state,
-                reload: true
             }
         default:
             return {

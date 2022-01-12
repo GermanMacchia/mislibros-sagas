@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password'
-import { URL } from '../../sagas/requests/URL';
 import { Toast } from 'primereact/toast';
 
 export default function Registro () {
@@ -26,26 +25,12 @@ export default function Registro () {
 			[e.target.name] : e.target.value
 		})
 	}
-	//SE ENVIA REGISTRO POR ACA PARA NO COMPROMETER CLAVE
-	async function registrar () {
-		await axios.post(URL + `registro`, user)
-			.then((res) => {
-				toast.current.show({ severity: 'success', summary: "Exito", detail: res.data.message});
-				dispatch({ type: REGISTER_SUCCESS })
-				document.getElementById('myform').reset();
-			})
-               	 	.catch((e) => {
-				dispatch({ type: REGISTER_ERROR })	
-				toast.current.show({ severity: 'error', summary: "Error de Registro", detail: "No enviaste los datos necesarios" });			
-			});
-        }
 
 	const handleSubmit = (e) => {
-		e.preventDefault();
 		dispatch({
-			type: REGISTER
+			type: REGISTER,
+			payload: user
 		})
-        	registrar();
 	}
 
 	return(

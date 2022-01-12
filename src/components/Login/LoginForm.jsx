@@ -1,19 +1,15 @@
-import React, {useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect } from 'react';
 import { useSelector, useDispatch} from 'react-redux';
-import { useHistory } from "react-router-dom";
 import { LOGIN } from '../../sagas/types'; 
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
-import { Toast } from 'primereact/toast';
 
 export default function LoginForm () {
 
-	const history = useHistory();
 	const state = useSelector(state => state.user)
 	const dispatch = useDispatch()
 	const [form, setForm] = useState({user:'',pass:''});
-    	const toast = useRef(null);
 
 	const handleForm = (e) => {
 		setForm({
@@ -22,23 +18,7 @@ export default function LoginForm () {
 		});
 		
 	}
-	
-	useEffect(() => {
-		if(state.loggedIn === true){
-
-			history.push('/home');
-		}
-
-	}, [state.loggedIn])
-
-	useEffect(() => {
 		
-		if(state.error.length > 0){
-			toast.current.show({ severity: 'error', summary: "Error de Login", detail: state.error.at(-1)});	
-		}
-		
-	}, [state.error]);
-	
     const handleSubmit = () => {
 		dispatch({
 			type: LOGIN,
@@ -48,7 +28,6 @@ export default function LoginForm () {
 
 	return(
 		<div className="log">
-			<Toast ref={toast} />
 			{/*Formulario*/}
 			<form action="Login">
                 <span className="p-float-label">

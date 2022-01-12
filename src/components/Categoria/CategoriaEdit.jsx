@@ -95,7 +95,6 @@ export default function CategoriaEdit({hideEditDialog, categoriaEditModal }) {
 				<label htmlFor="description">Descripción</label>
 				<InputTextarea name="descripcion" onChange={ handleForm }  placeholder="Descripción"  required rows={3} cols={20} />
 			</div>
-
 			<div className="p-field">
 				<div className="p-d-flex p-dir-col p-mr-3 p-mt-3">
 					<h6>Libros</h6>

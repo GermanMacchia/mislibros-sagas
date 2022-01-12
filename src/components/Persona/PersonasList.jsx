@@ -6,24 +6,12 @@ import { Button } from 'primereact/button';
 import { Toolbar } from 'primereact/toolbar';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext'
-import { DELETE_LIBROS, TOAST } from '../../sagas/types';
-import { Dropdown } from 'primereact/dropdown';
-import ModalLibros from '../Libros/ModalLibros';
-import ModalEdit from '../Libros/ModalEdit';
-import react from 'react';
+import { TOAST, DELETE_PERSONA } from '../../sagas/types';
+import ModalPersona from './ModalPersona';
+import ModalEditPersona from './ModalPersona';
+import Spinner from '../utilities/Spinner';
 
 export default function Lista(){
-
-//SE UBICA COMO INICIAL EN SETPRODUCTS QUE INGRESA DIALOG ABAJO
-    let libroVacio= {
-        id: null,
-        autor: '',
-        nombre: '',
-        descripcion: '',
-        categoria_id: null,
-        persona_id: null,
-        rating: 0,
-    };
 
     const dispatch = useDispatch();
     const state = useSelector(state => state.persona)
@@ -32,7 +20,7 @@ export default function Lista(){
 //INGRESO LISTA DE PRODUCTOS INICIAL  
     const [personas, setPersonas] = useState()
 //VISIBILIDAD DEL MODAL DE LIBROS NUEVOS / EDIT
-    const [libroModal, setLibroModal] = useState(false);
+    const [personaModal, setPersonaModal] = useState(false);
     const [libroEditModal, setLibroEditModal] = useState(false);
 //BORRAR PRODUCTO INDIVIDUAL
     const [deleteProductDialog, setDeleteProductDialog] = useState(false);
@@ -53,57 +41,21 @@ export default function Lista(){
 
 //INGRESO INICIAL DE PRODUCTOS A LISTA
     useEffect(() => {
-        setPersonas(state.payload)
-        setLibros(stateLibros)
-
-    }, [personas]);
-
-{/*
-//FUNCION PARA FILTRAR ID CATEGORIAS Y PRESTADO/EN BIBIOTECA / (de la API llegan con numeros de id relacional)
-function formatearArray(){
-    if(state.payload){
-            let personas = [...state.payload]
-            let array = [];             
-            //Por cada libro voy a crear un objeto distinto al que hay en el servidor para mejorar la presentación de la tabla
-            libros.forEach( e => {
-                //Saco el nombre de la categoria que coincida con el categoria_id de <<libros>> en cada caso
-                let [ cate ] = auxCategorias.filter( c => c.id === e.categoria_id)
-                //si el persona_id de <<libros>> esta ocupado quiere decir que esta prestado
-                function retorno(){
-                    if( e.persona_id !== null){
-                        return "Prestado"
-                    }else{
-                        return "En biblioteca"
-                    }
-                }
-                //Finalmente creo el objeto a medida con lo que consumo del servidor
-                let objeto = {
-                    id: e.id,
-                    nombre: e.nombre,
-                    categoria: cate.nombre,
-                    descripcion: e.descripcion,
-                    persona_id: e.persona_id,
-                    categoria_id: e.categoria_id,
-                    autor: e.autor,
-                    rating: e.rating,
-                    estado: retorno()
-                }
-                array.push(objeto)    
-            }) 
-            setLibros(array) 
-    }        
-} */}
+        if(state.loaded){
+            setPersonas(state.payload)
+        }
+    }, [personas, state]);
 
 //ABRIR EL MODAL DE INGRESO NUEVO
     const openNew = () => {
         //setLibro(libroVacio);
         setSubmitted(false);
-        setLibroModal(true);
+        setPersonaModal(true);
     }
+
 //CERRAR MODAL SIN GUARDAR
     const hideDialog = () => {
-        //setSubmitted(false);
-        setLibroModal(false);
+        setPersonaModal(false);
     }
     
     const hideDialogEdit = () => {
@@ -114,15 +66,7 @@ function formatearArray(){
         setDeleteProductDialog(false);
     }
 
-
     const confirmEditProduct = (persona) => {
-       /* setCategoriaModal(libro.categoria_id)
-        setNombrePlaceHolder(libro.nombre)
-        if(libro.subtitulo){setSubtituloPlaceHolder(libro.subtitulo)}
-        if(libro.descripcion){setDescripcionPlaceHolder(libro.descripcion)}
-        if(libro.persona_id){setPrestado(libro.persona_id)}
-        if(libro.rating){setStars(libro.rating)}
-        setSubmitted(false);*/
         setSubmitEdit(false)
         setLibroEditModal(true);
         setPersona(persona)
@@ -133,6 +77,7 @@ function formatearArray(){
         setPersona(personaFila);
         setDeleteProductDialog(true);
     }
+
     //BORRAR PRODUCTO INDIVIDUAL UNA VEZ CONFIRMADO
     const deletePersona = () => {
         {/*DISPATCH*/}
@@ -144,7 +89,7 @@ function formatearArray(){
         setDeleteProductsDialog(true);
     }
     // ESCONDER MODAL DE COMFIRMACIÓN
-    const hideDeleteProductsDialog = () => {
+    const hideDeletePersonasDialog = () => {
         setDeleteProductsDialog(false);
     }
 
@@ -180,7 +125,6 @@ function formatearArray(){
         return (
             
             <React.Fragment>
-                <Button icon="pi pi-info-circle" className="p-button-rounded p-button-info p-mr-2" />
                 <Button icon="pi pi-pencil" className="p-button-rounded p-button-warning p-mr-2" onClick={() => confirmEditProduct(rowData)} />
                 <Button icon="pi pi-trash" className="p-button-rounded p-button-danger" onClick={() => confirmDeleteProduct(rowData)} />
             </React.Fragment>
@@ -194,72 +138,50 @@ function formatearArray(){
             <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deletePersona} />
         </React.Fragment>
     );
-{/*
-    //BORRAR PRODUCTOS DE SELECCION MULTIPLE 
-    const deleteSelectedProducts = () => {
 
-        //Las personas a Borrar no deben tener libros prestados
-        var personasABorrar = []
-        personasABorrar = personasSeleccionadas.filter( personas => personas.id == null)
-
-        //función para que retorne array solo los nombres de otro array
-        const retornarLista = (aBorrar) =>{
-            var nombres = []
-            nombres = aBorrar.map(element => {
-                return element.nombre
-            });
-            return nombres
+    const retornarPersonasBorrables = () => {
+        var personas = []
+        var noborrables = []
+        personasSeleccionadas.forEach( persona => {
+            var libros = stateLibros.filter( libro => libro.persona_id === persona.id)
+            if(libros.length === 0){
+                personas.push(persona.id)
+            }else{
+                noborrables.push(persona.nombre)
+            }
+        });
+        if( noborrables.length !== 0){
+            dispatch({
+                        type:TOAST, 
+                        info: { 
+                            severity: 'warn', 
+                            summary: 'Cuidado', 
+                            detail: noborrables.join() + " figura con prestamos"
+                        } })
         }
-
-        //Condiciones para TOAST de info
-        if( personasABorrar.length == 0){
-            //NINGUNO
-            dispatch({
-                type:TOAST, 
-                info: {
-                    severity: 'info', 
-                    summary: 'Atención', 
-                    detail: 'Los libros prestados no pueden eliminarse'
-                }
-            })
-
-        }else if(personasABorrar.length > librosABorrar.length){
-            //ALGUNOS
-            dispatch({
-                type:TOAST, 
-                info: { 
-                    severity: 'warn', 
-                    summary: 'Prestados no pueden eliminarse', 
-                    detail: retornarLista(librosABorrar).toString() + ' se han eliminado'
-                }
-            })    
-
-        } else{
-            //TODOS
-            dispatch({
-                type:TOAST, 
-                info: { 
-                    severity: 'success', 
-                    summary: 'Libros Eliminados', 
-                    detail: retornarLista(librosABorrar).toString() 
-                }
-            }) 
-        }
-        
-
-        librosABorrar.forEach( e =>{
-            dispatch({type:DELETE_LIBROS, props: e.id})
-        })
-
-        setDeleteProductsDialog(false);
-        setSelectedProducts(null);
+        return personas
     }
-*/}
+
+    const deletePersonasSeleccionadas = () => {
+        //Las personas a Borrar no deben tener libros prestados
+        var idPersonas = retornarPersonasBorrables()
+
+        if(idPersonas.length !== 0){
+            idPersonas.forEach( id => {
+                dispatch({
+                type: DELETE_PERSONA, 
+                props: id
+                })
+            })
+        }
+        hideDeletePersonasDialog()
+    }
+
     //FOOTER DE CONFIRMACION PARA BORRAR PRODUCTOS MULTIPLES  
     const deleteProductsDialogFooter = (
         <React.Fragment>
-            <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleteProductsDialog} />
-            <Button label="Yes" icon="pi pi-check" className="p-button-text" />
+            <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeletePersonasDialog} />
+            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deletePersonasSeleccionadas} />
         </React.Fragment>
     );
 
@@ -271,36 +193,40 @@ function formatearArray(){
                 {/*BOTONERA SUPERIOR*/}
                 <Toolbar className="p-mb-4" left={leftToolbarTemplate} ></Toolbar>
                 {/*ESTRUCTURA DE TABLA*/}
-                <DataTable                    
-                    ref={dt} 
-                    //VALORES DE LAS TABLAS
-                    value={personas} 
-                    //SELECCION POR CASILLA-
-                    selectionMode="multiple" 
-                    //HOOK, FUNCION y DATAKEY! REFERENCIA DENTRO DEL JSON
-                    selection={personasSeleccionadas} onSelectionChange={(e) => setPersonasSeleccionadas(e.value)} dataKey="id"
-                    paginator rows={5} rowsPerPageOptions={[5, 10, 25]}
-                    paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                    currentPageReportTemplate="Mostrando {first} to {last} de {totalRecords} Personas"
-                    globalFilter={globalFilter}
-                    header={header}>
-                    {/*SELECCION POR CASILLA */}
-                    {/* FIELD = AGARRA EL VALOR DEL OBJETO INGRESADO EN <Datatable> Value - REFERENCIA DEL JSON*/}
-                    <Column selectionMode="multiple" headerStyle={{ width: '0.3rem' }}></Column>
-                    <Column className="column" field="nombre" header="Nombre" sortable></Column>
-                    <Column className="column" field="apellido" header="Apellido" sortable></Column>
-                    <Column className="column" field="email" header="Email" sortable></Column>
-                    <Column className="column" field="alias" header="Alias" sortable></Column>                
-                    {/* OPCIONES BOORRAR Y EDIT n°175 */}
-                    <Column className="column" body={actionBodyTemplate}></Column> 
-                </DataTable>
+                { state.loaded ?
+                    <DataTable                    
+                        ref={dt} 
+                        //VALORES DE LAS TABLAS
+                        value={personas} 
+                        //SELECCION POR CASILLA-
+                        selectionMode="multiple" 
+                        //HOOK, FUNCION y DATAKEY! REFERENCIA DENTRO DEL JSON
+                        selection={personasSeleccionadas} onSelectionChange={(e) => setPersonasSeleccionadas(e.value)} dataKey="id"
+                        paginator rows={5} rowsPerPageOptions={[5, 10, 25]}
+                        paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                        currentPageReportTemplate="Mostrando {first} to {last} de {totalRecords} Personas"
+                        globalFilter={globalFilter}
+                        header={header}>
+                        {/*SELECCION POR CASILLA */}
+                        {/* FIELD = AGARRA EL VALOR DEL OBJETO INGRESADO EN <Datatable> Value - REFERENCIA DEL JSON*/}
+                        <Column selectionMode="multiple" headerStyle={{ width: '0.3rem' }}></Column>
+                        <Column className="column" field="nombre" header="Nombre" sortable></Column>
+                        <Column className="column" field="apellido" header="Apellido" sortable></Column>
+                        <Column className="column" field="email" header="Email" sortable></Column>
+                        <Column className="column" field="alias" header="Alias" sortable></Column>                
+                        {/* OPCIONES BOORRAR Y EDIT n°175 */}
+                        <Column className="column" body={actionBodyTemplate}></Column> 
+                    </DataTable>
+                    :
+                    <Spinner />
+                }
             </div>    
 
             {/*MODAL LIBRO NUEVO*/}  
             {libroEditModal?                
-                <ModalEdit hideEditDialog={hideDialogEdit} submitEdit={submitEdit} libroEditModal={libroEditModal} libroUpdate={libros}/>
+                <ModalEditPersona hideEditDialog={hideDialogEdit} submitEdit={submitEdit} libroEditModal={libroEditModal} libroUpdate={libros}/>
                 :
-                <ModalLibros hideDialog={hideDialog} submitted={submitted} libroModal={libroModal}/>
+                <ModalPersona hideDialog={hideDialog} submitted={submitted} personaModal={personaModal}/>
             }               
             {/*MODAL PARA BORRAR ARTICULO INDIVIDUAL*/}
             <Dialog visible={deleteProductDialog} style={{ width: '450px' }} header="Confirmar" modal footer={deleteProductDialogFooter} onHide={hideDeleteProductDialog}>
@@ -310,10 +236,10 @@ function formatearArray(){
                 </div>
             </Dialog>
             {/* MODAL DE BORRAR CON SELECTOR MULTIPLE */}
-            <Dialog visible={deleteProductsDialog} style={{ width: '450px' }} header="Confirmar" modal footer={deleteProductsDialogFooter} onHide={hideDeleteProductsDialog}>
+            <Dialog visible={deleteProductsDialog} style={{ width: '450px' }} header="Confirmar" modal footer={deleteProductsDialogFooter} onHide={hideDeletePersonasDialog}>
                 <div className="confirmation-content">
                     <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem'}} />
-                    {persona && <span style={{marginLeft: "20px"}}> ¿Seguro que queres borrar las personas seleccionadas?</span>}
+                    {personasSeleccionadas && <span style={{marginLeft: "20px"}}> ¿Seguro que queres borrar las personas seleccionadas?</span>}
                 </div>
             </Dialog>
         </div>

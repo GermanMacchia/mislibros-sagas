@@ -18,10 +18,13 @@ export default function Lista(){
         id: null,
         autor: '',
         nombre: '',
+        categora: '',
+        nombrePersona: '',
         descripcion: '',
         categoria_id: null,
         persona_id: null,
         rating: 0,
+        estado: ''
     };
 
     const dispatch = useDispatch();
@@ -319,7 +322,7 @@ function formatearArray(){
                     <Column selectionMode="multiple" headerStyle={{ width: '0.3rem' }}></Column>
                     <Column className="column" field="nombre" header="Nombre" sortable></Column>
                     <Column className="column" field="autor" header="Autor" sortable></Column>
-	<Column style={{wordWrap: "break-word", width: "5em"}} field="descripcion" header="Sinopsis"></Column>
+	                <Column style={{wordWrap: "break-word", width: "5em"}} field="descripcion" header="Sinopsis"></Column>
                     <Column className="column" field="categoria" header="Categoria" sortable></Column>
                     <Column style={{width: "3em"}}field="rating" header="Valoración" body={ratingBodyTemplate} sortable></Column>
                     <Column className="column" field="estado" header="Estado" sortable></Column>
