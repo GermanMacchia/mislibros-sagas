@@ -11,7 +11,7 @@ import {
     REDIRECT,
     REDIRECT_SUCCESS
 } from '../types'
-import { loginWithGoogle } from '../../firebase'
+//import { loginWithGoogle } from '../../firebase'
 
 const initialData = {
     loggedIn: false,
@@ -126,7 +126,7 @@ export default function reducer(state = initialData, action){
 //         }
 // 	}
 // }
-
+/*
 export const doLoginAction = () => dispatch => {
     return loginWithGoogle()
         .then( user => {
@@ -148,4 +148,4 @@ export const doLoginAction = () => dispatch => {
                 payload: e.message
             })
         })
-}
+}*/

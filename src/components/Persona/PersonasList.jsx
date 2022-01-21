@@ -8,7 +8,7 @@ import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext'
 import { TOAST, DELETE_PERSONA } from '../../sagas/types';
 import ModalPersona from './ModalPersona';
-import ModalEditPersona from './ModalPersona';
+import ModalEditPersona from './ModalEditPersona';
 import Spinner from '../utilities/Spinner';
 
 export default function Lista(){
@@ -21,20 +21,18 @@ export default function Lista(){
     const [personas, setPersonas] = useState()
 //VISIBILIDAD DEL MODAL DE LIBROS NUEVOS / EDIT
     const [personaModal, setPersonaModal] = useState(false);
-    const [libroEditModal, setLibroEditModal] = useState(false);
+    const [personaEditModal, setPersonaEditModal] = useState(false);
 //BORRAR PRODUCTO INDIVIDUAL
     const [deleteProductDialog, setDeleteProductDialog] = useState(false);
 //BORRAR SELECCION MULTIPLE
     const [deleteProductsDialog, setDeleteProductsDialog] = useState(false);
 //INGRESO A MODAL Y ELECCION INDIVIDUAL: VER LIBROVACIO
-    const [libros, setLibros] = useState();
     const [persona, setPersona] = useState()
 //SELECTORES POR CASILLA
     const [personasSeleccionadas, setPersonasSeleccionadas] = useState(null);
 //INGRESOS DEL MODAL
     const [submitted, setSubmitted] = useState(false);
     const [submitEdit, setSubmitEdit] = useState(false);
-    const [modalEdit, setModalEdit] = useState(false);
 //FILTRO DEL HEADER 
     const [globalFilter, setGlobalFilter] = useState(null);
     const dt = useRef(null);
@@ -59,28 +57,28 @@ export default function Lista(){
     }
     
     const hideDialogEdit = () => {
-        setLibroEditModal(false)
+        setPersonaEditModal(false)
     }
 
     const hideDeleteProductDialog = () => {
         setDeleteProductDialog(false);
     }
 
-    const confirmEditProduct = (persona) => {
+    const confirmEditPersona = (persona) => {
         setSubmitEdit(false)
-        setLibroEditModal(true);
+        setPersonaEditModal(true);
         setPersona(persona)
     }
     
     //MODAL CONFIRMACION BORRAR INDIVIDUAL
-    const confirmDeleteProduct = (personaFila) => {
+    const confirmDeletePersona = (personaFila) => {
         setPersona(personaFila);
         setDeleteProductDialog(true);
     }
 
     //BORRAR PRODUCTO INDIVIDUAL UNA VEZ CONFIRMADO
     const deletePersona = () => {
-        {/*DISPATCH*/}
+        dispatch({type:DELETE_PERSONA, props:persona.id})
         setDeleteProductDialog(false);
         setPersona(null); 
     }
@@ -98,7 +96,7 @@ export default function Lista(){
     const leftToolbarTemplate = () => {
         return (
             <React.Fragment>
-                <Button label="Nuevo" icon="pi pi-plus" className="p-button-success p-mr-2" onClick={openNew} />
+                <Button label="Nuevo" icon="pi pi-plus" className="p-button-success p-mr-2" onClick={() => {openNew()}} />
                 <Button label="Borrar" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} disabled={!personasSeleccionadas || !personasSeleccionadas.length} />
             </React.Fragment>
         )
@@ -125,8 +123,8 @@ export default function Lista(){
         return (
             
             <React.Fragment>
-                <Button icon="pi pi-pencil" className="p-button-rounded p-button-warning p-mr-2" onClick={() => confirmEditProduct(rowData)} />
-                <Button icon="pi pi-trash" className="p-button-rounded p-button-danger" onClick={() => confirmDeleteProduct(rowData)} />
+                <Button icon="pi pi-pencil" className="p-button-rounded p-button-warning p-mr-2" onClick={() => confirmEditPersona(rowData)} />
+                <Button icon="pi pi-trash" className="p-button-rounded p-button-danger" onClick={() => confirmDeletePersona(rowData)} />
             </React.Fragment>
         );
     }
@@ -180,8 +178,8 @@ export default function Lista(){
     //FOOTER DE CONFIRMACION PARA BORRAR PRODUCTOS MULTIPLES  
     const deleteProductsDialogFooter = (
         <React.Fragment>
-            <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeletePersonasDialog} />
-            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deletePersonasSeleccionadas} />
+            <Button label="No" icon="pi pi-times" className="p-button-text" onClick={() => {hideDeletePersonasDialog()}} />
+            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={() => {deletePersonasSeleccionadas()}} />
         </React.Fragment>
     );
 
@@ -214,7 +212,7 @@ export default function Lista(){
                         <Column className="column" field="apellido" header="Apellido" sortable></Column>
                         <Column className="column" field="email" header="Email" sortable></Column>
                         <Column className="column" field="alias" header="Alias" sortable></Column>                
-                        {/* OPCIONES BOORRAR Y EDIT n°175 */}
+                        {/* OPCIONES BOORRAR Y EDIT*/}
                         <Column className="column" body={actionBodyTemplate}></Column> 
                     </DataTable>
                     :
@@ -223,8 +221,8 @@ export default function Lista(){
             </div>    
 
             {/*MODAL LIBRO NUEVO*/}  
-            {libroEditModal?                
-                <ModalEditPersona hideEditDialog={hideDialogEdit} submitEdit={submitEdit} libroEditModal={libroEditModal} libroUpdate={libros}/>
+            {personaEditModal?                
+                <ModalEditPersona hideEditDialog={hideDialogEdit} submitEdit={submitEdit} libroEditModal={personaEditModal} libroUpdate={persona}/>
                 :
                 <ModalPersona hideDialog={hideDialog} submitted={submitted} personaModal={personaModal}/>
             }               

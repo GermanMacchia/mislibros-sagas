@@ -16,17 +16,22 @@ export default function SignIn () {
 	const dispatch = useDispatch()
 	const state = useSelector(state => state.user)
 	const history = useHistory();
-
+	const titulo = (
+			<>
+				<i style={{ marginRight: "10px"}} className="pi pi-user"/>
+				Registrate
+			</>
+	);
 	const header = (
         	<h1>Mis Libros App</h1>
    	 );
 
 	useEffect(() => {
 		
-		if(state.redirect.redirecting == true){
+		if(state.redirect.redirecting === true){
 			history.push(state.redirect.page);
 		}
-	}, [state.redirect]);
+	}, [state.redirect, history]);
 	
     	useEffect(() => {
 		if(state.info != null){
@@ -36,7 +41,10 @@ export default function SignIn () {
 			type:TOAST, 
 			info: null
 		}) 
-	}, [state.info]);
+	}, [state.info, dispatch]);
+
+
+		
 
 	return(
 		
@@ -47,12 +55,7 @@ export default function SignIn () {
 					<img id="intro" src= {shelve} alt="shelve" />
 					<LoginForm />
 					<Accordion style={{ width: "23em", marginTop: "10px"}} activeIndex={1}>
-						<AccordionTab header={
-								<>
-									<i style={{ marginRight: "10px"}} className="pi pi-user"/>
-									Registrate
-								</>
-							}>
+						<AccordionTab header={titulo}>
 							<Registro />
 						</AccordionTab>
 					</Accordion>

@@ -1,10 +1,10 @@
 import { createStore, combineReducers, compose, applyMiddleware} from 'redux';
 import thunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
-import librosReducer from './sagas/reducers/librosDuck';
-import personaReducer from './sagas/reducers/personasDuck';
-import categoriaReducer from './sagas/reducers/categoriasDuck';
-import userReducer from './sagas/reducers/userDuck'
+import librosReducer from './sagas/reducers/librosReducer';
+import personaReducer from './sagas/reducers/personasReducer';
+import categoriaReducer from './sagas/reducers/categoriasReducer';
+import userReducer from './sagas/reducers/userReducer'
 import rootSaga from './sagas/rootSaga';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

@@ -1,6 +1,5 @@
-import axios from 'axios';
 import React, {useState,  useRef } from 'react';
-import { REGISTER, REGISTER_SUCCESS, REGISTER_ERROR } from '../../sagas/types';
+import { REGISTER } from '../../sagas/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';

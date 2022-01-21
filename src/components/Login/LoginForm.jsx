@@ -1,4 +1,4 @@
-import React, {useState, useEffect } from 'react';
+import React, {useState  } from 'react';
 import { useSelector, useDispatch} from 'react-redux';
 import { LOGIN } from '../../sagas/types'; 
 import { Button } from 'primereact/button';
@@ -41,7 +41,7 @@ export default function LoginForm () {
 			</form>
 			{/*Botones*/}
 			{state.fetching? 
-				<Button id="loading" loading loadingOptions={{ position: 'right' }} className="p-button-secondary p-ml-2" />
+				<Button id="loading" loading className="p-button-secondary p-ml-2" />
 					: 
 				<Button onClick={ handleSubmit } label="Login" icon="pi pi-sign-in" className="p-button-secondary p-ml-2" />
 			}

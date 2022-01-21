@@ -10,6 +10,7 @@ import { DELETE_LIBROS, TOAST } from '../../sagas/types';
 import { Rating } from 'primereact/rating';
 import ModalLibros from './ModalLibros';
 import ModalEdit from './ModalEdit';
+import Spinner from '../utilities/Spinner';
 
 export default function Lista(){
 
@@ -57,61 +58,60 @@ export default function Lista(){
 
 //INGRESO INICIAL DE PRODUCTOS A LISTA
     useEffect(() => {
-        formatearArray()
 
+        function retornarNombreCat(categoria_id){
+            let [categoriaAux] = categorias.filter( c => c.id === categoria_id)
+            return categoriaAux.nombre
+        }    
+
+        function retornarNombrePersona(persona_id){
+            let persona = ''
+            if( persona_id !== null){
+                let [personaAux] = personas.filter( c => c.id === persona_id)
+                persona = ' a '+ personaAux.nombre + ' ' + personaAux.apellido
+            }
+            return persona
+        }   
+
+        function retornarEstadoLibro(persona_id){
+            let estado;
+            if( persona_id !== null){
+                estado = "Prestado"
+            }else{
+                estado = "Disponible"
+            }
+            return estado
+        }
+
+        //FUNCION PARA FILTRAR ID CATEGORIAS Y PRESTADO/EN BIBIOTECA / (de la API llegan con numeros de id relacional)
+        function formatearArray(){
+            if(state.payload && categorias && personas){
+
+                    let libros = [...state.payload]
+                    let array = [];             
+                    //Por cada libro voy a crear un objeto distinto al que hay en el servidor para mejorar la presentación de la tabla
+                    libros.forEach( e => {
+                        let objeto = {
+                            id: e.id,
+                            nombre: e.nombre,
+                            categoria: retornarNombreCat(e.categoria_id),
+                            nombrePersona: retornarNombrePersona(e.persona_id),
+                            descripcion: e.descripcion,
+                            persona_id: e.persona_id,
+                            categoria_id: e.categoria_id,
+                            autor: e.autor,
+                            rating: e.rating,
+                            estado: retornarEstadoLibro(e.persona_id)
+                        }
+                        array.push(objeto)    
+                    }) 
+                    setLibros(array) 
+            }        
+        }
+        formatearArray()
     }, [personas, state, categorias]);
 
 
-//RETORNAR NOMBRE CATEGORIA 
-function retornarNombreCat(categoria_id){
-    let [categoriaAux] = categorias.filter( c => c.id === categoria_id)
-    return categoriaAux.nombre
-}    
-
-function retornarNombrePersona(persona_id){
-    let persona = ''
-    if( persona_id !== null){
-        let [personaAux] = personas.filter( c => c.id === persona_id)
-        persona = ' a '+ personaAux.nombre + ' ' + personaAux.apellido
-    }
-    return persona
-}   
-
-function retornarEstadoLibro(persona_id){
-    let estado;
-    if( persona_id !== null){
-        estado = "Prestado"
-    }else{
-        estado = "Disponible"
-    }
-    return estado
-}
-
-//FUNCION PARA FILTRAR ID CATEGORIAS Y PRESTADO/EN BIBIOTECA / (de la API llegan con numeros de id relacional)
-function formatearArray(){
-    if(state.payload && categorias){
-
-            let libros = [...state.payload]
-            let array = [];             
-            //Por cada libro voy a crear un objeto distinto al que hay en el servidor para mejorar la presentación de la tabla
-            libros.forEach( e => {
-                let objeto = {
-                    id: e.id,
-                    nombre: e.nombre,
-                    categoria: retornarNombreCat(e.categoria_id),
-                    nombrePersona: retornarNombrePersona(e.persona_id),
-                    descripcion: e.descripcion,
-                    persona_id: e.persona_id,
-                    categoria_id: e.categoria_id,
-                    autor: e.autor,
-                    rating: e.rating,
-                    estado: retornarEstadoLibro(e.persona_id)
-                }
-                array.push(objeto)    
-            }) 
-            setLibros(array) 
-    }        
-}
 
 //ABRIR EL MODAL DE INGRESO NUEVO
     const openNew = () => {
@@ -135,13 +135,6 @@ function formatearArray(){
 
 
     const confirmEditProduct = (libro) => {
-       /* setCategoriaModal(libro.categoria_id)
-        setNombrePlaceHolder(libro.nombre)
-        if(libro.subtitulo){setSubtituloPlaceHolder(libro.subtitulo)}
-        if(libro.descripcion){setDescripcionPlaceHolder(libro.descripcion)}
-        if(libro.persona_id){setPrestado(libro.persona_id)}
-        if(libro.rating){setStars(libro.rating)}
-        setSubmitted(false);*/
         setSubmitEdit(false)
         setLibroEditModal(true);
         setLibro(libro)
@@ -245,7 +238,7 @@ function formatearArray(){
         }
 
         //Condiciones para TOAST de info
-        if( librosABorrar.length == 0){
+        if( librosABorrar.length === 0){
             //NINGUNO
             dispatch({
                 type:TOAST, 
@@ -296,7 +289,6 @@ function formatearArray(){
         </React.Fragment>
     );
 
-
     //RENDER----------------------------------------------------------------------------------------------------------
     return (
         <div className="datatable-crud-demo">
@@ -304,31 +296,35 @@ function formatearArray(){
                 {/*BOTONERA SUPERIOR*/}
                 <Toolbar className="p-mb-4" left={leftToolbarTemplate} ></Toolbar>
                 {/*ESTRUCTURA DE TABLA*/}
-                <DataTable                    
-                    ref={dt} 
-                    //VALORES DE LAS TABLAS
-                    value={libros} 
-                    //SELECCION POR CASILLA-
-                    selectionMode="multiple" 
-                    //HOOK, FUNCION y DATAKEY! REFERENCIA DENTRO DEL JSON
-                    selection={selectedProducts} onSelectionChange={(e) => setSelectedProducts(e.value)} dataKey="id"
-                    paginator rows={5} rowsPerPageOptions={[5, 10, 25]}
-                    paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                    currentPageReportTemplate="Mostrando {first} to {last} de {totalRecords} libros"
-                    globalFilter={globalFilter}
-                    header={header}>
-                    {/*SELECCION POR CASILLA */}
-                    {/* FIELD = AGARRA EL VALOR DEL OBJETO INGRESADO EN <Datatable> Value - REFERENCIA DEL JSON*/}
-                    <Column selectionMode="multiple" headerStyle={{ width: '0.3rem' }}></Column>
-                    <Column className="column" field="nombre" header="Nombre" sortable></Column>
-                    <Column className="column" field="autor" header="Autor" sortable></Column>
-	                <Column style={{wordWrap: "break-word", width: "5em"}} field="descripcion" header="Sinopsis"></Column>
-                    <Column className="column" field="categoria" header="Categoria" sortable></Column>
-                    <Column style={{width: "3em"}}field="rating" header="Valoración" body={ratingBodyTemplate} sortable></Column>
-                    <Column className="column" field="estado" header="Estado" sortable></Column>
-                    {/* OPCIONES BOORRAR Y EDIT n°175 */}
-                    <Column className="column" body={actionBodyTemplate}></Column> 
-                </DataTable>
+                { state.loaded ?
+                    <DataTable                    
+                        ref={dt} 
+                        //VALORES DE LAS TABLAS
+                        value={libros} 
+                        //SELECCION POR CASILLA-
+                        selectionMode="multiple" 
+                        //HOOK, FUNCION y DATAKEY! REFERENCIA DENTRO DEL JSON
+                        selection={selectedProducts} onSelectionChange={(e) => setSelectedProducts(e.value)} dataKey="id"
+                        paginator rows={5} rowsPerPageOptions={[5, 10, 25]}
+                        paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                        currentPageReportTemplate="Mostrando {first} to {last} de {totalRecords} libros"
+                        globalFilter={globalFilter}
+                        header={header}>
+                        {/*SELECCION POR CASILLA */}
+                        {/* FIELD = AGARRA EL VALOR DEL OBJETO INGRESADO EN <Datatable> Value - REFERENCIA DEL JSON*/}
+                        <Column selectionMode="multiple" headerStyle={{ width: '0.3rem' }}></Column>
+                        <Column className="column" field="nombre" header="Nombre" sortable></Column>
+                        <Column className="column" field="autor" header="Autor" sortable></Column>
+                        <Column style={{wordWrap: "break-word", width: "5em"}} field="descripcion" header="Sinopsis"></Column>
+                        <Column className="column" field="categoria" header="Categoria" sortable></Column>
+                        <Column style={{width: "3em"}}field="rating" header="Valoración" body={ratingBodyTemplate} sortable></Column>
+                        <Column className="column" field="estado" header="Estado" sortable></Column>
+                        {/* OPCIONES BOORRAR Y EDIT n°175 */}
+                        <Column className="column" body={actionBodyTemplate}></Column> 
+                    </DataTable>
+                        :
+                    <Spinner />
+                }
             </div>    
 
             {/*MODAL LIBRO NUEVO*/}  
@@ -352,13 +348,13 @@ function formatearArray(){
                 </div>
             </Dialog>
             {/* MODAL INFO*/}
-            <Dialog  header={modalInfoData.nombre} visible={modalInfo} position="left" modal style={{ width: '50vw' }} draggable={false} resizable={false} onHide={hideModalInfo}>
-                <p><b>Autor:</b> {modalInfoData.autor}</p>
-                <p><b>Categoria:</b> {modalInfoData.categoria} </p>
-                <p><b>Estado:</b> {modalInfoData.estado}{modalInfoData.nombrePersona}</p>
-                <p id="dialogo"><b>Sinopsis</b>:<br /> {modalInfoData.descripcion}</p>                
-                <p><b>Valoración:</b>{ratingBodyTemplate(modalInfoData)}</p>
-            </Dialog>
+                <Dialog  header={modalInfoData.nombre} visible={modalInfo} position="left" modal style={{ width: '50vw' }} draggable={false} resizable={false} onHide={hideModalInfo}>
+                    <p><b>Autor:</b> {modalInfoData.autor}</p>
+                    <p><b>Categoria:</b> {modalInfoData.categoria} </p>
+                    <p><b>Estado:</b> {modalInfoData.estado}{modalInfoData.nombrePersona}</p>
+                    <p id="dialogo"><b>Sinopsis</b>:<br /> {modalInfoData.descripcion}</p>                
+                    <p><b>Valoración:</b>{ratingBodyTemplate(modalInfoData)}</p>
+                </Dialog>
         </div>
     );
 }      

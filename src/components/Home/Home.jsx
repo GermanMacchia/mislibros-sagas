@@ -9,9 +9,6 @@ export default function Home () {
 				<>
 					<Nav />
 					<Biblioteca />
-					<footer>
-						<p class="copy">&copy; 2021 - Germán O. Macchia</p>
-					</footer>
 				</>
 			)
 }
