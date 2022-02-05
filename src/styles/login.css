@@ -42,3 +42,34 @@
 }
 
 
+
+@media (min-width: 300px) and (max-width: 450px){
+    .datatable-crud-demo{
+        width: 24em;
+    }
+    .card{
+        width: 24em;
+    }
+
+    #tablaB{
+        width: 24em;
+    }
+
+    #pr_id_13{
+        width: 25rem !important;
+    }
+
+    .column{
+        width: 9rem;
+    }
+    .autor{
+        width: 8rem;
+    }
+    .p-button-rounded{
+        height: 1.357rem !important;
+        width: 1.357rem !important;
+    }
+    td{
+        font-size: medium;
+    }
+}

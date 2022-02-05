@@ -12,7 +12,7 @@ export default function Personas () {
 
 	useEffect(() => {
 		dispatch( { type: GET_PERSONA } )
-	}, [state.reducerChanges]);
+	}, [state.reducerChanges, dispatch]);
 
 	return(
 		<>

@@ -55,17 +55,17 @@ export default function ModalLibros({hideDialog, libroModal}) {
 			}
 		}) 
 		}		
-	}, [state.error]);
+	}, [state.error, dispatch, enviado]);
 
 	const handleForm = (e) => {
         	//estas condiciones se hacen para que la opcion permanezca en el formulario del "Prime"
-		if(e.target.name == "persona_id"){
+		if(e.target.name === "persona_id"){
 		setPrestado(e.target.value)
 		}
-		if(e.target.name == "categoria_id"){
+		if(e.target.name === "categoria_id"){
 		setCategoriaModal(e.target.value)
 		}
-		if(e.target.name == "rating"){
+		if(e.target.name === "rating"){
 		setStars(e.target.value)
 		}
 		setForm({

@@ -11,6 +11,7 @@ import { Rating } from 'primereact/rating';
 import ModalLibros from './ModalLibros';
 import ModalEdit from './ModalEdit';
 import Spinner from '../utilities/Spinner';
+import { useMediaQuery } from 'react-responsive'
 
 export default function Lista(){
 
@@ -55,6 +56,8 @@ export default function Lista(){
 //FILTRO DEL HEADER 
     const [globalFilter, setGlobalFilter] = useState(null);
     const dt = useRef(null);
+//MEDIA QUERY
+    const isPC = useMediaQuery({ query: '(min-width: 500px)'});
 
 //INGRESO INICIAL DE PRODUCTOS A LISTA
     useEffect(() => {
@@ -109,6 +112,7 @@ export default function Lista(){
             }        
         }
         formatearArray()
+    
     }, [personas, state, categorias]);
 
 
@@ -178,6 +182,25 @@ export default function Lista(){
                 <Button label="Borrar" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} disabled={!selectedProducts || !selectedProducts.length} />
             </React.Fragment>
         )
+    }
+
+//----------------------------------------RETORNAR COLUMNAS DINAMICAS MEDIA QUERY DATATABLE------------------------------------------------------------  
+    const returnColumns = () => {
+        const columns = [
+        {field: 'descripcion', header: 'Sinopsis'},
+        {field: 'categoria', header: 'Categoria'},
+        {field: 'rating', header: 'Valoracion'},
+        {field: 'estado', header: 'Estado'}
+    ];
+        return columns.map((col, _i) => {
+            if(col.field === 'rating'){
+                return <Column className="column" key={col.field} field={col.field} header={col.header}  body={ratingBodyTemplate} sorteable />;
+            }else if(col.field === 'descripcion'){
+                return <Column style={{wordWrap: "break-word", width: "5em"}} key={col.field} field={col.field} header={col.header}  sorteable />;
+            }else{
+                return <Column className="column" key={col.field} field={col.field} header={col.header}  sorteable />;
+            }
+        });
     }
 
 
@@ -272,7 +295,6 @@ export default function Lista(){
             }) 
         }
         
-
         librosABorrar.forEach( e =>{
             dispatch({type:DELETE_LIBROS, props: e.id})
         })
@@ -309,19 +331,19 @@ export default function Lista(){
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         currentPageReportTemplate="Mostrando {first} to {last} de {totalRecords} libros"
                         globalFilter={globalFilter}
-                        header={header}>
+                        header={header}
+                        id="tablaB"
+                        >
                         {/*SELECCION POR CASILLA */}
                         {/* FIELD = AGARRA EL VALOR DEL OBJETO INGRESADO EN <Datatable> Value - REFERENCIA DEL JSON*/}
                         <Column selectionMode="multiple" headerStyle={{ width: '0.3rem' }}></Column>
                         <Column className="column" field="nombre" header="Nombre" sortable></Column>
-                        <Column className="column" field="autor" header="Autor" sortable></Column>
-                        <Column style={{wordWrap: "break-word", width: "5em"}} field="descripcion" header="Sinopsis"></Column>
-                        <Column className="column" field="categoria" header="Categoria" sortable></Column>
-                        <Column style={{width: "3em"}}field="rating" header="Valoración" body={ratingBodyTemplate} sortable></Column>
-                        <Column className="column" field="estado" header="Estado" sortable></Column>
+                        <Column className="column autor" field="autor" header="Autor" sortable></Column>   
+                        {/* Ver adaptable */}                      
+                        {isPC &&  returnColumns()}
                         {/* OPCIONES BOORRAR Y EDIT n°175 */}
                         <Column className="column" body={actionBodyTemplate}></Column> 
-                    </DataTable>
+                    </DataTable>                            
                         :
                     <Spinner />
                 }
@@ -348,12 +370,12 @@ export default function Lista(){
                 </div>
             </Dialog>
             {/* MODAL INFO*/}
-                <Dialog  header={modalInfoData.nombre} visible={modalInfo} position="left" modal style={{ width: '50vw' }} draggable={false} resizable={false} onHide={hideModalInfo}>
+                <Dialog header={modalInfoData.nombre} visible={modalInfo} position="left" modal style={{ width: '50vw' }} draggable={false} resizable={false} onHide={hideModalInfo}>
                     <p><b>Autor:</b> {modalInfoData.autor}</p>
                     <p><b>Categoria:</b> {modalInfoData.categoria} </p>
                     <p><b>Estado:</b> {modalInfoData.estado}{modalInfoData.nombrePersona}</p>
                     <p id="dialogo"><b>Sinopsis</b>:<br /> {modalInfoData.descripcion}</p>                
-                    <p><b>Valoración:</b>{ratingBodyTemplate(modalInfoData)}</p>
+                    <p><b>Valoración:</b></p>{ratingBodyTemplate(modalInfoData)}
                 </Dialog>
         </div>
     );
