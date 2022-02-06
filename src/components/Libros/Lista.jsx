@@ -12,6 +12,9 @@ import ModalLibros from './ModalLibros';
 import ModalEdit from './ModalEdit';
 import Spinner from '../utilities/Spinner';
 import { useMediaQuery } from 'react-responsive'
+import { SpeedDial } from 'primereact/speeddial';
+import { Tooltip } from 'primereact/tooltip';
+import { Toast } from 'primereact/toast';
 
 export default function Lista(){
 
@@ -33,7 +36,7 @@ export default function Lista(){
     const state = useSelector(state => state.libros)
     const categorias = useSelector(state => state.categoria.payload) 
     const personas = useSelector(state => state.persona.payload)
-
+    const toast = useRef(null);
 //INGRESO LISTA DE PRODUCTOS INICIAL
     const [libros, setLibros] = useState([]);   
 //VISIBILIDAD DEL MODAL DE LIBROS NUEVOS / EDIT
@@ -225,13 +228,38 @@ export default function Lista(){
 
     //OPCIONES DE CADA FILA {EDICION y BORRAR}
     const actionBodyTemplate = (rowData) => {
+    
+    const items = [
+        {
+            label: 'Info',
+            icon: 'pi pi-info-circle',
+            command: () => mostrarInfo(rowData)
+        },
+        {
+            label: 'Edit',
+            icon: 'pi pi-pencil',
+            command: () => confirmEditProduct(rowData)
+        },
+        {
+            label: 'Delete',
+            icon: 'pi pi-trash',
+            command: () => confirmDeleteProduct(rowData)
+        }
+    ]
         return (
-            
+            isPC?
             <React.Fragment>
                 <Button icon="pi pi-info-circle" className="p-button-rounded p-button-info p-mr-2" onClick={() => mostrarInfo(rowData)}/>
                 <Button icon="pi pi-pencil" className="p-button-rounded p-button-warning p-mr-2" onClick={() => confirmEditProduct(rowData)} />
                 <Button icon="pi pi-trash" className="p-button-rounded p-button-danger" onClick={() => confirmDeleteProduct(rowData)} />
             </React.Fragment>
+                :
+            <>
+                <div className="speeddial-tooltip-demo" style={{ position: 'relative', height: '350px' }}>
+                    <SpeedDial model={items} direction="up"  buttonClassName="p-button-help" />
+                </div>
+            </>
+
         );
     }
 
@@ -340,9 +368,9 @@ export default function Lista(){
                         <Column className="column" field="nombre" header="Nombre" sortable></Column>
                         <Column className="column autor" field="autor" header="Autor" sortable></Column>   
                         {/* Ver adaptable */}                      
-                        {isPC &&  returnColumns()}
-                        {/* OPCIONES BOORRAR Y EDIT n°175 */}
-                        <Column className="column" body={actionBodyTemplate}></Column> 
+                        {isPC && returnColumns()}
+                        {/* OPCIONES BOORRAR Y EDIT n°175 */} 
+                        <Column className="column" body={actionBodyTemplate}></Column>
                     </DataTable>                            
                         :
                     <Spinner />

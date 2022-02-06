@@ -113,7 +113,7 @@ export default function ModalEdit({hideEditDialog, libroEditModal, libroUpdate})
 	//OPTIONLABEL-> La llave que elije para desplegar del JSON
 	//OPTIONVALUE -> El valor que devuelve
 	return(
-		<Dialog visible={libroEditModal} style={{ width: '450px' }} header="Edite el Libro" footer={productDialogFooter} modal className="p-fluid" onHide={hideEditDialog}>
+		<Dialog visible={libroEditModal} style={{ width: '450px' }} header="Edite el Libro" footer={productDialogFooter} modal className="p-fluid modalEdit" onHide={hideEditDialog}>
 			<div className="p-field">
 				<label htmlFor="nombre">Nombre</label>
 				<InputText name="nombre" placeholder="Nombre" value={libro.nombre} onChange={ handleForm }  />
@@ -141,7 +141,7 @@ export default function ModalEdit({hideEditDialog, libroEditModal, libroUpdate})
 			<div className="p-field">
 				<label className="p-mb-3">Rating</label>
 				<div style={{marginTop:"10px"}} className="p-formgrid p-grid">
-				<Rating cancel={false} value={ stars } name="rating" value={libro.rating} onChange={ handleForm } />
+				<Rating cancel={false} name="rating" value={libro.rating} onChange={ handleForm } />
 				</div>
 			</div>
 		</Dialog>

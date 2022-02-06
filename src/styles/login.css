@@ -72,4 +72,8 @@
     td{
         font-size: medium;
     }
+    .modalEdit{
+        width: 380px !important; 
+        height: 900px !important;
+    }
 }
