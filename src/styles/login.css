@@ -41,6 +41,11 @@
     height: "auto";
 }
 
+.dropmenu{
+    width: 5rem !important;
+    left: 22.8rem !important;
+    min-width: 0px !important; 
+}
 
 
 @media (min-width: 300px) and (max-width: 450px){
@@ -60,20 +65,30 @@
     }
 
     .column{
-        width: 9rem;
+        width: 10rem;
     }
     .autor{
+        width: 6rem;
+    }
+    .nombre{
         width: 8rem;
     }
+
     .p-button-rounded{
         height: 1.357rem !important;
         width: 1.357rem !important;
     }
     td{
-        font-size: medium;
+        font-size: small;
     }
     .modalEdit{
         width: 380px !important; 
         height: 900px !important;
     }
+    .dropmenu{
+        width: 3.5rem !important;
+        left: 18.8rem !important;
+        min-width: 0px !important; 
+    }
+
 }

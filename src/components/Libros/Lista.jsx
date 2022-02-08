@@ -12,9 +12,7 @@ import ModalLibros from './ModalLibros';
 import ModalEdit from './ModalEdit';
 import Spinner from '../utilities/Spinner';
 import { useMediaQuery } from 'react-responsive'
-import { SpeedDial } from 'primereact/speeddial';
-import { Tooltip } from 'primereact/tooltip';
-import { Toast } from 'primereact/toast';
+import { SplitButton } from 'primereact/splitbutton';
 
 export default function Lista(){
 
@@ -231,17 +229,10 @@ export default function Lista(){
     
     const items = [
         {
-            label: 'Info',
-            icon: 'pi pi-info-circle',
-            command: () => mostrarInfo(rowData)
-        },
-        {
-            label: 'Edit',
             icon: 'pi pi-pencil',
             command: () => confirmEditProduct(rowData)
         },
         {
-            label: 'Delete',
             icon: 'pi pi-trash',
             command: () => confirmDeleteProduct(rowData)
         }
@@ -255,8 +246,8 @@ export default function Lista(){
             </React.Fragment>
                 :
             <>
-                <div className="speeddial-tooltip-demo" style={{ position: 'relative', height: '350px' }}>
-                    <SpeedDial model={items} direction="up"  buttonClassName="p-button-help" />
+                <div>
+                    <SplitButton style={{width: '5.5rem', position: 'relative'}} dropdownIcon="pi pi-plus" menuClassName="dropmenu" icon="pi pi-info-circle" model={items} onClick={() => mostrarInfo(rowData)} className="p-button-info mr-2"></SplitButton>
                 </div>
             </>
 
@@ -341,36 +332,35 @@ export default function Lista(){
 
     //RENDER----------------------------------------------------------------------------------------------------------
     return (
-        <div className="datatable-crud-demo">
+        <div className="datatable-crud-demo" >
             <div className="card">
                 {/*BOTONERA SUPERIOR*/}
                 <Toolbar className="p-mb-4" left={leftToolbarTemplate} ></Toolbar>
                 {/*ESTRUCTURA DE TABLA*/}
                 { state.loaded ?
-                    <DataTable                    
+                    <DataTable       
                         ref={dt} 
                         //VALORES DE LAS TABLAS
                         value={libros} 
                         //SELECCION POR CASILLA-
-                        selectionMode="multiple" 
+                        selectionMode="checkbox"  
                         //HOOK, FUNCION y DATAKEY! REFERENCIA DENTRO DEL JSON
                         selection={selectedProducts} onSelectionChange={(e) => setSelectedProducts(e.value)} dataKey="id"
-                        paginator rows={5} rowsPerPageOptions={[5, 10, 25]}
+                        paginator rows={3} rowsPerPageOptions={[5, 10, 25]}
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         currentPageReportTemplate="Mostrando {first} to {last} de {totalRecords} libros"
                         globalFilter={globalFilter}
-                        header={header}
                         id="tablaB"
                         >
                         {/*SELECCION POR CASILLA */}
                         {/* FIELD = AGARRA EL VALOR DEL OBJETO INGRESADO EN <Datatable> Value - REFERENCIA DEL JSON*/}
                         <Column selectionMode="multiple" headerStyle={{ width: '0.3rem' }}></Column>
-                        <Column className="column" field="nombre" header="Nombre" sortable></Column>
+                        <Column className="column nombre" field="nombre" header="Nombre" sortable></Column>
                         <Column className="column autor" field="autor" header="Autor" sortable></Column>   
                         {/* Ver adaptable */}                      
                         {isPC && returnColumns()}
                         {/* OPCIONES BOORRAR Y EDIT n°175 */} 
-                        <Column className="column" body={actionBodyTemplate}></Column>
+                        <Column className="column botones" body={actionBodyTemplate}></Column>
                     </DataTable>                            
                         :
                     <Spinner />
