@@ -100,7 +100,7 @@ export default function ModalLibros({hideDialog, libroModal}) {
 	//OPTIONLABEL-> La llave que elije para desplegar del JSON
 	//OPTIONVALUE -> El valor que devuelve
 	return(
-		<Dialog visible={libroModal} style={{ width: '450px' }} header="Ingrese el libro" footer={productDialogFooter} modal className="p-fluid" onHide={hideDialog}>
+		<Dialog closable={false} visible={libroModal} style={{ width: '450px' }} header="Ingrese el libro" footer={productDialogFooter} modal className="p-fluid" onHide={hideDialog}>
 			<div className="p-field">
 				<label htmlFor="nombre">Nombre</label>
 				<InputText name="nombre" placeholder="Nombre" onChange={ handleForm }  />

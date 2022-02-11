@@ -10,6 +10,7 @@ import 'primereact/resources/primereact.min.css'
 import 'primeicons/primeicons.css'
 
 
+
 const store = generateStore()
 
 let WithStore = () => <Provider store = {store} ><App /></Provider>

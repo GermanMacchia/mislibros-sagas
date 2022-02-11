@@ -44,7 +44,7 @@ export default function Nav () {
 			<div>
 				<Toast ref={toast} />				
 				<div id="menu">
-					<Menubar model={items} />
+					<Menubar model={items}/>
             			</div>
 				<div id="imagen"></div>
 			</div>

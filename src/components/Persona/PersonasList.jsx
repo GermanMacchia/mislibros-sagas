@@ -37,6 +37,12 @@ export default function Lista(){
     const [globalFilter, setGlobalFilter] = useState(null);
     const dt = useRef(null);
 
+    //ABRIR EL MODAL DE INGRESO NUEVO
+    const openNew = () => {
+        //setLibro(libroVacio);
+        setSubmitted(false);
+        setPersonaModal(true);
+    }
 //INGRESO INICIAL DE PRODUCTOS A LISTA
     useEffect(() => {
         if(state.loaded){
@@ -44,19 +50,12 @@ export default function Lista(){
         }
     }, [personas, state]);
 
-//ABRIR EL MODAL DE INGRESO NUEVO
-    const openNew = () => {
-        //setLibro(libroVacio);
-        setSubmitted(false);
-        setPersonaModal(true);
-    }
-
 //CERRAR MODAL SIN GUARDAR
     const hideDialog = () => {
         setPersonaModal(false);
     }
     
-    const hideDialogEdit = () => {
+    const hideEditDialog = () => {
         setPersonaEditModal(false)
     }
 
@@ -96,24 +95,14 @@ export default function Lista(){
     const leftToolbarTemplate = () => {
         return (
             <React.Fragment>
-                <Button label="Nuevo" icon="pi pi-plus" className="p-button-success p-mr-2" onClick={() => {openNew()}} />
-                <Button label="Borrar" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} disabled={!personasSeleccionadas || !personasSeleccionadas.length} />
+                <Button label="Nuevo" icon="pi pi-plus" className="p-button-success p-mr-2 nuevobtn" onClick={openNew} />
+                <Button label="Borrar" icon="pi pi-trash" className="p-button-danger borrarbtn" onClick={confirmDeleteSelected} disabled={!personasSeleccionadas || !personasSeleccionadas.length} />
+                <InputText className="searchbtn" type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Buscar..." />
             </React.Fragment>
         )
     }
 
 
-//--------------------------------------------------HEADER y BUSCADOR ----------------------------------------
-    const header = (
-        <div className="table-header">
-            <h5 className="p-m-0">PERSONAS</h5>
-            <span className="p-input-icon-left">
-                <i className="pi pi-search" />
-                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Buscar..." />
-            </span>  
-        </div>
-    );
-    
 
 //----------------------------------------------- INDICACIONES A LA FILA HORIZONTAL--------------------------------
 
@@ -197,14 +186,14 @@ export default function Lista(){
                         //VALORES DE LAS TABLAS
                         value={personas} 
                         //SELECCION POR CASILLA-
-                        selectionMode="multiple" 
+                        selectionMode="checkbox" 
                         //HOOK, FUNCION y DATAKEY! REFERENCIA DENTRO DEL JSON
                         selection={personasSeleccionadas} onSelectionChange={(e) => setPersonasSeleccionadas(e.value)} dataKey="id"
                         paginator rows={5} rowsPerPageOptions={[5, 10, 25]}
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         currentPageReportTemplate="Mostrando {first} to {last} de {totalRecords} Personas"
                         globalFilter={globalFilter}
-                        header={header}>
+                        >
                         {/*SELECCION POR CASILLA */}
                         {/* FIELD = AGARRA EL VALOR DEL OBJETO INGRESADO EN <Datatable> Value - REFERENCIA DEL JSON*/}
                         <Column selectionMode="multiple" headerStyle={{ width: '0.3rem' }}></Column>
@@ -222,7 +211,7 @@ export default function Lista(){
 
             {/*MODAL LIBRO NUEVO*/}  
             {personaEditModal?                
-                <ModalEditPersona hideEditDialog={hideDialogEdit} submitEdit={submitEdit} libroEditModal={personaEditModal} libroUpdate={persona}/>
+                <ModalEditPersona hideEditDialog={hideEditDialog} submitEdit={submitEdit} personaEditModal={personaEditModal} personaUpdate={persona}/>
                 :
                 <ModalPersona hideDialog={hideDialog} submitted={submitted} personaModal={personaModal}/>
             }               

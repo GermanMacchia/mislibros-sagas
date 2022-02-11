@@ -7,7 +7,10 @@ import {
     DELETE_PERSONA_SUCCESS,
     POST_PERSONA,
     POST_PERSONA_SUCCESS,
-    POST_PERSONA_ERROR } from '../types'
+    POST_PERSONA_ERROR,
+    UPDATE_PERSONA,
+    UPDATE_PERSONA_ERROR,
+    UPDATE_PERSONA_SUCCESS } from '../types'
 
 //INITIAL DATA
 const initialData = {
@@ -76,6 +79,28 @@ export default function reducer(state = initialData, action){
                 posting: false,
                 props: null
             }
+                //UPDATE LIBROS
+        case UPDATE_PERSONA:
+            return {
+                ...state,
+                updating: {
+                    status: true,
+                    props: action.props
+                }             
+            }
+        case UPDATE_PERSONA_ERROR:
+            return {
+                ...state,
+                updating: null,
+                error: [...state.error, action.error]
+            }
+        case UPDATE_PERSONA_SUCCESS:
+            return {
+                ...state,
+                updating: null,
+                reducerChanges: [...state.reducerChanges, action.payload]
+            }
+
         default:
             return {
                 ...state

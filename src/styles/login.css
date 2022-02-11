@@ -48,6 +48,12 @@
 }
 
 
+    .borrarbtn, .nuevobtn{
+        margin-right: 1rem !important;
+
+    }
+
+
 @media (min-width: 300px) and (max-width: 450px){
     .datatable-crud-demo{
         width: 24em;
@@ -68,10 +74,10 @@
         width: 10rem;
     }
     .autor{
-        width: 6rem;
+        width: 9rem;
     }
     .nombre{
-        width: 8rem;
+        width: 9rem;
     }
 
     .p-button-rounded{
@@ -91,4 +97,26 @@
         min-width: 0px !important; 
     }
 
+    .searchbtn{
+        width: 13rem;
+
+    }
+
+    .borrarbtn{
+        width:2rem;
+        margin-right: 0rem;
+
+    }
+
+    .nuevobtn{
+        width:2rem;
+        margin-right: 0rem;
+    }
+    #imagen {
+        height: 114px;
+    }
+    .p-menu{
+        left: 276px !important;
+        width: 8rem !important;
+    }
 }

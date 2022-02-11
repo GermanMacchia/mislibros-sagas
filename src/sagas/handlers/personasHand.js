@@ -1,5 +1,5 @@
 import { call, put, select } from 'redux-saga/effects'
-import { reqGetPersonas, reqDeletePersonas, reqPostPersonas } from '../requests/personasReq'
+import { reqGetPersonas, reqDeletePersonas, reqPostPersonas, reqPutPersona } from '../requests/personasReq'
 import { 
     GET_PERSONA_ERROR, 
     GET_PERSONA_SUCCESS, 
@@ -7,6 +7,8 @@ import {
     DELETE_PERSONA_SUCCESS,
     POST_PERSONA_ERROR,
     POST_PERSONA_SUCCESS, 
+    UPDATE_PERSONA_SUCCESS,
+    UPDATE_PERSONA_ERROR,
     TOAST, 
     GET_PERSONA } from '../types'
 
@@ -37,6 +39,28 @@ export function* handleDeletePersonas() {
 
 }
 
+
+export function* handlePutPersona() {
+    try {
+        const { user } = yield select(state => state.user)
+        const { props } = yield select(state => state.persona.updating)
+        const respuesta  = yield call(reqPutPersona, user, props)
+        yield put({ type:UPDATE_PERSONA_SUCCESS, payload: respuesta} )
+        yield put({ type: GET_PERSONA })
+    } catch (error) {
+        yield put({ type: UPDATE_PERSONA_ERROR, error: error})
+        yield put({
+            type:TOAST, 
+            info: { 
+                severity: 'error', 
+                summary: 'Error', 
+                detail: error.response.data.error
+            }          
+        })
+    }
+
+}
+
 export function* handlePostPersonas() {
 
     try {
@@ -57,4 +81,5 @@ export function* handlePostPersonas() {
         })
     }
 
+    
 }

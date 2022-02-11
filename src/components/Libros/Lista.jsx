@@ -12,7 +12,8 @@ import ModalLibros from './ModalLibros';
 import ModalEdit from './ModalEdit';
 import Spinner from '../utilities/Spinner';
 import { useMediaQuery } from 'react-responsive'
-import { SplitButton } from 'primereact/splitbutton';
+import { SelectButton } from 'primereact/selectbutton';
+import { Menu } from 'primereact/menu';
 
 export default function Lista(){
 
@@ -34,7 +35,6 @@ export default function Lista(){
     const state = useSelector(state => state.libros)
     const categorias = useSelector(state => state.categoria.payload) 
     const personas = useSelector(state => state.persona.payload)
-    const toast = useRef(null);
 //INGRESO LISTA DE PRODUCTOS INICIAL
     const [libros, setLibros] = useState([]);   
 //VISIBILIDAD DEL MODAL DE LIBROS NUEVOS / EDIT
@@ -57,9 +57,16 @@ export default function Lista(){
 //FILTRO DEL HEADER 
     const [globalFilter, setGlobalFilter] = useState(null);
     const dt = useRef(null);
+    const menu = useRef(null);
 //MEDIA QUERY
     const isPC = useMediaQuery({ query: '(min-width: 500px)'});
-
+     const options = [
+        {name: 'A', value: 1},
+        {name: 'C', value: 2},
+        {name: 'V', value: 3},
+        {name: 'E', value: 4}
+    ];
+    const [value, setValue] = useState(null);
 //INGRESO INICIAL DE PRODUCTOS A LISTA
     useEffect(() => {
 
@@ -177,10 +184,25 @@ export default function Lista(){
 
 //----------------------------------------BOTONERA IZQUIERDA SUPERIOR------------------------------------------------------------
     const leftToolbarTemplate = () => {
+        const retornarLabel1 = () =>{
+            if(isPC){ 
+                return "Nuevo";
+            }else{                
+                return "";
+            }
+        }
+        const retornarLabel2 = () =>{
+            if(isPC){ 
+                return "Borrar";
+            }else{                
+                return "";
+            }
+        }
         return (
             <React.Fragment>
-                <Button label="Nuevo" icon="pi pi-plus" className="p-button-success p-mr-2" onClick={openNew} />
-                <Button label="Borrar" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} disabled={!selectedProducts || !selectedProducts.length} />
+                <Button label={retornarLabel1()} icon="pi pi-plus" className="p-button-success p-mr-2 nuevobtn" onClick={openNew} />
+                <Button label={retornarLabel2()} icon="pi pi-trash" className="p-button-danger borrarbtn" onClick={confirmDeleteSelected} disabled={!selectedProducts || !selectedProducts.length} />
+                <InputText className="searchbtn" type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Buscar..." />
             </React.Fragment>
         )
     }
@@ -202,20 +224,7 @@ export default function Lista(){
                 return <Column className="column" key={col.field} field={col.field} header={col.header}  sorteable />;
             }
         });
-    }
-
-
-//--------------------------------------------------HEADER y BUSCADOR ----------------------------------------
-    const header = (
-        <div className="table-header">
-            <h5 className="p-m-0">TU BIBLIOTECA</h5>
-            <span className="p-input-icon-left">
-                <i className="pi pi-search" />
-                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Buscar..." />
-            </span>  
-        </div>
-    );
-    
+    }    
 
 //----------------------------------------------- INDICACIONES A LA FILA HORIZONTAL--------------------------------
 
@@ -229,11 +238,18 @@ export default function Lista(){
     
     const items = [
         {
+            icon: 'pi pi-info-circle',
+            label: "Info",
+            command: () => mostrarInfo(rowData)
+        },
+        {
             icon: 'pi pi-pencil',
+            label: "Pencil",
             command: () => confirmEditProduct(rowData)
         },
         {
             icon: 'pi pi-trash',
+            label: "Borrar",
             command: () => confirmDeleteProduct(rowData)
         }
     ]
@@ -247,7 +263,8 @@ export default function Lista(){
                 :
             <>
                 <div>
-                    <SplitButton style={{width: '5.5rem', position: 'relative'}} dropdownIcon="pi pi-plus" menuClassName="dropmenu" icon="pi pi-info-circle" model={items} onClick={() => mostrarInfo(rowData)} className="p-button-info mr-2"></SplitButton>
+                    <Menu model={items} popup ref={menu} id="popup_menu" />
+                    <Button icon="pi pi-chevron-down" onClick={(event) => menu.current.toggle(event)} aria-controls="popup_menu" aria-haspopup />  
                 </div>
             </>
 
@@ -330,6 +347,15 @@ export default function Lista(){
         </React.Fragment>
     );
 
+    const retornarHeader = () =>{
+    
+
+        if(!isPC){
+                return <SelectButton value={value} options={options} onChange={(e) => setValue(e.value)} optionLabel="name" />
+        }else {
+            return null;
+        }
+    }
     //RENDER----------------------------------------------------------------------------------------------------------
     return (
         <div className="datatable-crud-demo" >
@@ -342,21 +368,25 @@ export default function Lista(){
                         ref={dt} 
                         //VALORES DE LAS TABLAS
                         value={libros} 
-                        //SELECCION POR CASILLA-
+                        //SELECCION POR CASILLA- 
                         selectionMode="checkbox"  
                         //HOOK, FUNCION y DATAKEY! REFERENCIA DENTRO DEL JSON
-                        selection={selectedProducts} onSelectionChange={(e) => setSelectedProducts(e.value)} dataKey="id"
-                        paginator rows={3} rowsPerPageOptions={[5, 10, 25]}
+                        selection={selectedProducts} 
+                        onSelectionChange={(e) => setSelectedProducts(e.value)} dataKey="id"
+                        paginator rows={3} 
+                        rowsPerPageOptions={[5, 10, 25]}
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         currentPageReportTemplate="Mostrando {first} to {last} de {totalRecords} libros"
                         globalFilter={globalFilter}
                         id="tablaB"
+                        header= {retornarHeader()}
                         >
                         {/*SELECCION POR CASILLA */}
                         {/* FIELD = AGARRA EL VALOR DEL OBJETO INGRESADO EN <Datatable> Value - REFERENCIA DEL JSON*/}
                         <Column selectionMode="multiple" headerStyle={{ width: '0.3rem' }}></Column>
                         <Column className="column nombre" field="nombre" header="Nombre" sortable></Column>
-                        <Column className="column autor" field="autor" header="Autor" sortable></Column>   
+                        <Column className="column autor" field="autor" header="Autor" sortable></Column>  
+
                         {/* Ver adaptable */}                      
                         {isPC && returnColumns()}
                         {/* OPCIONES BOORRAR Y EDIT n°175 */} 

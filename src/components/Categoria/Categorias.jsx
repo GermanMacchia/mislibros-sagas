@@ -14,7 +14,7 @@ export default function Categorias () {
 		return	<>
 				<Nav />
 				<div>
-					<div class="flex" >
+					<div className="flex" >
 						<CategoriaForm />	
 						{
 							(state.loaded === false) ?
