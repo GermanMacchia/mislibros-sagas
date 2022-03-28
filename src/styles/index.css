@@ -22,7 +22,7 @@ html{
 
 .column {
     word-wrap: break-word;
-    width: 6em;
+    width: 6.3em;
 }
 label{
     margin-top: -0.6 !important;
@@ -253,8 +253,8 @@ table p {
 
         .p-button-rounded {
                 border-radius: 50%;
-                height: 2rem !important;
-                width: 2rem !important;
+                height: 1.65rem !important;
+                width: 1.65rem !important;
                 margin: 3px;
         }
 }

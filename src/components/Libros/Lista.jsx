@@ -372,7 +372,7 @@ export default function Lista(){
                         >
                         {/*SELECCION POR CASILLA */}
                         {/* FIELD = AGARRA EL VALOR DEL OBJETO INGRESADO EN <Datatable> Value - REFERENCIA DEL JSON*/}
-                        <Column selectionMode="multiple" headerStyle={{ width: '0.3rem' }}></Column>
+                        <Column selectionMode="multiple" headerStyle={{ width: '0.1rem' }}></Column>
                         <Column className="column nombre" field="nombre" header="Nombre" sortable></Column>
                         { value === 1 && <Column className="column" field="autor" header="Autor/a" sortable></Column> }
                         { value === 2 && <Column className="column" field="categoria" header="Categoría" sortable></Column> }
