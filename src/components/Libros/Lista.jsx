@@ -215,7 +215,7 @@ export default function Lista(){
     const returnColumns = () => {
         const columns = [
         {field: 'descripcion', header: 'Sinopsis'},
-        {field: 'categoria', header: 'Categoria'},
+        {field: 'categoria', header: 'Categoría'},
         {field: 'rating', header: 'Rating'},
         {field: 'estado', header: 'Estado'}
     ];
@@ -388,9 +388,9 @@ export default function Lista(){
                         {/* FIELD = AGARRA EL VALOR DEL OBJETO INGRESADO EN <Datatable> Value - REFERENCIA DEL JSON*/}
                         <Column selectionMode="multiple" headerStyle={{ width: '0.3rem' }}></Column>
                         <Column className="column nombre" field="nombre" header="Nombre" sortable></Column>
-                        { value === 1 && <Column className="column autor" field="autor" header="Autor" sortable></Column> }
-                        { value === 2 && <Column className="column categoria" field="categoria" header="Categoria" sortable></Column> }
-                        { value === 3 && <Column className="column rating" field="rating" header="Rating" sortable></Column> }
+                        { value === 1 && <Column className="column autor" field="autor" header="Autor/a" sortable></Column> }
+                        { value === 2 && <Column className="column categoria" field="categoria" header="Categoría" sortable></Column> }
+                        { value === 3 && <Column className="column rating" field="rating" header="Rating " sortable></Column> }
                         { value === 4 && <Column className="column estado" field="estado" header="Estado" sortable></Column> }
                         {/* Ver adaptable */}                      
                         {isPC && returnColumns()}

@@ -22,7 +22,7 @@ html{
 
 .column {
     word-wrap: break-word;
-    width: 3em;
+    width: 5em;
 }
 label{
     margin-top: -0.6 !important;
