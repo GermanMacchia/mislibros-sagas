@@ -60,13 +60,17 @@ export default function Lista(){
     const menu = useRef(null);
 //MEDIA QUERY
     const isPC = useMediaQuery({ query: '(min-width: 500px)'});
-     const options = [
-        {name: 'A', value: 1},
-        {name: 'C', value: 2},
-        {name: 'V', value: 3},
-        {name: 'E', value: 4}
+    const options = [
+        {icon: 'pi pi-user', value: 1},
+        {icon: 'pi pi-bookmark', value: 2},
+        {icon: 'pi pi-star', value: 3},
+        {icon: 'pi pi-search', value: 4}
     ];
-    const [value, setValue] = useState(null);
+    const [value, setValue] = useState(1);
+
+    const justifyTemplate = (option) => {
+        return <i className={option.icon}></i>;
+    }
 //INGRESO INICIAL DE PRODUCTOS A LISTA
     useEffect(() => {
 
@@ -212,7 +216,7 @@ export default function Lista(){
         const columns = [
         {field: 'descripcion', header: 'Sinopsis'},
         {field: 'categoria', header: 'Categoria'},
-        {field: 'rating', header: 'Valoracion'},
+        {field: 'rating', header: 'Rating'},
         {field: 'estado', header: 'Estado'}
     ];
         return columns.map((col, _i) => {
@@ -349,9 +353,8 @@ export default function Lista(){
 
     const retornarHeader = () =>{
     
-
         if(!isPC){
-                return <SelectButton value={value} options={options} onChange={(e) => setValue(e.value)} optionLabel="name" />
+                return <SelectButton value={value} options={options} onChange={(e) => setValue(e.value)} itemTemplate={justifyTemplate} />
         }else {
             return null;
         }
@@ -385,8 +388,10 @@ export default function Lista(){
                         {/* FIELD = AGARRA EL VALOR DEL OBJETO INGRESADO EN <Datatable> Value - REFERENCIA DEL JSON*/}
                         <Column selectionMode="multiple" headerStyle={{ width: '0.3rem' }}></Column>
                         <Column className="column nombre" field="nombre" header="Nombre" sortable></Column>
-                        <Column className="column autor" field="autor" header="Autor" sortable></Column>  
-
+                        { value === 1 && <Column className="column autor" field="autor" header="Autor" sortable></Column> }
+                        { value === 2 && <Column className="column categoria" field="categoria" header="Categoria" sortable></Column> }
+                        { value === 3 && <Column className="column rating" field="rating" header="Rating" sortable></Column> }
+                        { value === 4 && <Column className="column estado" field="estado" header="Estado" sortable></Column> }
                         {/* Ver adaptable */}                      
                         {isPC && returnColumns()}
                         {/* OPCIONES BOORRAR Y EDIT n°175 */} 
