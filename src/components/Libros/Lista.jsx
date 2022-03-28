@@ -212,7 +212,7 @@ export default function Lista(){
     }
 
 //----------------------------------------RETORNAR COLUMNAS DINAMICAS MEDIA QUERY DATATABLE------------------------------------------------------------  
-    const returnColumns = () => {
+    const returnColumns = (rowData) => {
         const columns = [
         {field: 'descripcion', header: 'Sinopsis'},
         {field: 'categoria', header: 'Categoría'},
@@ -221,11 +221,11 @@ export default function Lista(){
     ];
         return columns.map((col, _i) => {
             if(col.field === 'rating'){
-                return <Column className="column" key={col.field} field={col.field} header={col.header}  body={ratingBodyTemplate} sorteable />;
+                return <Column className="column" key={col.field} field={col.field} header={col.header}  body={ratingBodyTemplate} sortable />;
             }else if(col.field === 'descripcion'){
-                return <Column style={{wordWrap: "break-word", width: "5em"}} key={col.field} field={col.field} header={col.header}  sorteable />;
+                return <Column style={{wordWrap: "break-word", width: "5em"}} key={col.field} field={col.field} header={col.header}  sortable />;
             }else{
-                return <Column className="column" key={col.field} field={col.field} header={col.header}  sorteable />;
+                return <Column className="column" key={col.field} field={col.field} header={col.header}  sortable />;
             }
         });
     }    
@@ -240,7 +240,9 @@ export default function Lista(){
     //OPCIONES DE CADA FILA {EDICION y BORRAR}
     const actionBodyTemplate = (rowData) => {
     
+
     const items = [
+        
         {
             icon: 'pi pi-info-circle',
             label: "Info",
@@ -266,10 +268,8 @@ export default function Lista(){
             </React.Fragment>
                 :
             <>
-                <div>
-                    <Menu model={items} popup ref={menu} id="popup_menu" />
-                    <Button icon="pi pi-chevron-down" onClick={(event) => menu.current.toggle(event)} aria-controls="popup_menu" aria-haspopup />  
-                </div>
+                <Menu model={items} popup ref={menu} id="popup_menu" />
+                <Button icon="pi pi-chevron-down" onClick={(e) => menu.current.toggle(e)} aria-controls="popup_menu" aria-haspopup />  
             </>
 
         );
@@ -372,10 +372,11 @@ export default function Lista(){
                         //VALORES DE LAS TABLAS
                         value={libros} 
                         //SELECCION POR CASILLA- 
-                        selectionMode="checkbox"  
+                        selectionMode="checkbox" 
                         //HOOK, FUNCION y DATAKEY! REFERENCIA DENTRO DEL JSON
                         selection={selectedProducts} 
-                        onSelectionChange={(e) => setSelectedProducts(e.value)} dataKey="id"
+                        onSelectionChange={(e) => setSelectedProducts(e.value)} 
+                        dataKey="id"
                         paginator rows={3} 
                         rowsPerPageOptions={[5, 10, 25]}
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
@@ -388,14 +389,14 @@ export default function Lista(){
                         {/* FIELD = AGARRA EL VALOR DEL OBJETO INGRESADO EN <Datatable> Value - REFERENCIA DEL JSON*/}
                         <Column selectionMode="multiple" headerStyle={{ width: '0.3rem' }}></Column>
                         <Column className="column nombre" field="nombre" header="Nombre" sortable></Column>
-                        { value === 1 && <Column className="column autor" field="autor" header="Autor/a" sortable></Column> }
-                        { value === 2 && <Column className="column categoria" field="categoria" header="Categoría" sortable></Column> }
-                        { value === 3 && <Column className="column rating" field="rating" header="Rating " sortable></Column> }
-                        { value === 4 && <Column className="column estado" field="estado" header="Estado" sortable></Column> }
+                        { value === 1 && <Column className="column" field="autor" header="Autor/a" sortable></Column> }
+                        { value === 2 && <Column className="column" field="categoria" header="Categoría" sortable></Column> }
+                        { value === 3 && <Column className="column" field="rating" header="Rating " sortable></Column> }
+                        { value === 4 && <Column className="column" field="estado" header="Estado" sortable></Column> }
                         {/* Ver adaptable */}                      
-                        {isPC && returnColumns()}
+                        {isPC && returnColumns() }
                         {/* OPCIONES BOORRAR Y EDIT n°175 */} 
-                        <Column className="column botones" body={actionBodyTemplate}></Column>
+                        <Column className="column botones"  body={actionBodyTemplate} ></Column>
                     </DataTable>                            
                         :
                     <Spinner />
