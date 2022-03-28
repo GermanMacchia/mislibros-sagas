@@ -27,6 +27,7 @@
         .p-button-rounded {
                 height: 1.357rem !important;
                 width: 1.357rem !important;
+                width: 2rem !important;
         }
         td {
                 font-size: small;

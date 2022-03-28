@@ -249,4 +249,12 @@ table p {
     width: 100%;
 }
 
+@media(max-width: 500px){
 
+        .p-button-rounded {
+                border-radius: 50%;
+                height: 2rem !important;
+                width: 2rem !important;
+                margin: 3px;
+        }
+}

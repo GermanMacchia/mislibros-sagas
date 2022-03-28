@@ -13,7 +13,6 @@ import ModalEdit from './ModalEdit';
 import Spinner from '../utilities/Spinner';
 import { useMediaQuery } from 'react-responsive'
 import { SelectButton } from 'primereact/selectbutton';
-import { Menu } from 'primereact/menu';
 
 export default function Lista(){
 
@@ -57,7 +56,6 @@ export default function Lista(){
 //FILTRO DEL HEADER 
     const [globalFilter, setGlobalFilter] = useState(null);
     const dt = useRef(null);
-    const menu = useRef(null);
 //MEDIA QUERY
     const isPC = useMediaQuery({ query: '(min-width: 500px)'});
     const options = [
@@ -237,41 +235,28 @@ export default function Lista(){
         return <Rating value={rowData.rating} readOnly cancel={false} />;
     }
 
-    //OPCIONES DE CADA FILA {EDICION y BORRAR}
-    const actionBodyTemplate = (rowData) => {
+        //OPCIONES DE CADA FILA {EDICION y BORRAR}
+    const actionBodyTemplate3 = (rowData) => {
     
 
-    const items = [
-        
-        {
-            icon: 'pi pi-info-circle',
-            label: "Info",
-            command: () => mostrarInfo(rowData)
-        },
-        {
-            icon: 'pi pi-pencil',
-            label: "Pencil",
-            command: () => confirmEditProduct(rowData)
-        },
-        {
-            icon: 'pi pi-trash',
-            label: "Borrar",
-            command: () => confirmDeleteProduct(rowData)
-        }
-    ]
         return (
-            isPC?
             <React.Fragment>
                 <Button icon="pi pi-info-circle" className="p-button-rounded p-button-info p-mr-2" onClick={() => mostrarInfo(rowData)}/>
                 <Button icon="pi pi-pencil" className="p-button-rounded p-button-warning p-mr-2" onClick={() => confirmEditProduct(rowData)} />
                 <Button icon="pi pi-trash" className="p-button-rounded p-button-danger" onClick={() => confirmDeleteProduct(rowData)} />
             </React.Fragment>
-                :
-            <>
-                <Menu model={items} popup ref={menu} id="popup_menu" />
-                <Button icon="pi pi-chevron-down" onClick={(e) => menu.current.toggle(e)} aria-controls="popup_menu" aria-haspopup />  
-            </>
+        );
+    }
+    //OPCIONES DE CADA FILA {EDICION y BORRAR}
+    const actionBodyTemplate = (rowData) => {
+    
 
+        return (
+            <React.Fragment>
+                <Button icon="pi pi-info-circle" className="p-button-rounded p-button-info p-mr-2" onClick={() => mostrarInfo(rowData)}/>
+                <Button icon="pi pi-pencil" className="p-button-rounded p-button-warning p-mr-2" onClick={() => confirmEditProduct(rowData)} />
+                <Button icon="pi pi-trash" className="p-button-rounded p-button-danger" onClick={() => confirmDeleteProduct(rowData)} />
+            </React.Fragment>
         );
     }
 
@@ -396,7 +381,11 @@ export default function Lista(){
                         {/* Ver adaptable */}                      
                         {isPC && returnColumns() }
                         {/* OPCIONES BOORRAR Y EDIT n°175 */} 
-                        <Column className="column botones"  body={actionBodyTemplate} ></Column>
+                        {isPC?
+                            <Column className="column botones"  body={actionBodyTemplate} ></Column>
+                            :
+                            <Column className="column botones"  body={actionBodyTemplate3} ></Column>
+                        }
                     </DataTable>                            
                         :
                     <Spinner />
