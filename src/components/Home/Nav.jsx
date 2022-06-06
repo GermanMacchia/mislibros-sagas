@@ -16,20 +16,19 @@ export default function Nav () {
 		const init = () => {
 		dispatch({type: GET_LIBROS})
 		dispatch({type: GET_CATEGORIAS})
-		dispatch({type: GET_PERSONA})	
+		dispatch({type: GET_PERSONA})
 		}
-
 		init();
 	}, [dispatch]);
 
-	useEffect(() => {
+	useEffect(() => {		
 		if(state.info != null){
 			toast.current.show({ severity: state.info.severity, summary: state.info.summary, detail: state.info.detail, life: 3000	 });
-		}
+		}		
 		dispatch({
 			type:TOAST, 
 			info: null
-		}); 
+		});
 	}, [state.info, dispatch]);
 
     const items = [
@@ -46,7 +45,6 @@ export default function Nav () {
 				<div id="menu">
 					<Menubar model={items}/>
             			</div>
-				<div id="imagen"></div>
 			</div>
 		</>
 	);

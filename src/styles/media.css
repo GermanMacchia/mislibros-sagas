@@ -1,4 +1,4 @@
-@media(min-width: 300px) and(max-width: 450px) {
+@media(min-width: 300px) and(max-width: 500px) {
         .datatable-crud-demo {
                 width: 24em;
         }
@@ -55,6 +55,22 @@
 
         .nuevobtn {
                 width: 2rem;
+                margin-right: 0;
+        }
+
+
+        .searchbtn {
+                width: 13rem;
+
+        }
+
+        .borrarbtn {
+                width: 2rem;
+                margin-right: 0;
+        }
+
+        .nuevobtn {
+                width: 2rem ;
                 margin-right: 0;
         }
         #imagen {

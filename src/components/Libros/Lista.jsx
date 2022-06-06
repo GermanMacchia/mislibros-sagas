@@ -81,7 +81,7 @@ export default function Lista(){
             let persona = ''
             if( persona_id !== null){
                 let [personaAux] = personas.filter( c => c.id === persona_id)
-                persona = ' a '+ personaAux.nombre + ' ' + personaAux.apellido
+                persona = ` a ${personaAux.nombre} ${personaAux.apellido}`
             }
             return persona
         }   
@@ -230,27 +230,14 @@ export default function Lista(){
 
 //----------------------------------------------- INDICACIONES A LA FILA HORIZONTAL--------------------------------
 
-    //TEMPLATE DE ESTRELLAS RATING
+    //TEMPLATE DE ESTRELLAS RATING INFO / TABLE
     const ratingBodyTemplate = (rowData) => {
         return <Rating value={rowData.rating} readOnly cancel={false} />;
     }
 
         //OPCIONES DE CADA FILA {EDICION y BORRAR}
-    const actionBodyTemplate3 = (rowData) => {
-    
-
-        return (
-            <React.Fragment>
-                <Button icon="pi pi-info-circle" className="p-button-rounded p-button-info p-mr-2" onClick={() => mostrarInfo(rowData)}/>
-                <Button icon="pi pi-pencil" className="p-button-rounded p-button-warning p-mr-2" onClick={() => confirmEditProduct(rowData)} />
-                <Button icon="pi pi-trash" className="p-button-rounded p-button-danger" onClick={() => confirmDeleteProduct(rowData)} />
-            </React.Fragment>
-        );
-    }
-    //OPCIONES DE CADA FILA {EDICION y BORRAR}
     const actionBodyTemplate = (rowData) => {
     
-
         return (
             <React.Fragment>
                 <Button icon="pi pi-info-circle" className="p-button-rounded p-button-info p-mr-2" onClick={() => mostrarInfo(rowData)}/>
@@ -273,7 +260,7 @@ export default function Lista(){
     const deleteSelectedProducts = () => {
 
         //Los libros a Borrar debe ser los que NO están prestados
-        var librosABorrar = []
+        let librosABorrar = []
         librosABorrar = selectedProducts.filter( libro => libro.persona_id == null)
 
         //función para que retorne array solo los nombres de otro array
@@ -371,21 +358,18 @@ export default function Lista(){
                         header= {retornarHeader()}
                         >
                         {/*SELECCION POR CASILLA */}
-                        {/* FIELD = AGARRA EL VALOR DEL OBJETO INGRESADO EN <Datatable> Value - REFERENCIA DEL JSON*/}
+                        {/* FIELD = TOMA EL VALOR DEL OBJETO INGRESADO EN <Datatable> Value - REFERENCIA DEL JSON*/}
                         <Column selectionMode="multiple" headerStyle={{ width: '0.1rem' }}></Column>
                         <Column className="column nombre" field="nombre" header="Nombre" sortable></Column>
+                        {/*CODICIONALES EN TAMAÑO MOVIL */}
                         { value === 1 && <Column className="column" field="autor" header="Autor/a" sortable></Column> }
                         { value === 2 && <Column className="column" field="categoria" header="Categoría" sortable></Column> }
-                        { value === 3 && <Column className="column" field="rating" header="Rating " sortable></Column> }
-                        { value === 4 && <Column className="column" field="estado" header="Estado" sortable></Column> }
+                        { value === 3 && <Column className="column" field="rating" style={{ width: "28vw"}} header="Rating" body={ratingBodyTemplate} sortable></Column> }
+                        { value === 4 && <Column className="column" field="estado" style={{ width: "28vw"}} header="Estado" sortable></Column> }
                         {/* Ver adaptable */}                      
                         {isPC && returnColumns() }
                         {/* OPCIONES BOORRAR Y EDIT n°175 */} 
-                        {isPC?
-                            <Column className="column botones"  body={actionBodyTemplate} ></Column>
-                            :
-                            <Column className="column botones"  body={actionBodyTemplate3} ></Column>
-                        }
+                        <Column className="column botones"  body={actionBodyTemplate} ></Column>
                     </DataTable>                            
                         :
                     <Spinner />
@@ -413,11 +397,11 @@ export default function Lista(){
                 </div>
             </Dialog>
             {/* MODAL INFO*/}
-                <Dialog header={modalInfoData.nombre} visible={modalInfo} position="left" modal style={{ width: '50vw' }} draggable={false} resizable={false} onHide={hideModalInfo}>
-                    <p><b>Autor:</b> {modalInfoData.autor}</p>
-                    <p><b>Categoria:</b> {modalInfoData.categoria} </p>
-                    <p><b>Estado:</b> {modalInfoData.estado}{modalInfoData.nombrePersona}</p>
-                    <p id="dialogo"><b>Sinopsis</b>:<br /> {modalInfoData.descripcion}</p>                
+                <Dialog header={modalInfoData.nombre} visible={modalInfo} position="left" modal style={{ width: '80vw' }} draggable={true} resizable={false} onHide={hideModalInfo}>
+                    <p><b>Autor:</b><br /> {modalInfoData.autor}</p>
+                    <p><b>Categoria:</b><br /> {modalInfoData.categoria} </p>
+                    <p><b>Estado:</b><br /> {modalInfoData.estado}{modalInfoData.nombrePersona}</p>
+                    <p id="dialogo"><b>Sinopsis:</b><br /> {modalInfoData.descripcion}</p>                
                     <p><b>Valoración:</b></p>{ratingBodyTemplate(modalInfoData)}
                 </Dialog>
         </div>

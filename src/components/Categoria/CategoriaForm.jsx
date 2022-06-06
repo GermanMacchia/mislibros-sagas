@@ -36,19 +36,17 @@ export default function CategoriaForm () {
 	return(
 		<div id="catForm">
 			{/*Formulario*/}
-			<form id="categoriaForm" action="Post Categoría">
-               			 <span className="p-float-label">
-					<InputText  name='nombre' className="p-inputtext-mb p-d-block txt" onChange={handleForm} />
-					<label class="lab" htmlFor="categoria">Nueva Categoría</label>
-               			 </span><br/>
-				<span className="p-float-label">
-					<InputText name='imagen' className="p-inputtext-mb p-d-block txt" onChange={handleForm} />
-					<label class="lab" htmlFor="imagen">Dirección de Imagen</label>
-				</span><br/>
-				<span className="p-float-label">
-					<InputTextarea name="descripcion" required rows={4} cols={18} className='p-inputtext-mb p-d-block txt' onChange={handleForm}/>
-					<label class="lab" htmlFor="description">Descripción</label>
-				</span>
+			<form action="Post Categoría">
+				<label htmlFor="categoria">Nueva Categoría</label><br/>
+				<InputText  name='nombre' className="p-inputtext-mb p-d-block txt" onChange={handleForm} /><br/>
+
+				<label  htmlFor="imagen">Dirección de Imagen</label><br/>			
+				<InputText name='imagen' className="p-inputtext-mb p-d-block txt" onChange={handleForm} /><br/>
+
+				<label htmlFor="description">Descripción</label><br/>
+				<InputTextarea name="descripcion" required rows={4} cols={18} className='p-inputtext-mb p-d-block txt' onChange={handleForm}/><br/>
+
+
 			</form>
 			{/*Botones*/}
 			{state.fetching? 

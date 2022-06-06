@@ -9,20 +9,23 @@ export default function Biblioteca () {
 	const state = useSelector(state => state.libros)
 
 	return(
-		<div className= "center">
-		{
-			(state.loaded === false )
-			?
-				<>
-					<br/>
-					<Spinner />
-				</>
-			:
-			<div>
-				<Lista />
+		<>
+			<div id="imagen"></div>
+			<div className= "center">
+			{
+				(state.loaded === false )
+				?
+					<>
+						<br/>
+						<Spinner />
+					</>
+				:
+				<div>
+					<Lista />
+				</div>
+			}
 			</div>
-		}
-		</div>
+		</>
 	)
 }
 

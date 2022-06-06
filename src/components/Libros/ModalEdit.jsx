@@ -18,18 +18,18 @@ export default function ModalEdit({hideEditDialog, libroEditModal, libroUpdate})
 	const [libro, setLibro] = useState({})
 	const [form, setForm] = useState()
 	//OPCIONES EN MODAL
-	const [stars, setStars] = useState()
+	//const [stars, setStars] = useState()
 	const [cat, setCat] = useState()
 	const [per, setPer] = useState()
-	const [prestado, setPrestado] = useState()
-	const [categoriaModal, setCategoriaModal] = useState()
+	//const [prestado, setPrestado] = useState()
+	//const [categoriaModal, setCategoriaModal] = useState()
 	const [enviado, setEnviado] = useState(false)
 
 	//RESETAR FORMULARIO PRIME
 	function resetForm () {
-		setPrestado(null)
-		setCategoriaModal(null)
-		setStars(null)
+		//setPrestado(null)
+		//setCategoriaModal(null)
+		//setStars(null)
 		setForm(null)		
 		setEnviado(false)
 		hideEditDialog();
@@ -41,7 +41,7 @@ export default function ModalEdit({hideEditDialog, libroEditModal, libroUpdate})
 		if(categorias != null && personas != null){
 
 			const auxPer = [...personas, {id: null, alias: "NADIE"}]
-			const auxCat = [...categorias, {id: null, nombre:"NINGUNA"}]
+			const auxCat = [...categorias]
 			setCat(auxCat)
 			setPer(auxPer)
 		}
@@ -50,7 +50,7 @@ export default function ModalEdit({hideEditDialog, libroEditModal, libroUpdate})
 
 	useEffect(() => {
 		setLibro(libroUpdate)
-	}, []);
+	}, [setLibro, libroUpdate]);
 
 	useEffect(() => {
 		if(state.error != null && enviado){
@@ -67,15 +67,16 @@ export default function ModalEdit({hideEditDialog, libroEditModal, libroUpdate})
 
 	const handleForm = (e) => {
         	//estas condiciones se hacen para que la opcion permanezca en el formulario del "Prime"
-		if(e.target.name == "persona_id"){
+		/*
+		if(e.target.name === "persona_id"){
 		setPrestado(e.target.value)
 		}
-		if(e.target.name == "categoria_id"){
+		if(e.target.name === "categoria_id"){
 		setCategoriaModal(e.target.value)
 		}
-		if(e.target.name == "rating"){
+		if(e.target.name === "rating"){
 		setStars(e.target.value)
-		}		
+		}		*/
 		setLibro({
 			...libro,
 			[e.target.name]: e.target.value
@@ -129,7 +130,7 @@ export default function ModalEdit({hideEditDialog, libroEditModal, libroUpdate})
 			<div className="p-field">
 				<label className="p-mb-3">Categoria</label>
 				<div className="p-formgrid p-grid">
-				<Dropdown optionLabel="nombre" optionValue="id" placeholder="Categoría" value={libro.categoria_id} options={ cat } name="categoria_id" value={ libro.categoria_id }  onChange={ handleForm } />
+				<Dropdown optionLabel="nombre" optionValue="id" placeholder="Categoría" value={libro.categoria_id} options={ cat } name="categoria_id" onChange={ handleForm } />
 				</div>
 			</div>
 			<div className="p-field">

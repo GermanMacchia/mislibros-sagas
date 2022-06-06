@@ -6,7 +6,7 @@ import { Button } from 'primereact/button';
 export default function CategoriaCard({ categoria, openDelete }) {
 
     const header = (
-        <img alt="Card" style={{width: '15rem' }} src={categoria.imagen}  alt='imagen' />
+        <img alt="Imagen" style={{width: '10rem', margin:'1rem' }} src={categoria.imagen}  />
     );
 
     const footer = (

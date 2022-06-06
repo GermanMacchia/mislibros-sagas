@@ -22,21 +22,18 @@ html{
 
 .column {
     word-wrap: break-word;
-    width: 6.3em;
+    width: 6.4em;
 }
 label{
     margin-top: -0.6 !important;
 }
 .txt {
-    margin-bottom: 0.5rem !important;
-}
-
-.clear {
-    clear: both;
+    margin: 1vh 0 1vh 0 !important;
+    width: 45vw;
 }
 
 #catForm{
-    padding: 30px;
+    text-align: left;
 
 }
 
@@ -75,22 +72,22 @@ select {
     margin-top: 2px;
 }
 #spin{
-    margin-left: 23rem;
-    margin-top: 2rem;
+    margin-right: 50vw;
+    margin-top: 25vh;
 }
 
 .flex{
     display:flex;
-    flex-direction: row;
+    flex-direction: column;
+    align-items:flex-end;
 }
 
 #carrusel{
-    width: 100rem;
-    margin-top: 30px;
+    width: 100vw !important;
+    margin-top: 2vh;
 }
-#tarjetas{
-    margin-left: 30px;
-}
+
+
 
 #menu{
     border: none !important;
@@ -147,7 +144,8 @@ select {
 
 .homeform label {
     color: #D6E4E5;
-    font-size: 25px
+    font-size: 25px;
+
 }
 
 .contentForm {
@@ -243,6 +241,7 @@ table p {
     color: #FAFAFA;
     text-align: center;
 }
+
 
 .display {
     display: inline-flex;

@@ -15,8 +15,9 @@ export default function Personas () {
 	}, [state.reducerChanges, dispatch]);
 
 	return(
-		<>
+		<>			
 			<Nav />
+			<div id="imagen"></div>
 			<div className='center'>
 				{
 					(state.loaded === false)

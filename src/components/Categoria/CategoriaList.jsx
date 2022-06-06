@@ -50,17 +50,17 @@ export default function CategoriaList () {
 
     const responsiveOptions = [
         {
-            breakpoint: '200px',
-            numVisible: 3,
-            numScroll: 3
+            breakpoint: '200vw',
+            numVisible: 1,
+            numScroll: 1
         },
         {
-            breakpoint: '10rem',
-            numVisible: 2,
-            numScroll: 2
+            breakpoint: '400vw',
+            numVisible: 1,
+            numScroll: 1
         },
         {
-            breakpoint: '4rem',
+            breakpoint: '600vw',
             numVisible: 1,
             numScroll: 1
         }
@@ -73,9 +73,9 @@ export default function CategoriaList () {
     return (
         <>
             { 
-                loaded ? 
+                loaded ?   
                     <div id="carrusel">
-                        <Carousel value={categorias} numVisible={3} numScroll={3} responsiveOptions={responsiveOptions}
+                        <Carousel value={categorias}  numVisible={1}  numScroll={1} responsiveOptions={responsiveOptions}
                         itemTemplate={productTemplate}  />
                     </div>  
                         :

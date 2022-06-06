@@ -11,6 +11,8 @@ import ModalPersona from './ModalPersona';
 import ModalEditPersona from './ModalEditPersona';
 import Spinner from '../utilities/Spinner';
 
+
+//FALTA PONER EL MODAL DE INFO
 export default function Lista(){
 
     const dispatch = useDispatch();
@@ -19,7 +21,7 @@ export default function Lista(){
 
 //INGRESO LISTA DE PRODUCTOS INICIAL  
     const [personas, setPersonas] = useState()
-//VISIBILIDAD DEL MODAL DE LIBROS NUEVOS / EDIT
+//VISIBILIDAD DEL MODAL DE PERSONAS NUEVOS / EDIT
     const [personaModal, setPersonaModal] = useState(false);
     const [personaEditModal, setPersonaEditModal] = useState(false);
 //BORRAR PRODUCTO INDIVIDUAL
@@ -35,6 +37,8 @@ export default function Lista(){
     const [submitEdit, setSubmitEdit] = useState(false);
 //FILTRO DEL HEADER 
     const [globalFilter, setGlobalFilter] = useState(null);
+    //const [ModalInfo, setModalInfo] = useState(false);
+    //const [ModalInfoData, setModalInfoData] = useState();
     const dt = useRef(null);
 
     //ABRIR EL MODAL DE INGRESO NUEVO
@@ -90,6 +94,11 @@ export default function Lista(){
         setDeleteProductsDialog(false);
     }
 
+    /*
+    const mostrarInfo = (rowData) => {
+        setModalInfo(true)
+        setModalInfoData(rowData)
+    }*/
 
 //----------------------------------------BOTONERA IZQUIERDA SUPERIOR------------------------------------------------------------
     const leftToolbarTemplate = () => {
@@ -107,11 +116,12 @@ export default function Lista(){
 //----------------------------------------------- INDICACIONES A LA FILA HORIZONTAL--------------------------------
 
 
-    //OPCIONES DE CADA FILA {EDICION y BORRAR}
+    //OPCIONES DE CADA FILA {EDICION y BORRAR} onClick={() => mostrarInfo(rowData)}
     const actionBodyTemplate = (rowData) => {
         return (
             
             <React.Fragment>
+                <Button icon="pi pi-info-circle" className="p-button-rounded p-button-info p-mr-2" />
                 <Button icon="pi pi-pencil" className="p-button-rounded p-button-warning p-mr-2" onClick={() => confirmEditPersona(rowData)} />
                 <Button icon="pi pi-trash" className="p-button-rounded p-button-danger" onClick={() => confirmDeletePersona(rowData)} />
             </React.Fragment>
@@ -196,13 +206,13 @@ export default function Lista(){
                         >
                         {/*SELECCION POR CASILLA */}
                         {/* FIELD = AGARRA EL VALOR DEL OBJETO INGRESADO EN <Datatable> Value - REFERENCIA DEL JSON*/}
-                        <Column selectionMode="multiple" headerStyle={{ width: '0.3rem' }}></Column>
-                        <Column className="column" field="nombre" header="Nombre" sortable></Column>
-                        <Column className="column" field="apellido" header="Apellido" sortable></Column>
-                        <Column className="column" field="email" header="Email" sortable></Column>
-                        <Column className="column" field="alias" header="Alias" sortable></Column>                
+                        <Column selectionMode="multiple" headerStyle={{ width: '5px' }}></Column>
+                        <Column className="column" field="alias" header="Alias" style={{width:'22vw'}} sortable></Column>    
+                        {/*<Column className="column" field="nombre" header="Nombre" sortable></Column>
+                        <Column className="column" field="apellido" header="Apellido" sortable></Column>*/}
+                        <Column className="column" field="email" header="Email"  sortable></Column>
                         {/* OPCIONES BOORRAR Y EDIT*/}
-                        <Column className="column" body={actionBodyTemplate}></Column> 
+                        <Column className="column" body={actionBodyTemplate} ></Column> 
                     </DataTable>
                     :
                     <Spinner />

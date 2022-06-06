@@ -8,15 +8,15 @@ import { Button } from 'primereact/button';
 import { UPDATE_LIBROS, TOAST } from '../../sagas/types';
 import { VirtualScroller } from 'primereact/virtualscroller';
 
-export default function CategoriaEdit({hideEditDialog, categoriaEditModal }) {
+export default function CategoriaEdit({ hideEditDialog }) {
 
 	const categorias = useSelector(state => state.categoria.payload) 
 	const state = useSelector(state => state.libros)
 	const dispatch = useDispatch()
-	const [libros, setLibros] = useState({})
+	//const [libros, setLibros] = useState({})
 	const [form, setForm] = useState()
 	//OPCIONES EN MODAL
-	const [per, setPer] = useState()
+	//const [per, setPer] = useState()
 	const [categoria, setCategoria] = useState()
 	const [enviado, setEnviado] = useState(false)
 
@@ -52,7 +52,7 @@ export default function CategoriaEdit({hideEditDialog, categoriaEditModal }) {
 				}
 			}) 
 		}		
-	}, [state.error]);
+	}, [state.error, enviado, dispatch]);
 
 	const handleForm = (e) => {
 		
