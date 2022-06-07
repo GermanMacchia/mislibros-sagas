@@ -9,8 +9,10 @@ export function* handleGetLogin() {
         const { user } = yield select(state => state.user);
         const  { data }  = yield call(reqLogin, user);
         yield put({ type: LOGIN_SUCCESS, payload: data.token} );
+        localStorage.storage = JSON.stringify({user: data.token})
         yield put({ type: REDIRECT, page:'/home'})
         yield put({ type: REDIRECT_SUCCESS })
+
     } catch (error){
         yield put({ type: LOGIN_ERROR, error: error.response.data.error})
         yield put({

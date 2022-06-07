@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import { Menubar } from 'primereact/menubar';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from "react-router-dom";
-import { GET_CATEGORIAS, GET_PERSONA, GET_LIBROS, TOAST } from '../../sagas/types'
+import { GET_CATEGORIAS, GET_PERSONA, GET_LIBROS, TOAST, LOGIN_SUCCESS } from '../../sagas/types'
 import { Toast } from 'primereact/toast';
 
 export default function Nav () {
@@ -12,14 +12,30 @@ export default function Nav () {
 	const state = useSelector(state => state.user)
 	const toast = useRef(null);
 
-	useEffect(() =>{ 
-		const init = () => {
+	const init = useCallback(
+		() => {
 		dispatch({type: GET_LIBROS})
 		dispatch({type: GET_CATEGORIAS})
 		dispatch({type: GET_PERSONA})
-		}
+		},[dispatch]
+	)
+
+	useEffect(() =>{ 
 		init();
-	}, [dispatch]);
+	}, [init]);
+
+	useEffect(() => {
+		let storage  = localStorage.getItem('storage')
+		storage = JSON.parse(storage)
+		
+		if(storage && storage.user){
+			dispatch({
+				type:LOGIN_SUCCESS,
+				payload: storage.user
+			})
+			init()
+		}
+	}, [dispatch, init]);
 
 	useEffect(() => {		
 		if(state.info != null){
