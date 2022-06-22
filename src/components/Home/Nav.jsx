@@ -7,6 +7,7 @@ import { Toast } from 'primereact/toast';
 
 export default function Nav () {
 
+//TO DO REALIZAR SIGN OUT
 	const dispatch = useDispatch();
 	const history = useHistory();
 	const state = useSelector(state => state.user)
@@ -50,8 +51,11 @@ export default function Nav () {
     const items = [
         {label: 'Biblioteca', icon: 'pi pi-fw pi-book', command:()=>{ history.push('/home')}},
         {label: 'Categorias', icon: 'pi pi-fw pi-bookmark', command:()=>{ history.push('/categoria')}},
-        {label: 'Personas', icon: 'pi pi-fw pi-users', command:()=>{ history.push('/personas')}}
-      //  {label: 'Settings', icon: 'pi pi-fw pi-cog', command:()=>{ history.push('/settings')}}
+        {label: 'Personas', icon: 'pi pi-fw pi-users', command:()=>{ history.push('/personas')}},
+      	{label: 'Sign Out', icon: 'pi pi-sign-out', command:()=>{ 
+									history.push('/')
+									localStorage.clear()
+								}}
     ];
 
 	return(

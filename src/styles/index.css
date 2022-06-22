@@ -33,7 +33,7 @@ label{
 }
 
 #catForm{
-    text-align: left;
+    text-align: center;
 
 }
 
@@ -79,12 +79,14 @@ select {
 .flex{
     display:flex;
     flex-direction: column;
-    align-items:flex-end;
+    align-items:center;
+    margin-top: 5vh;
+
 }
 
 #carrusel{
-    width: 100vw !important;
-    margin-top: 2vh;
+    width: 30vw !important;
+    margin-top: 5vh;
 }
 
 
@@ -96,6 +98,11 @@ select {
 }
 .p-menubar{
     border: none !important;
+
+}
+
+.p-menuitem-link{
+    width: 6vw !important
 }
 
 #imagen{
@@ -147,6 +154,7 @@ select {
     font-size: 25px;
 
 }
+
 
 .contentForm {
     width: 35%;
@@ -256,4 +264,17 @@ table p {
                 width: 1.65rem !important;
                 margin: 3px;
         }
+        #carrusel{
+                width: 100vw !important;
+                margin-top: 2vh !important;
+                margin-bottom: 0 !important;
+        }
+
+        .p-menubar-root-list{
+            width: 40% !important
+        }
+        .p-accordion {
+            width: 80vw !important;
+        }
+
 }

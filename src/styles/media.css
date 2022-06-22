@@ -80,4 +80,11 @@
                 left: 276px !important;
                 width: 8rem !important;
         }
+
+        #carrusel{
+                width: 100vw !important;
+                margin-top: 2vh !important;
+                margin-bottom: 0 !important;
+        }
+
 }
