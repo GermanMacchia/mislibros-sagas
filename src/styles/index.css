@@ -93,7 +93,7 @@ select {
 
 #menu{
     border: none !important;
-    left: -1px;
+
     width: 140px;
 }
 .p-menubar{
@@ -109,7 +109,7 @@ select {
     height: 189px;
     background-image: url('../assets/fondo.jpg');
 }
-
+/*
 .buttonsNav {
     display: flex;
     flex-direction: row-reverse;
@@ -132,7 +132,7 @@ select {
     margin: 20px -31px 20px 0px;
     text-decoration: none;
 }
-
+*/
 
 .homeform {
     margin-top: 10px;
@@ -191,6 +191,13 @@ select {
 
 .funcionBtt:hover {
     cursor: pointer;
+}
+.p-menubar .p-menuitem-link{
+    overflow: visible !important;
+    width: 8vw !important;
+}
+.p-menuitem{
+    width: 8vw;
 }
 
 #guardar_button {
