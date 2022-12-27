@@ -55,7 +55,8 @@ export default function ModalLibros({hideDialog, libroModal}) {
 			}
 		}) 
 		}		
-	}, [state.error, dispatch, enviado]);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [state.error]);
 
 	const handleForm = (e) => {
         	//estas condiciones se hacen para que la opcion permanezca en el formulario del "Prime"

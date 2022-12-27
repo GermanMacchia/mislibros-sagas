@@ -63,6 +63,7 @@ export default function ModalEdit({hideEditDialog, libroEditModal, libroUpdate})
 				}
 			}) 
 		}		
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [state.error]);
 
 	const handleForm = (e) => {

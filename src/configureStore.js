@@ -1,5 +1,4 @@
 import { createStore, combineReducers, compose, applyMiddleware} from 'redux';
-import thunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
 import librosReducer from './sagas/reducers/librosReducer';
 import personaReducer from './sagas/reducers/personasReducer';
@@ -22,7 +21,7 @@ const rootReducer = combineReducers({
 export default function generateStore(){
     const store = createStore(
         rootReducer,
-        composeEnhancers(applyMiddleware(thunk, sagaMiddleware))
+        composeEnhancers(applyMiddleware(sagaMiddleware))
     );
     sagaMiddleware.run(rootSaga);
 
