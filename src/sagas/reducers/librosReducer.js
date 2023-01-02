@@ -1,6 +1,6 @@
-import { 
-    GET_LIBROS, 
-    GET_LIBROS_ERROR, 
+import {
+    GET_LIBROS,
+    GET_LIBROS_ERROR,
     GET_LIBROS_SUCCESS,
     DELETE_LIBROS,
     DELETE_LIBROS_ERROR,
@@ -10,7 +10,8 @@ import {
     UPDATE_LIBROS_SUCCESS,
     POST_LIBROS,
     POST_LIBROS_ERROR,
-    POST_LIBROS_SUCCESS } from '../types'
+    POST_LIBROS_SUCCESS
+} from '../types'
 
 //INITIAL DATA
 const initialData = {
@@ -20,17 +21,17 @@ const initialData = {
     updating: null,
     deleting: null,
     error: [],
-    reducerChanges: [] 
+    reducerChanges: []
 }
 
 //REDUCER
-export default function reducer(state = initialData, action){
-    switch(action.type){
+export default function reducer(state = initialData, action) {
+    switch (action.type) {
         //GETLIBROS
         case GET_LIBROS:
             return {
                 ...state,
-                fetching:true,
+                fetching: true,
                 loaded: false
             }
         case GET_LIBROS_ERROR:
@@ -76,7 +77,7 @@ export default function reducer(state = initialData, action){
                 updating: {
                     status: true,
                     props: action.props
-                }             
+                }
             }
         case UPDATE_LIBROS_ERROR:
             return {

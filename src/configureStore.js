@@ -1,4 +1,4 @@
-import { createStore, combineReducers, compose, applyMiddleware} from 'redux';
+import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import librosReducer from './sagas/reducers/librosReducer';
 import personaReducer from './sagas/reducers/personasReducer';
@@ -12,13 +12,13 @@ const sagaMiddleware = createSagaMiddleware();
 
 const rootReducer = combineReducers({
     libros: librosReducer,
-	user: userReducer,
+    user: userReducer,
     persona: personaReducer,
     categoria: categoriaReducer
 })
 
 
-export default function generateStore(){
+export default function generateStore() {
     const store = createStore(
         rootReducer,
         composeEnhancers(applyMiddleware(sagaMiddleware))

@@ -1,9 +1,9 @@
-import { 
-    LOGIN, 
-    LOG_OUT, 
-    LOGIN_SUCCESS, 
-    LOGIN_ERROR, 
-    LOGIN_GOOGLE_SUCCESS, 
+import {
+    LOGIN,
+    LOG_OUT,
+    LOGIN_SUCCESS,
+    LOGIN_ERROR,
+    LOGIN_GOOGLE_SUCCESS,
     REGISTER,
     REGISTER_SUCCESS,
     REGISTER_ERROR,
@@ -21,17 +21,17 @@ const initialData = {
     id: {
         uid: []
     },
-    error:[],
+    error: [],
     info: null,
-    redirect:{
+    redirect: {
         redirecting: false,
         page: null
     }
 }
 
 //REDUCER
-export default function reducer(state = initialData, action){
-    switch(action.type){
+export default function reducer(state = initialData, action) {
+    switch (action.type) {
         case REDIRECT:
             return {
                 ...state,
@@ -49,31 +49,31 @@ export default function reducer(state = initialData, action){
                 }
             }
         case REGISTER:
-            return{
+            return {
                 ...state,
                 registering: true,
                 user: action.payload
             }
         case REGISTER_SUCCESS:
-            return{
+            return {
                 ...state,
                 registering: false,
                 user: []
             }
         case REGISTER_ERROR:
-            return{
+            return {
                 ...state,
                 registering: false,
                 user: []
             }
         case LOG_OUT:
-            return{
+            return {
                 ...initialData
             }
         case LOGIN:
             return {
                 ...state,
-                fetching:true,
+                fetching: true,
                 user: action.payload
             }
         case LOGIN_ERROR:

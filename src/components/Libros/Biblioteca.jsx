@@ -1,29 +1,28 @@
 import React from 'react'
 import Spinner from '../utilities/Spinner'
 import { useSelector } from 'react-redux'
-import Lista from './Lista';
+import Lista from './Lista/Lista';
 
-
-export default function Biblioteca () {
+export default function Biblioteca() {
 
 	const state = useSelector(state => state.libros)
 
-	return(
+	return (
 		<>
 			<div id="imagen"></div>
-			<div className= "center">
-			{
-				(state.loaded === false )
-				?
-					<>
-						<br/>
-						<Spinner />
-					</>
-				:
-				<div>
-					<Lista />
-				</div>
-			}
+			<div className="center">
+				{
+					(state.loaded === false)
+						?
+						<>
+							<br />
+							<Spinner />
+						</>
+						:
+						<div>
+							<Lista />
+						</div>
+				}
 			</div>
 		</>
 	)

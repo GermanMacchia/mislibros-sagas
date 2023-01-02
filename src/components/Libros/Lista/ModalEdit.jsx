@@ -6,31 +6,34 @@ import { Rating } from 'primereact/rating';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { useDispatch, useSelector } from 'react-redux'
 import { Button } from 'primereact/button';
-import { POST_LIBROS, TOAST } from '../../sagas/types';
+import { UPDATE_LIBROS, TOAST } from '../../../sagas/types' 
 
-export default function ModalLibros({hideDialog, libroModal}) {
+
+export default function ModalEdit({hideEditDialog, libroEditModal, libroUpdate}) {
 
 	const categorias = useSelector(state => state.categoria.payload) 
 	const personas = useSelector(state => state.persona.payload)
 	const state = useSelector(state => state.libros)
 	const dispatch = useDispatch()
+	const [libro, setLibro] = useState({})
 	const [form, setForm] = useState()
 	//OPCIONES EN MODAL
-	const [stars, setStars] = useState()
+	//const [stars, setStars] = useState()
 	const [cat, setCat] = useState()
 	const [per, setPer] = useState()
-	const [prestado, setPrestado] = useState()
-	const [categoriaModal, setCategoriaModal] = useState()
+	//const [prestado, setPrestado] = useState()
+	//const [categoriaModal, setCategoriaModal] = useState()
 	const [enviado, setEnviado] = useState(false)
 
 	//RESETAR FORMULARIO PRIME
 	function resetForm () {
-		setPrestado(null)
-		setCategoriaModal(null)
-		setStars(null)
+		//setPrestado(null)
+		//setCategoriaModal(null)
+		//setStars(null)
 		setForm(null)		
 		setEnviado(false)
-		hideDialog();
+		hideEditDialog();
+
 	}
 
 	//NECESITO GENERAR UNA OPCION PARA QUE SEA NULA SI FUERA EL CASO
@@ -38,28 +41,34 @@ export default function ModalLibros({hideDialog, libroModal}) {
 		if(categorias != null && personas != null){
 
 			const auxPer = [...personas, {id: null, alias: "NADIE"}]
-			const auxCat = [...categorias, {id: null, nombre:"NINGUNA"}]
+			const auxCat = [...categorias]
 			setCat(auxCat)
 			setPer(auxPer)
 		}
+
 	}, [categorias, personas])
 
 	useEffect(() => {
+		setLibro(libroUpdate)
+	}, [setLibro, libroUpdate]);
+
+	useEffect(() => {
 		if(state.error != null && enviado){
-		dispatch({
-			type:TOAST, 
-			info: { 
-			severity: 'error', 
-			summary: 'Error', 
-			detail: state.error.at(-1)
-			}
-		}) 
+			dispatch({
+				type:TOAST, 
+				info: { 
+				severity: 'error', 
+				summary: 'Error', 
+				detail: state.error.at(-1)
+				}
+			}) 
 		}		
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [state.error]);
 
 	const handleForm = (e) => {
         	//estas condiciones se hacen para que la opcion permanezca en el formulario del "Prime"
+		/*
 		if(e.target.name === "persona_id"){
 		setPrestado(e.target.value)
 		}
@@ -68,27 +77,32 @@ export default function ModalLibros({hideDialog, libroModal}) {
 		}
 		if(e.target.name === "rating"){
 		setStars(e.target.value)
-		}
-		setForm({
-			...form,
+		}		*/
+		setLibro({
+			...libro,
 			[e.target.name]: e.target.value
-		});
+			
+		})
 	}
+
+	useEffect(() => {
+		setForm({
+			id: libro.id,
+			nombre: libro.nombre,
+			autor: libro.autor,
+			categoria_id: libro.categoria_id,
+			descripcion: libro.descripcion,
+			persona_id: libro.persona_id,
+			rating: libro.rating
+		});
+	}, [libro]);
+
 
 	const saveProduct = () => {
 		dispatch({
-			type: POST_LIBROS,
+			type: UPDATE_LIBROS,
 			props: form
 		});
-		dispatch({
-			type:TOAST, 
-			info: { 
-			severity: 'success', 
-			summary: 'Libro Nuevo', 
-			detail: form.nombre
-			}
-		}) 
-		hideDialog();
 		setEnviado( true )
 	}
 
@@ -101,35 +115,35 @@ export default function ModalLibros({hideDialog, libroModal}) {
 	//OPTIONLABEL-> La llave que elije para desplegar del JSON
 	//OPTIONVALUE -> El valor que devuelve
 	return(
-		<Dialog closable={false} visible={libroModal} style={{ width: '450px' }} header="Ingrese el libro" footer={productDialogFooter} modal className="p-fluid" onHide={hideDialog}>
+		<Dialog visible={libroEditModal} style={{ width: '450px' }} header="Edite el Libro" footer={productDialogFooter} modal className="p-fluid modalEdit" onHide={hideEditDialog}>
 			<div className="p-field">
 				<label htmlFor="nombre">Nombre</label>
-				<InputText name="nombre" placeholder="Nombre" onChange={ handleForm }  />
+				<InputText name="nombre" placeholder="Nombre" value={libro.nombre} onChange={ handleForm }  />
 			</div>
 			<div className="p-field">
 				<label htmlFor="autor">Autor</label>
-				<InputText name="autor" onChange={ handleForm } placeholder="Autor"/>
+				<InputText name="autor" onChange={ handleForm } value={libro.autor} placeholder="Autor"/>
 			</div>
 			<div className="p-field">
 				<label htmlFor="description">Descripción</label>
-				<InputTextarea name="descripcion" onChange={ handleForm } placeholder="Descripción"  required rows={3} cols={20} />
+				<InputTextarea name="descripcion" onChange={ handleForm } value={libro.descripcion} placeholder="Descripción"  required rows={3} cols={20} />
 			</div>
 			<div className="p-field">
 				<label className="p-mb-3">Categoria</label>
 				<div className="p-formgrid p-grid">
-				<Dropdown optionLabel="nombre" optionValue="id" placeholder="Categoría" options={ cat } name="categoria_id" value={ categoriaModal }  onChange={ handleForm } />
+				<Dropdown optionLabel="nombre" optionValue="id" placeholder="Categoría" value={libro.categoria_id} options={ cat } name="categoria_id" onChange={ handleForm } />
 				</div>
 			</div>
 			<div className="p-field">
 				<label className="p-mb-3">Prestado a</label>
 				<div className="p-formgrid p-grid">
-				<Dropdown optionLabel="alias" optionValue="id" placeholder="En biblioteca" options={ per } name="persona_id" value={ prestado } onChange={ handleForm } />
+				<Dropdown optionLabel="alias" optionValue="id" placeholder="En biblioteca"  options={ per } name="persona_id" value={libro.persona_id} onChange={ handleForm } />
 				</div> 
 			</div>
 			<div className="p-field">
 				<label className="p-mb-3">Rating</label>
 				<div style={{marginTop:"10px"}} className="p-formgrid p-grid">
-				<Rating cancel={false} value={ stars } name="rating" onChange={ handleForm } />
+				<Rating cancel={false} name="rating" value={libro.rating} onChange={ handleForm } />
 				</div>
 			</div>
 		</Dialog>

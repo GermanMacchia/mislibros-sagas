@@ -1,6 +1,6 @@
-import { 
-    GET_PERSONA, 
-    GET_PERSONA_ERROR, 
+import {
+    GET_PERSONA,
+    GET_PERSONA_ERROR,
     GET_PERSONA_SUCCESS,
     DELETE_PERSONA,
     DELETE_PERSONA_ERROR,
@@ -10,7 +10,8 @@ import {
     POST_PERSONA_ERROR,
     UPDATE_PERSONA,
     UPDATE_PERSONA_ERROR,
-    UPDATE_PERSONA_SUCCESS } from '../types'
+    UPDATE_PERSONA_SUCCESS
+} from '../types'
 
 //INITIAL DATA
 const initialData = {
@@ -20,20 +21,20 @@ const initialData = {
     updating: false,
     deleting: false,
     props: null,
-    reducerChanges: [] 
+    reducerChanges: []
 }
 //REDUCER
-export default function reducer(state = initialData, action){
-    switch(action.type){
+export default function reducer(state = initialData, action) {
+    switch (action.type) {
         case GET_PERSONA:
             return {
                 ...state,
-                fetching:true
+                fetching: true
             }
         case GET_PERSONA_SUCCESS:
             return {
                 ...state,
-                fetching:false,
+                fetching: false,
                 loaded: true,
                 payload: action.payload
             }
@@ -46,7 +47,7 @@ export default function reducer(state = initialData, action){
         case DELETE_PERSONA:
             return {
                 ...state,
-                deleting:true,
+                deleting: true,
                 props: action.props
             }
         case DELETE_PERSONA_SUCCESS:
@@ -64,7 +65,7 @@ export default function reducer(state = initialData, action){
         case POST_PERSONA:
             return {
                 ...state,
-                posting:true,
+                posting: true,
                 props: action.props
             }
         case POST_PERSONA_SUCCESS:
@@ -79,14 +80,14 @@ export default function reducer(state = initialData, action){
                 posting: false,
                 props: null
             }
-                //UPDATE LIBROS
+        //UPDATE LIBROS
         case UPDATE_PERSONA:
             return {
                 ...state,
                 updating: {
                     status: true,
                     props: action.props
-                }             
+                }
             }
         case UPDATE_PERSONA_ERROR:
             return {
