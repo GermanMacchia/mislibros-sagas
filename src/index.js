@@ -14,9 +14,9 @@ import './styles/media.css'
 
 const store = generateStore()
 
-let WithStore = () => <Provider store={store} ><App /></Provider>
+const WithStore = () => <Provider store={ store } ><App /></Provider>
 const WithStrictMode = () => <React.StrictMode><WithStore /></React.StrictMode>
 
 
-ReactDOM.render(<WithStrictMode />, document.getElementById('root'))
+ReactDOM.render( <WithStrictMode />, document.getElementById( 'root' ) )
 

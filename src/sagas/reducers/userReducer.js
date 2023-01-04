@@ -1,17 +1,17 @@
 import {
-    LOGIN,
-    LOG_OUT,
-    LOGIN_SUCCESS,
-    LOGIN_ERROR,
-    LOGIN_GOOGLE_SUCCESS,
-    REGISTER,
-    REGISTER_SUCCESS,
-    REGISTER_ERROR,
-    TOAST,
-    REDIRECT,
-    REDIRECT_SUCCESS
+  LOGIN,
+  LOG_OUT,
+  LOGIN_SUCCESS,
+  LOGIN_ERROR,
+  LOGIN_GOOGLE_SUCCESS,
+  REGISTER,
+  REGISTER_SUCCESS,
+  REGISTER_ERROR,
+  TOAST,
+  REDIRECT,
+  REDIRECT_SUCCESS,
 } from '../types'
-//import { loginWithGoogle } from '../../firebase'
+// import { loginWithGoogle } from '../../firebase'
 
 const initialData = {
     loggedIn: false,
@@ -29,9 +29,9 @@ const initialData = {
     }
 }
 
-//REDUCER
-export default function reducer(state = initialData, action) {
-    switch (action.type) {
+// REDUCER
+export default function reducer ( state = initialData, action ) {
+    switch( action.type ) {
         case REDIRECT:
             return {
                 ...state,
@@ -80,7 +80,7 @@ export default function reducer(state = initialData, action) {
             return {
                 ...state,
                 fetching: false,
-                error: [...state.error, action.error]
+                error: [ ...state.error, action.error ]
             }
         case LOGIN_GOOGLE_SUCCESS:
             return {
@@ -148,4 +148,4 @@ export const doLoginAction = () => dispatch => {
                 payload: e.message
             })
         })
-}*/
+} */

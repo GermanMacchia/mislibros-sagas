@@ -1,19 +1,19 @@
 import {
-    GET_PERSONA,
-    GET_PERSONA_ERROR,
-    GET_PERSONA_SUCCESS,
-    DELETE_PERSONA,
-    DELETE_PERSONA_ERROR,
-    DELETE_PERSONA_SUCCESS,
-    POST_PERSONA,
-    POST_PERSONA_SUCCESS,
-    POST_PERSONA_ERROR,
-    UPDATE_PERSONA,
-    UPDATE_PERSONA_ERROR,
-    UPDATE_PERSONA_SUCCESS
+  GET_PERSONA,
+  GET_PERSONA_ERROR,
+  GET_PERSONA_SUCCESS,
+  DELETE_PERSONA,
+  DELETE_PERSONA_ERROR,
+  DELETE_PERSONA_SUCCESS,
+  POST_PERSONA,
+  POST_PERSONA_SUCCESS,
+  POST_PERSONA_ERROR,
+  UPDATE_PERSONA,
+  UPDATE_PERSONA_ERROR,
+  UPDATE_PERSONA_SUCCESS,
 } from '../types'
 
-//INITIAL DATA
+// INITIAL DATA
 const initialData = {
     fetching: false,
     loaded: false,
@@ -23,9 +23,9 @@ const initialData = {
     props: null,
     reducerChanges: []
 }
-//REDUCER
-export default function reducer(state = initialData, action) {
-    switch (action.type) {
+// REDUCER
+export default function reducer ( state = initialData, action ) {
+    switch( action.type ) {
         case GET_PERSONA:
             return {
                 ...state,
@@ -80,7 +80,7 @@ export default function reducer(state = initialData, action) {
                 posting: false,
                 props: null
             }
-        //UPDATE LIBROS
+        // UPDATE LIBROS
         case UPDATE_PERSONA:
             return {
                 ...state,
@@ -93,13 +93,13 @@ export default function reducer(state = initialData, action) {
             return {
                 ...state,
                 updating: null,
-                error: [...state.error, action.error]
+                error: [ ...state.error, action.error ]
             }
         case UPDATE_PERSONA_SUCCESS:
             return {
                 ...state,
                 updating: null,
-                reducerChanges: [...state.reducerChanges, action.payload]
+                reducerChanges: [ ...state.reducerChanges, action.payload ]
             }
 
         default:

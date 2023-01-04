@@ -9,12 +9,12 @@ const firebaseConfig = {
   storageBucket: "mybooks-5ea4c.appspot.com",
   messagingSenderId: "726032564104",
   appId: "1:726032564104:web:7456774deb2c3baf9c443d"
-};
+}
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp( firebaseConfig )
 
-export function loginWithGoogle() {
-  const provider = new firebase.auth.GoogleAuthProvider();
-  return firebase.auth().signInWithPopup(provider)
-    .then(snap => snap.user)
+export function loginWithGoogle () {
+  const provider = new firebase.auth.GoogleAuthProvider()
+  return firebase.auth().signInWithPopup( provider )
+    .then( snap => snap.user )
 }

@@ -1,15 +1,15 @@
 import {
-    GET_CATEGORIAS,
-    GET_CATEGORIAS_ERROR,
-    GET_CATEGORIAS_SUCCESS,
-    POST_CATEGORIAS,
-    DELETE_CATEGORIAS,
-    DELETE_CATEGORIAS_ERROR,
-    POST_CATEGORIAS_SUCCESS,
-    DELETE_CATEGORIAS_SUCCESS
+  GET_CATEGORIAS,
+  GET_CATEGORIAS_ERROR,
+  GET_CATEGORIAS_SUCCESS,
+  POST_CATEGORIAS,
+  DELETE_CATEGORIAS,
+  DELETE_CATEGORIAS_ERROR,
+  POST_CATEGORIAS_SUCCESS,
+  DELETE_CATEGORIAS_SUCCESS,
 } from '../types'
 
-//INITIAL DATA
+// INITIAL DATA
 const initialData = {
     fetching: false,
     loaded: false,
@@ -20,9 +20,9 @@ const initialData = {
     error: [],
     reducerChanges: []
 }
-//REDUCER
-export default function reducer(state = initialData, action) {
-    switch (action.type) {
+// REDUCER
+export default function reducer ( state = initialData, action ) {
+    switch( action.type ) {
         case GET_CATEGORIAS:
             return {
                 ...state,

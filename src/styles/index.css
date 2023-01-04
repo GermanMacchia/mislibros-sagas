@@ -1,11 +1,12 @@
-body{
+body {
     margin: 0;
-    font-family:  -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background: #201f1f;
 }
-html{
+
+html {
     height: auto;
     width: auto;
 }
@@ -24,15 +25,17 @@ html{
     word-wrap: break-word;
     width: 6.4em;
 }
-label{
+
+label {
     margin-top: -0.6 !important;
 }
+
 .txt {
     margin: 1vh 0 1vh 0 !important;
     width: 45vw;
 }
 
-#catForm{
+#catForm {
     text-align: center;
 
 }
@@ -41,7 +44,7 @@ label{
     margin-left: 40px;
 }
 
-.icon{
+.icon {
     color: white;
 }
 
@@ -71,44 +74,47 @@ select {
     height: 30px;
     margin-top: 2px;
 }
-#spin{
+
+#spin {
     margin-right: 50vw;
     margin-top: 25vh;
 }
 
-.flex{
-    display:flex;
+.flex {
+    display: flex;
     flex-direction: column;
-    align-items:center;
+    align-items: center;
     margin-top: 5vh;
 
 }
 
-#carrusel{
+#carrusel {
     width: 30vw !important;
     margin-top: 5vh;
 }
 
 
 
-#menu{
+#menu {
     border: none !important;
 
     width: 140px;
 }
-.p-menubar{
+
+.p-menubar {
     border: none !important;
 
 }
 
-.p-menuitem-link{
+.p-menuitem-link {
     width: 6vw !important
 }
 
-#imagen{
+#imagen {
     height: 189px;
     background-image: url('../assets/fondo.jpg');
 }
+
 /*
 .buttonsNav {
     display: flex;
@@ -192,11 +198,13 @@ select {
 .funcionBtt:hover {
     cursor: pointer;
 }
-.p-menubar .p-menuitem-link{
+
+.p-menubar .p-menuitem-link {
     overflow: visible !important;
     width: 8vw !important;
 }
-.p-menuitem{
+
+.p-menuitem {
     width: 8vw;
 }
 
@@ -246,7 +254,11 @@ td {
     font-size: 15px;
 }
 
-#editadoBtt, #deleteBtt, #mostrarLibrosBtt, #editarBtt, #librosPrestados {
+#editadoBtt,
+#deleteBtt,
+#mostrarLibrosBtt,
+#editarBtt,
+#librosPrestados {
     text-align: center;
 }
 
@@ -263,23 +275,24 @@ table p {
     width: 100%;
 }
 
-@media(max-width: 500px){
+@media(max-width: 500px) {
 
-        .p-button-rounded {
-                border-radius: 50%;
-                height: 1.65rem !important;
-                width: 1.65rem !important;
-                margin: 3px;
-        }
-        #carrusel{
-                width: 100vw !important;
-                margin-top: 2vh !important;
-                margin-bottom: 0 !important;
-        }
+    .p-button-rounded {
+        border-radius: 50%;
+        height: 1.65rem !important;
+        width: 1.65rem !important;
+        margin: 3px;
+    }
+
+    #carrusel {
+        width: 100vw !important;
+        margin-top: 2vh !important;
+        margin-bottom: 0 !important;
+    }
 
 
-        .p-accordion {
-            width: 80vw !important;
-        }
+    .p-accordion {
+        width: 80vw !important;
+    }
 
 }

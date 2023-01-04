@@ -2,6 +2,7 @@
         .datatable-crud-demo {
                 width: 24em;
         }
+
         .card {
                 width: 24em;
         }
@@ -17,9 +18,11 @@
         .column {
                 width: 5rem;
         }
+
         .autor {
                 width: 9rem;
         }
+
         .nombre {
                 width: 9rem;
         }
@@ -29,13 +32,16 @@
                 width: 1.357rem !important;
                 width: 2rem !important;
         }
+
         td {
                 font-size: small;
         }
+
         .modalEdit {
                 width: 380px !important;
                 height: 900px !important;
         }
+
         .dropmenu {
                 width: 3.5rem !important;
                 left: 17.5rem !important;
@@ -70,18 +76,20 @@
         }
 
         .nuevobtn {
-                width: 2rem ;
+                width: 2rem;
                 margin-right: 0;
         }
+
         #imagen {
                 height: 114px;
         }
+
         .p-menu {
                 left: 276px !important;
                 width: 8rem !important;
         }
 
-        #carrusel{
+        #carrusel {
                 width: 100vw !important;
                 margin-top: 2vh !important;
                 margin-bottom: 0 !important;

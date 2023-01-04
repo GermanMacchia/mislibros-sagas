@@ -7,24 +7,24 @@ import { GET_PERSONA } from '../../sagas/types'
 
 export default function Personas () {
 
-	const state = useSelector(state => state.persona)
+	const state = useSelector( state => state.persona )
 	const dispatch = useDispatch()
 
-	useEffect(() => {
+	useEffect( () => {
 		dispatch( { type: GET_PERSONA } )
-	}, [state.reducerChanges, dispatch]);
+	}, [ state.reducerChanges, dispatch ] )
 
-	return(
-		<>			
+	return (
+		<>
 			<Nav />
 			<div id="imagen"></div>
 			<div className='center'>
 				{
-					(state.loaded === false)
-					?
-					<Spinner />
-					:
-					<PersonaList />
+					( state.loaded === false )
+						?
+						<Spinner />
+						:
+						<PersonaList />
 				}
 			</div>
 		</>
