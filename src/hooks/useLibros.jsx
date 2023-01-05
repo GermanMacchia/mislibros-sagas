@@ -3,81 +3,51 @@ import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { DELETE_LIBROS, TOAST } from '../sagas/types'
 
-export const useLibroList = () => {
-	const librosList = useSelector( state => state.libros )
+export const useLibros = () => {
+
+	const librosList = useSelector( state => state.libros.payload )
 	const categorias = useSelector( state => state.categoria.payload )
 	const personas = useSelector( state => state.persona.payload )
 	const [ libros, setLibros ] = useState( [] )
 	const dispatch = useDispatch()
 
+	const getNombre = ( id, array, persona ) => {
+		const searched = array.find( ele => ele.id === id )
+		if( !searched ) return
+		if( persona ) return ` ${ searched?.nombre } ${ searched?.apellido }`
+
+		return searched?.nombre
+	}
+
 	useEffect( () => {
-		if( librosList ) {
-			formatearArray()
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [ librosList ] )
-
-	function getNombreCategoria ( categoria_id ) {
-		const [ categoriaAux ] = categorias.filter( c => c.id === categoria_id )
-		return categoriaAux.nombre
-	}
-
-	function getNombrePersona ( persona_id ) {
-		let persona = ''
-		if( persona_id !== null ) {
-			const [ personaAux ] = personas.filter( c => c.id === persona_id )
-			persona = ` a ${ personaAux.nombre } ${ personaAux.apellido }`
-		}
-		return persona
-	}
-
-	function getEstadoLibro ( persona_id ) {
-		let estado
-		if( persona_id !== null ) {
-			estado = "Prestado"
-		} else {
-			estado = "Disponible"
-		}
-		return estado
-	}
-
-	// FUNCION PARA FILTRAR ID CATEGORIAS Y PRESTADO/EN BIBIOTECA / 
-	// (de la API llegan con numeros de id relacional)
-	function formatearArray () {
-		if( librosList.payload && categorias && personas ) {
-			const libros = [ ...librosList.payload ]
-			const array = []
+		if( librosList && categorias && personas ) {
+			const auxArray = []
 			// Por cada libro voy a crear un objeto distinto al que hay en 
 			// el servidor para mejorar la presentación de la tabla
-			libros.forEach( e => {
-				const objeto = {
+			librosList.forEach( e => {
+				const libro = {
 					id: e.id,
 					nombre: e.nombre,
-					categoria: getNombreCategoria( e.categoria_id ),
-					nombrePersona: getNombrePersona( e.persona_id ),
+					categoria: getNombre( e.categoria_id, categorias ),
+					nombrePersona: getNombre( e.persona_id, personas, true ),
 					descripcion: e.descripcion,
 					persona_id: e.persona_id,
 					categoria_id: e.categoria_id,
 					autor: e.autor,
 					rating: e.rating,
-					estado: getEstadoLibro( e.persona_id )
+					estado: e.persona_id ? 'Prestado' : 'Disponible'
 				}
-				array.push( objeto )
+				auxArray.push( libro )
 			} )
-			setLibros( array )
+			setLibros( auxArray )
 		}
-	}
+	}, [ categorias, librosList, personas ] )
+
 
 	const deleteSelectedProducts = ( selectedProducts, setDeleteProductsDialog, setSelectedProducts ) => {
 		// Los libros a Borrar debe ser los que NO están prestados
 		const librosABorrar = selectedProducts.filter( libro => libro.persona_id == null )
-
-		const retornarLista = ( aBorrar ) => {
-			const nombres = aBorrar.map( element => {
-				return element.nombre
-			} )
-			return nombres
-		}
+		const nombresLibros = librosABorrar.map( element => element.nombre )
 
 		if( !librosABorrar.length ) {
 			dispatch( {
@@ -97,7 +67,7 @@ export const useLibroList = () => {
 				info: {
 					severity: 'warn',
 					summary: 'Prestados no pueden eliminarse',
-					detail: 'Se ha eliminado: ' + retornarLista( librosABorrar ).toString()
+					detail: 'Se ha eliminado: ' + nombresLibros.toString()
 				}
 			} )
 		}
@@ -108,7 +78,7 @@ export const useLibroList = () => {
 				info: {
 					severity: 'success',
 					summary: 'Libros Eliminados',
-					detail: retornarLista( librosABorrar ).toString()
+					detail: nombresLibros.toString()
 				}
 			} )
 		}
@@ -116,10 +86,10 @@ export const useLibroList = () => {
 		librosABorrar.forEach( e => {
 			dispatch( { type: DELETE_LIBROS, props: e.id } )
 		} )
-
 		setDeleteProductsDialog( false )
 		setSelectedProducts( null )
 	}
+
 	return {
 		libros,
 		categorias,

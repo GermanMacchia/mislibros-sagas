@@ -3,15 +3,16 @@ import { Dialog } from 'primereact/dialog'
 import { InputText } from 'primereact/inputtext'
 import { classNames } from 'primereact/utils'
 import { InputTextarea } from 'primereact/inputtextarea'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch  } from 'react-redux'
 import { Button } from 'primereact/button'
 import { UPDATE_LIBROS, TOAST } from '../../sagas/types'
 import { VirtualScroller } from 'primereact/virtualscroller'
+import { useDataQuery } from '../../hooks/useDataQuery'
 
 export default function CategoriaEdit ( { hideEditDialog } ) {
 
-	const categorias = useSelector( state => state.categoria.payload )
-	const state = useSelector( state => state.libros )
+	const { categorias, libros } = useDataQuery()
+
 	const dispatch = useDispatch()
 	//const [libros, setLibros] = useState({})
 	const [ form, setForm ] = useState()
@@ -24,11 +25,9 @@ export default function CategoriaEdit ( { hideEditDialog } ) {
 
 	//RESETAR FORMULARIO PRIME
 	function resetForm () {
-
 		setForm( null )
 		setEnviado( false )
 		hideEditDialog()
-
 	}
 
 	const basicItemTemplate = ( item, options ) => {
@@ -42,17 +41,17 @@ export default function CategoriaEdit ( { hideEditDialog } ) {
 
 
 	useEffect( () => {
-		if( state.error != null && enviado ) {
+		if( libros.error != null && enviado ) {
 			dispatch( {
 				type: TOAST,
 				info: {
 					severity: 'error',
 					summary: 'Error',
-					detail: state.error.at( -1 )
+					detail: libros.error.at( -1 )
 				}
 			} )
 		}
-	}, [ state.error, enviado, dispatch ] )
+	}, [ libros.error, enviado, dispatch ] )
 
 	const handleForm = ( e ) => {
 

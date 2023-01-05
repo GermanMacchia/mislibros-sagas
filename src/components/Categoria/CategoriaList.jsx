@@ -26,6 +26,7 @@ export default function CategoriaList () {
     }
 
     const deleteCategoria = () => {
+        console.log( categoria )
         dispatch( {
             type: DELETE_CATEGORIAS,
             props: categoria.id
@@ -65,8 +66,8 @@ export default function CategoriaList () {
         }
     ]
 
-    const productTemplate = ( cat ) => {
-        return ( <CategoriaCard key={ cat.id } categoria={ cat } openDelete={ openDeleteModal } /> )
+    const categoriaTemplate = ( categoria ) => {
+        return ( <CategoriaCard key={ categoria.id } categoria={ categoria } openDelete={ openDeleteModal } /> )
     }
 
     return (
@@ -75,7 +76,7 @@ export default function CategoriaList () {
                 loaded ?
                     <div id="carrusel">
                         <Carousel value={ categorias } numVisible={ 1 } numScroll={ 1 } responsiveOptions={ responsiveOptions }
-                            itemTemplate={ productTemplate } />
+                            itemTemplate={ categoriaTemplate } />
                     </div>
                     :
                     <Spinner />

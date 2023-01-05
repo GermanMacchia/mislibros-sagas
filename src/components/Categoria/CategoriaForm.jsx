@@ -1,30 +1,14 @@
-import React, { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import React, { useEffect } from 'react'
 import { Button } from 'primereact/button'
 import { InputText } from 'primereact/inputtext'
 import { InputTextarea } from 'primereact/inputtextarea'
-import { POST_CATEGORIAS } from '../../sagas/types'
+import { useCategorias, useDataQuery } from '../../hooks'
+
 
 export default function CategoriaForm () {
 
-	const state = useSelector( state => state.user )
-	const categorias = useSelector( state => state.categoria )
-	const dispatch = useDispatch()
-	const [ form, setForm ] = useState( { nombre: '', imagen: '', descripcion: '' } )
-
-	const handleForm = ( e ) => {
-		setForm( {
-			...form,
-			[ e.target.name ]: e.target.value
-		} )
-	}
-
-	const handleSubmit = () => {
-		dispatch( {
-			type: POST_CATEGORIAS,
-			props: form
-		} )
-	}
+	const { categorias, libros } = useDataQuery()
+	const { handleForm, handleSubmit } = useCategorias()
 
 	useEffect( () => {
 		if( categorias.reload ) {
@@ -44,11 +28,9 @@ export default function CategoriaForm () {
 
 				<label htmlFor="description">Descripción</label><br />
 				<InputTextarea name="descripcion" required rows={ 4 } cols={ 18 } className='p-inputtext-mb p-d-block txt' onChange={ handleForm } /><br />
-
-
 			</form>
 			{/* Botones */ }
-			{ state.fetching ?
+			{ libros.fetching ?
 				<Button id="loading" loading loadingOptions={ { position: 'right' } } className="p-button-secondary p-ml-2" />
 				:
 				<Button label="Crear" icon="pi pi-plus" className="p-button-success p-mr-2" onClick={ handleSubmit } />
