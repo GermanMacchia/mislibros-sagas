@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import Spinner from '../utilities/Spinner'
+import Spinner from '../Spinner'
 import CategoriaCard from './CategoriaCard'
 import { Button } from 'primereact/button'
 import { Dialog } from 'primereact/dialog'

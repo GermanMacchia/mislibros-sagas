@@ -9,7 +9,7 @@ import { InputText } from 'primereact/inputtext'
 import { TOAST, DELETE_PERSONA } from '../../sagas/types'
 import ModalPersona from './ModalPersona'
 import ModalEditPersona from './ModalEditPersona'
-import Spinner from '../utilities/Spinner'
+import Spinner from '../Spinner'
 
 
 // FALTA PONER EL MODAL DE INFO

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Nav from '../Home/Nav'
-import Spinner from '../utilities/Spinner'
+import Spinner from '../Spinner'
 import PersonaList from './PersonasList'
 import { GET_PERSONA } from '../../sagas/types'
 

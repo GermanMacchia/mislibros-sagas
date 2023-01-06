@@ -11,8 +11,6 @@ import {
     GET_CATEGORIAS
 } from '../types'
 
-
-
 export function* handleGetCategorias () {
 
     try {

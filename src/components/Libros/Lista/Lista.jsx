@@ -9,7 +9,7 @@ import { InputText } from 'primereact/inputtext'
 import { DELETE_LIBROS } from '../../../sagas/types'
 import ModalLibros from './ModalLibros'
 import ModalEdit from './ModalEdit'
-import Spinner from '../../utilities/Spinner'
+import Spinner from '../../Spinner'
 import { useMediaQuery } from 'react-responsive'
 import { useLibros } from '../../../hooks/useLibros'
 import { MovileHeader } from './MovileHeader'
@@ -32,7 +32,6 @@ export default function Lista () {
 
     const dispatch = useDispatch()
     const { libros, deleteSelectedProducts } = useLibros()
-    console.log( libros )
     // VISIBILIDAD DEL MODAL DE LIBROS NUEVOS / EDIT
     const [ libroModal, setLibroModal ] = useState( false )
     // MODAL INFO

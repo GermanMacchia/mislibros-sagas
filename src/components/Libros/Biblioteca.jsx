@@ -1,4 +1,4 @@
-import Spinner from '../utilities/Spinner'
+import Spinner from '../Spinner'
 import { useSelector } from 'react-redux'
 import Lista from './Lista/Lista'
 

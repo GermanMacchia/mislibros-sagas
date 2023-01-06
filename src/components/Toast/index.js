@@ -1,0 +1,1 @@
+export { ToastPortal as Toast } from './Toast'

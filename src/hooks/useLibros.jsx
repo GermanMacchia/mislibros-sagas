@@ -43,9 +43,9 @@ export const useLibros = () => {
 		}
 	}, [ categorias, librosList, personas ] )
 
-
+	// Los libros a Borrar debe ser los que NO están prestados
 	const deleteSelectedProducts = ( selectedProducts, setDeleteProductsDialog, setSelectedProducts ) => {
-		// Los libros a Borrar debe ser los que NO están prestados
+
 		const librosABorrar = selectedProducts.filter( libro => libro.persona_id == null )
 		const nombresLibros = librosABorrar.map( element => element.nombre )
 
@@ -60,8 +60,7 @@ export const useLibros = () => {
 			} )
 		}
 
-		if( selectedProducts.length > librosABorrar.length && selectedProducts.length !== 1 ) {
-			// ALGUNOS
+		if( librosABorrar.length && selectedProducts.length > librosABorrar.length ) {
 			dispatch( {
 				type: TOAST,
 				info: {
@@ -86,7 +85,9 @@ export const useLibros = () => {
 		librosABorrar.forEach( e => {
 			dispatch( { type: DELETE_LIBROS, props: e.id } )
 		} )
+
 		setDeleteProductsDialog( false )
+
 		setSelectedProducts( null )
 	}
 

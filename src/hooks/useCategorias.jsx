@@ -20,6 +20,7 @@ export const useCategorias = () => {
       type: POST_CATEGORIAS,
       props: form
     } )
+    document.getElementById( 'categoriaForm' ).reset()
   }
 
   return {
