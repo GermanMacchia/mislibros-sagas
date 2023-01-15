@@ -1,11 +1,20 @@
-<p align="center">
-  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnWwWcHpya-SzuqZL8A0EDfnQPpo0Z3BQCCw&usqp=CAU" width="200" alt="React Logo" />
+<p align="left">
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRn5Ipwht9SgjUySSRE65fzvbr_6Ek2Gx-iyw&usqp=CAU" width="200" alt="React Logo" />
   <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSU68NZj_RTViKuOFmRFEwQAGhj5hVM6KvCrw&usqp=CAU" width="200" alt="Saga Logo" />
 </p>
 
-# Mis_libros-3.0-Sagas 
+# Mis Libros -v Sagas 
 
-spanish >>> En proceso de Refactorización
+Deployed at:
+https://mislibros.onrender.com/
+
+try it!
+```
+user: admin
+pass: admin
+```
+----
+**spanish** >>> En proceso de Refactorización
 
 Se trata de un pequeño proyecto elaborado a comienzos del 2021.
 Debido a que Heroku dejo de dar soporte gratuito, se realizaron unos cambios en la BD para facilitar el deploy
@@ -20,7 +29,7 @@ y herramientas para dar forma a este crud.
 
 ----
 
-english >>> In process of refactoring
+**english** >>> In process of refactoring
 
 It is a small project elaborated at the beginning of 2021.
 Since Heroku stopped providing free support, some changes were made to the DB to make it easier to deploy

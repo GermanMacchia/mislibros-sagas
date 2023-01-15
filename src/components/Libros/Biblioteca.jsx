@@ -1,26 +1,19 @@
 import Spinner from '../Spinner'
-import { useSelector } from 'react-redux'
 import Lista from './Lista/Lista'
+import { useLibros } from '../../hooks/useLibros'
 
 export default function Biblioteca () {
 
-	const state = useSelector( state => state.libros )
+	const queries = useLibros()
 
 	return (
 		<>
 			<div id="imagen"></div>
 			<div className="center">
 				{
-					( state.loaded === false )
-						?
-						<>
-							<br />
-							<Spinner />
-						</>
-						:
-						<div>
-							<Lista />
-						</div>
+					queries.isFetching
+						? <Spinner />
+						: <Lista queries={ queries } />
 				}
 			</div>
 		</>

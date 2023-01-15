@@ -11,7 +11,6 @@ import ModalLibros from './ModalLibros'
 import ModalEdit from './ModalEdit'
 import Spinner from '../../Spinner'
 import { useMediaQuery } from 'react-responsive'
-import { useLibros } from '../../../hooks/useLibros'
 import { MovileHeader } from './MovileHeader'
 import { ColumnasLista, RatingBodyTemplate } from './ColumnasLista'
 
@@ -28,10 +27,10 @@ const libroVacio = {
     estado: ''
 }
 
-export default function Lista () {
+export default function Lista ( { queries } ) {
 
     const dispatch = useDispatch()
-    const { libros, deleteSelectedProducts } = useLibros()
+    const { libros, deleteSelectedProducts } = queries
     // VISIBILIDAD DEL MODAL DE LIBROS NUEVOS / EDIT
     const [ libroModal, setLibroModal ] = useState( false )
     // MODAL INFO

@@ -6,6 +6,7 @@ import { DELETE_LIBROS, TOAST } from '../sagas/types'
 export const useLibros = () => {
 
 	const librosList = useSelector( state => state.libros.payload )
+	const isFetching = useSelector( state => state.libros.fetching )
 	const categorias = useSelector( state => state.categoria.payload )
 	const personas = useSelector( state => state.persona.payload )
 	const [ libros, setLibros ] = useState( [] )
@@ -94,6 +95,7 @@ export const useLibros = () => {
 	return {
 		libros,
 		categorias,
+		isFetching,
 		personas,
 		deleteSelectedProducts
 	}
