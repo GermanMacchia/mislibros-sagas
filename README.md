@@ -1,8 +1,5 @@
-<p align="left">
+<p align="center">
   <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnWwWcHpya-SzuqZL8A0EDfnQPpo0Z3BQCCw&usqp=CAU" width="200" alt="React Logo" />
-</p>
-
-<p align="right">
   <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSU68NZj_RTViKuOFmRFEwQAGhj5hVM6KvCrw&usqp=CAU" width="200" alt="Saga Logo" />
 </p>
 
