@@ -13,6 +13,7 @@ export default function Router () {
 				<Route exact path="/home" component={ Home } />
 				<Route exact path="/categoria" component={ Categorias } />
 				<Route exact path="/personas" component={ Personas } />
+				<Route path="/*" component={Home} />
 				<Route component={ Error } />
 			</Switch>
 		</BrowserRouter>
